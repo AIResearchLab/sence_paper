@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<robot name="sence_main" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find sence_leg_description)/urdf/sence_leg_macro.xacro"/>
+<xacro:include filename="$(find sence_main_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find sence_main_description)/urdf/sence_main.trans" />
+<xacro:include filename="$(find sence_main_description)/urdf/sence_main.gazebo" />
+<link name="base_link">
+  <inertial>
+    <origin xyz="-0.0003058772493282508 -8.555215015878667e-05 -7.892579365353808e-05" rpy="0 0 0"/>
+    <mass value="0.866383082373337"/>
+    <inertia ixx="0.012736" iyy="0.003778" izz="0.016249" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_main_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_main_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<xacro:sence_leg_macro prefix="back_right_leg_" parent="base_link" adjT="0.20 -0.15 0" adjR="0 3.14159 0"/>
+<xacro:sence_leg_macro prefix="back_left_leg_" parent="base_link" adjT="-0.20 -0.15 0" adjR="0 0 0"/>
+<xacro:sence_leg_macro prefix="front_right_leg_" parent="base_link" adjT="0.20 0.15 0" adjR="3.14159 3.14159 0"/>
+<xacro:sence_leg_macro prefix="front_left_leg_" parent="base_link" adjT="-0.20 0.15 0" adjR="3.14159 0 0"/>
+
+
+</robot>
