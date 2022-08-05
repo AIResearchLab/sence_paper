@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+<robot name="sence_leg" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find sence_leg_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find sence_leg_description)/urdf/sence_leg.trans" />
+<xacro:include filename="$(find sence_leg_description)/urdf/sence_leg.gazebo" />
+<link name="base_link">
+  <inertial>
+    <origin xyz="0.029044932513473305 0.010265080427010284 -0.03814827760382364" rpy="0 0 0"/>
+    <mass value="0.15187448298114298"/>
+    <inertia ixx="5.3e-05" iyy="6.1e-05" izz="6.9e-05" ixy="-6e-06" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="HMMR_Leg_J2_v1_1">
+  <inertial>
+    <origin xyz="-0.04078394902352935 -0.013231283994066126 0.00021684450055575039" rpy="0 0 0"/>
+    <mass value="0.09734685103972182"/>
+    <inertia ixx="2.2e-05" iyy="3.6e-05" izz="4e-05" ixy="-2e-06" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.01348 -0.002676 0.038139" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.01348 -0.002676 0.038139" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="HMMR_Leg_J3_v1_1">
+  <inertial>
+    <origin xyz="-0.06366942125676311 -0.021943300476205383 0.0024103683252244337" rpy="0 0 0"/>
+    <mass value="0.1208747488020619"/>
+    <inertia ixx="3.4e-05" iyy="0.000102" izz="0.000104" ixy="1.4e-05" iyz="-1e-06" ixz="2e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="HMMR_Leg_J4_1">
+  <inertial>
+    <origin xyz="-0.06827181090766318 0.01066089288586344 0.020893759814543007" rpy="0 0 0"/>
+    <mass value="0.052701725493830516"/>
+    <inertia ixx="1.8e-05" iyy="7.3e-05" izz="7.2e-05" ixy="1.4e-05" iyz="0.0" ixz="-1e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="Rev1" type="continuous">
+  <origin xyz="0.01348 0.002676 -0.038139" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="HMMR_Leg_J2_v1_1"/>
+  <axis xyz="1.0 0.0 -0.0"/>
+</joint>
+
+<joint name="Rev2" type="revolute">
+  <origin xyz="-0.033927 0.00678 0.0002" rpy="0 0 0"/>
+  <parent link="HMMR_Leg_J2_v1_1"/>
+  <child link="HMMR_Leg_J3_v1_1"/>
+  <axis xyz="0.0 -1.0 0.0"/>
+  <limit upper="1.919862" lower="-1.919862" effort="100" velocity="100"/>
+</joint>
+
+<joint name="Rev3" type="revolute">
+  <origin xyz="-0.065007 -0.02 -0.019475" rpy="0 0 0"/>
+  <parent link="HMMR_Leg_J3_v1_1"/>
+  <child link="HMMR_Leg_J4_1"/>
+  <axis xyz="-0.0 -0.0 1.0"/>
+  <limit upper="2.356194" lower="-2.268928" effort="100" velocity="100"/>
+</joint>
+
+</robot>
