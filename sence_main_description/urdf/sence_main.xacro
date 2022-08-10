@@ -4,7 +4,12 @@
 <xacro:include filename="$(find sence_main_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find sence_main_description)/urdf/sence_main.trans" />
 <xacro:include filename="$(find sence_main_description)/urdf/sence_main.gazebo" />
+  
 <link name="base_link">
+</link>
+  
+  
+<link name="core">
   <inertial>
     <origin xyz="-0.0003058772493282508 -8.555215015878667e-05 -7.892579365353808e-05" rpy="0 0 0"/>
     <mass value="0.866383082373337"/>
@@ -24,5 +29,12 @@
     </geometry>
   </collision>
 </link>
+  
+<joint name="con" type="fixed">
+  <origin rpy="0 0 0" xyz="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="core"/>
+</joint>
+  
 
 </robot>

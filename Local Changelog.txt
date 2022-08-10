@@ -1,0 +1,8 @@
+-Resolved URDF misaligned joint issues caused by double generation of URDF from
+a fusion file without clearing changes from previous generation.
+
+-Added joint_state_publisher_gui to launch files instead of joint_state_publisher 
+due to gui being forked to a separate package, stopping gui from launching 
+and causing conflict if both were active.
+
+Logged: 9/08/2022 12:27am
