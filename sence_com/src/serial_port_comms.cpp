@@ -15,7 +15,7 @@
 #include "ros/ros.h"
 #include "serial/serial.h"
 
-vector<uint8_t> writeSerial(serial::Serial &teensy_serial, vector<uint8_t> commandVector)
+vector<uint8_t> writeSerial(serial::Serial &opencm_serial, vector<uint8_t> commandVector)
 {
     if(commandVector.empty()){
         return commandVector;
@@ -35,7 +35,7 @@ vector<uint8_t> writeSerial(serial::Serial &teensy_serial, vector<uint8_t> comma
 
     uint8_t commandArray[commandVector.size()];
     std::copy(commandVector.begin(), commandVector.end(), commandArray);
-    teensy_serial.write(commandArray, commandVector.size());
+    opencm_serial.write(commandArray, commandVector.size());
     commandVector.clear();
     return commandVector;
 }
@@ -76,12 +76,12 @@ std::string detectPort()
 int main(int argc, char **argv)
 {
     std::string port = detectPort();
-    std::cout << "Port for teensy is" << port << std::endl;
-    ros::init(argc, argv, "Randle_Serial_Interface");
+    std::cout << "Port for openCM is" << port << std::endl;
+    ros::init(argc, argv, "SENCE_Serial_Interface");
     ros::NodeHandle node;
     ros::Rate rate(1000);
 
-    ros::Publisher system_publisher = node.advertise<randle_msgs::Randle>("randle_state", 3);
+    ros::Publisher system_publisher = node.advertise<sence_msgs::SENCE>("randle_state", 3);
 
     ros::Subscriber target_updater = node.subscribe("randle_target", 2, updateTargetsCallback);
     ros::Subscriber force_updater = node.subscribe("/hub_0/sensor_0", 1, forceSensorCallback);
@@ -91,13 +91,13 @@ int main(int argc, char **argv)
     uint64_t time_now = getClockTime();
 
     //In this section we open up the port on the appropraite baud rate to listen to the autodetected teensy and establish a connection
-    serial::Serial teensy_serial(port, BAUD_RATE, serial::Timeout::simpleTimeout(1000));
+    serial::Serial opencm_serial(port, BAUD_RATE, serial::Timeout::simpleTimeout(1000));
 
-    if (teensy_serial.isOpen())
+    if (opencm_serial.isOpen())
     {
-        teensy_serial.flush();
-        teensy_serial.flushInput();
-        teensy_serial.flushOutput();
+        opencm_serial.flush();
+        opencm_serial.flushInput();
+        opencm_serial.flushOutput();
         std::cout << "Port is open and active" << std::endl;
     }
     else
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 
     while (1)
     {
-        readSerial(teensy_serial, 2);
+        readSerial(opencm_serial, 2);
         if (control_system.J1.PRESENT_POSITION != 0 &&
             control_system.J2.PRESENT_POSITION != 0 && control_system.J3.PRESENT_POSITION != 0)
         {
@@ -135,8 +135,8 @@ int main(int argc, char **argv)
     {
         time_now = getClockTime();
 
-        readSerial(teensy_serial, 2);
-        commandVector = writeSerial(teensy_serial, commandVector);
+        readSerial(opencm_serial, 2);
+        commandVector = writeSerial(opencm_serial, commandVector);
 
         //this if statement is to publish at 30 HZ the feedback of motor positions
         //uint32 seq
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
         rate.sleep();
         ros::spinOnce();
     }
-    teensy_serial.close();
+    opencm_serial.close();
 
     return 0;
 }
