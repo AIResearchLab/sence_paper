@@ -28,6 +28,16 @@ vector<uint8_t> commandVector;
 
 sence_msgs::SENCE control_system;
 
+
+
+void addItem(uint8_t motor, uint8_t cmd, uint16_t data)
+{
+    commandVector.push_back(motor);
+    commandVector.push_back(cmd);
+    commandVector.push_back(UPPER_BYTE(data));
+    commandVector.push_back(LOWER_BYTE(data));
+}
+
 void construct_commands(){
 
     uint16_t conversion_positionD_1 = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
@@ -87,65 +97,221 @@ void construct_commands(){
 
 void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
 {
-    sence_msgs::Target targets[] = msg->Buffer_To_Send;
-    int arrSize = *(&arr + 1) - arr;
-
-    for (int i = 0; i < arrSize; i++) {
-        switch (targets[i].TARGET_ID)
+    for (int i = 0; i < msg->count; i++) {
+        sence_msgs::Target target = msg->Buffer_To_Send[i];
+        switch (target.TARGET_ID)
         {
         case D_1:
-            control_system.Back_Left.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Back_Left.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Back_Left.J0.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Back_Left.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_2:
-            control_system.Back_Left.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Back_Left.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Back_Left.J1.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Back_Left.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_3:
-            control_system.Back_Left.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Back_Left.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Back_Left.J2.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Back_Left.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_4:
-            control_system.Back_Right.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Back_Right.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Back_Right.J0.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Back_Right.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_5:
-            control_system.Back_Right.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Back_Right.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Back_Right.J1.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Back_Right.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_6:
-            control_system.Back_Right.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Back_Right.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Back_Right.J2.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Back_Right.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_7:
-            control_system.Front_Right.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Front_Right.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Front_Right.J0.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Front_Right.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_8:
-            control_system.Front_Right.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Front_Right.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Front_Right.J1.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Front_Right.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_9:
-            control_system.Front_Right.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Front_Right.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Front_Right.J2.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Front_Right.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_10:
-            control_system.Front_Left.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Front_Left.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Front_Left.J0.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Front_Left.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_11:
-            control_system.Front_Left.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Front_Left.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Front_Left.J1.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Front_Left.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         case D_12:
-            control_system.Front_Left.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
-            control_system.Front_Left.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            control_system.Front_Left.J2.TARGET_POSITION = target.TARGET_POSITION;
+            control_system.Front_Left.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
             break;
         default:
             // code block
             std::cout << "Not Handled Yet";
         }
     }
+}
+void assignTemperatureDynamixelFeedback(int jID, uint16_t temperature)
+{
+    switch (jID)
+    {
+    case D_1:
+        control_system.Back_Left.J0.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_2:
+        control_system.Back_Left.J1.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_3:
+        control_system.Back_Left.J2.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_4:
+        control_system.Back_Right.J0.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_5:
+        control_system.Back_Right.J1.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_6:
+        control_system.Back_Right.J2.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_7:
+        control_system.Front_Right.J0.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_8:
+        control_system.Front_Right.J1.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_9:
+        control_system.Front_Right.J2.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_10:
+        control_system.Front_Left.J0.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_11:
+        control_system.Front_Left.J1.PRESENT_TEMPERATURE = temperature;
+        break;
+    case D_12:
+        control_system.Front_Left.J2.PRESENT_TEMPERATURE = temperature;
+        break;
+    default:
+        // code block
+        std::cout << "Not Handled Yet";
+    }
+}
+
+void assignVelocityDynamixelFeedback(int jID, uint16_t velocity)
+{
+    switch (jID)
+    {
+    case D_1:
+        control_system.Back_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_2:
+        control_system.Back_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_3:
+        control_system.Back_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_4:
+        control_system.Back_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_5:
+        control_system.Back_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_6:
+        control_system.Back_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_7:
+        control_system.Front_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_8:
+        control_system.Front_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_9:
+        control_system.Front_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_10:
+        control_system.Front_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_11:
+        control_system.Front_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    case D_12:
+        control_system.Front_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
+        break;
+    default:
+        // code block
+        std::cout << "Not Handled Yet";
+    }
+}
+
+void assignPositionDynamixelFeedback(int jID, uint16_t position)
+{
+    switch (jID)
+    {
+    case D_1:
+        control_system.Back_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_2:
+        control_system.Back_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_3:
+        control_system.Back_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_4:
+        control_system.Back_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_5:
+        control_system.Back_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_6:
+        control_system.Back_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_7:
+        control_system.Front_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_8:
+        control_system.Front_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_9:
+        control_system.Front_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_10:
+        control_system.Front_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_11:
+        control_system.Front_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    case D_12:
+        control_system.Front_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(position);
+        break;
+    default:
+        // code block
+        std::cout << "Not Handled Yet";
+    }
+}
+
+void processIncomingMessage(int cmd_id, int motor, uint16_t data)
+{
+    //std::cout << "id: " << cmd_id << " - motor: " << motor << " - value: "<< data << std::endl;
+    switch (cmd_id)
+    {
+    case PRESENT_POSITION:
+        assignPositionDynamixelFeedback(motor, data);
+        break;
+    case PRESENT_VELOCITY:
+        assignVelocityDynamixelFeedback(motor, data);
+        break;
+    case PRESENT_TEMP:
+        assignTemperatureDynamixelFeedback(motor, data);
+        break;
+    default:
+        // code block
+        std::cout << "Not Handled Yet " << cmd_id << "\n";
+    }
+    return;
 }
 
 void readSerial(serial::Serial &opencm_serial, int recursiveCounter)
@@ -194,172 +360,6 @@ void readSerial(serial::Serial &opencm_serial, int recursiveCounter)
     }
 }
 
-void assignVelocityDynamixelFeedback(int jID, uint16_t velocity)
-{
-    switch (jID)
-    {
-    case D_1:
-        control_system.Back_Left.J0 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_2:
-        control_system.Back_Left.J1 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_3:
-        control_system.Back_Left.J2 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_4:
-        control_system.Back_Right.J0 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_5:
-        control_system.Back_Right.J1 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_6:
-        control_system.Back_Right.J2 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_7:
-        control_system.Front_Right.J0 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_8:
-        control_system.Front_Right.J1 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_9:
-        control_system.Front_Right.J2 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_10:
-        control_system.Front_Left.J0 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_11:
-        control_system.Front_Left.J1 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    case D_12:
-        control_system.Front_Left.J2 = convertDynamixelSpeedToFloatFeedbackSpeed(velocity);
-        break;
-    default:
-        // code block
-        std::cout << "Not Handled Yet";
-    }
-}
-
-void assignPositionDynamixelFeedback(int jID, uint16_t position)
-{
-    switch (jID)
-    {
-    case D_1:
-        control_system.Back_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_2:
-        control_system.Back_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_3:
-        control_system.Back_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_4:
-        control_system.Back_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_5:
-        control_system.Back_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_6:
-        control_system.Back_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_7:
-        control_system.Front_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_8:
-        control_system.Front_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_9:
-        control_system.Front_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_10:
-        control_system.Front_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_11:
-        control_system.Front_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_12:
-        control_system.Front_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    default:
-        // code block
-        std::cout << "Not Handled Yet";
-    }
-}
-
-void assignTemperatureDynamixelFeedback(int jID, uint16_t temperature)
-{
-    switch (jID)
-    {
-    case D_1:
-        control_system.Back_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_2:
-        control_system.Back_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_3:
-        control_system.Back_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_4:
-        control_system.Back_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_5:
-        control_system.Back_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_6:
-        control_system.Back_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_7:
-        control_system.Front_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_8:
-        control_system.Front_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_9:
-        control_system.Front_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_10:
-        control_system.Front_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_11:
-        control_system.Front_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    case D_12:
-        control_system.Front_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
-        break;
-    default:
-        // code block
-        std::cout << "Not Handled Yet";
-    }
-}
-void processIncomingMessage(int cmd_id, int motor, uint16_t data)
-{
-    //std::cout << "id: " << cmd_id << " - motor: " << motor << " - value: "<< data << std::endl;
-    switch (cmd_id)
-    {
-    case PRESENT_POSITION:
-        assignPositionDynamixelFeedback(motor, data);
-        break;
-    case PRESENT_VELOCITY:
-        assignVelocityDynamixelFeedback(motor, data);
-        break;
-    case PRESENT_TEMP:
-        assignTemperatureDynamixelFeedback(motor, data);
-        break;
-    default:
-        // code block
-        std::cout << "Not Handled Yet " << cmd_id << "\n";
-    }
-    return;
-}
-
-void addItem(uint8_t motor, uint8_t cmd, uint16_t data)
-{
-    commandVector.push_back(motor);
-    commandVector.push_back(cmd);
-    commandVector.push_back(UPPER_BYTE(data));
-    commandVector.push_back(LOWER_BYTE(data));
-}
-
 
 int main(int argc, char **argv)
 {
@@ -404,7 +404,7 @@ int main(int argc, char **argv)
         std::cout << "Port was not opened correctly" << std::endl;
         return 0;
     }
-    std::this_thread::sleep_for(3std::chrono_literals::s);
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 
     while (1)
     {
