@@ -104,7 +104,7 @@
   </joint>
   <link name="back_right_leg_base_link">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.028184578381233765 0.0020392786644214244 -9.813214185615953e-06"/>
+      <origin rpy="0 0 0" xyz="0.029044932513473305 0.010265080427010284 -0.03814827760382364"/>
       <mass value="0.15187448298114298"/>
       <inertia ixx="5.3e-05" ixy="-6e-06" ixz="0.0" iyy="6.1e-05" iyz="0.0" izz="6.9e-05"/>
     </inertial>
@@ -124,19 +124,19 @@
   </link>
   <link name="back_right_leg_HMMR_Leg_J2_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.04078345991823647 -0.01323108575665483 0.00021630889019305232"/>
+      <origin rpy="0 0 0" xyz="-0.04078394902352935 -0.013231283994066126 0.00021684450055575039"/>
       <mass value="0.09734685103972182"/>
       <inertia ixx="2.2e-05" ixy="-2e-06" ixz="0.0" iyy="3.6e-05" iyz="0.0" izz="4e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -144,19 +144,19 @@
   </link>
   <link name="back_right_leg_HMMR_Leg_J3_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06366993215147018 -0.021943102238793904 0.0024098327148608222"/>
+      <origin rpy="0 0 0" xyz="-0.06366942125676311 -0.021943300476205383 0.0024103683252244337"/>
       <mass value="0.1208747488020619"/>
       <inertia ixx="3.4e-05" ixy="1.4e-05" ixz="2e-06" iyy="0.000102" iyz="-1e-06" izz="0.000104"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -164,37 +164,37 @@
   </link>
   <link name="back_right_leg_HMMR_Leg_J4_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06827232180237036 0.01066109112327507 0.02089322420417813"/>
+      <origin rpy="0 0 0" xyz="-0.06827181090766318 0.01066089288586344 0.020893759814543007"/>
       <mass value="0.052701725493830516"/>
       <inertia ixx="1.8e-05" ixy="1.4e-05" ixz="-1e-06" iyy="7.3e-05" iyz="0.0" izz="7.2e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
   <joint name="back_right_leg_system_connection" type="fixed">
-    <origin rpy="0 3.14159 0" xyz="0.20 -0.15 0"/>
+    <origin rpy="0 3.14159 0" xyz="0.1438 -0.1250 -0.0381"/>
     <parent link="core"/>
     <child link="back_right_leg_base_link"/>
   </joint>
   <joint name="back_right_leg_Rev1" type="continuous">
-    <origin rpy="0 0 0" xyz="-0.04375 -0.00555 0.0"/>
+    <origin rpy="0 0 0" xyz="0.01348 0.002676 -0.038139"/>
     <parent link="back_right_leg_base_link"/>
     <child link="back_right_leg_HMMR_Leg_J2_v1_1"/>
-    <axis xyz="1.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 -0.0"/>
   </joint>
   <joint name="back_right_leg_Rev2" type="revolute">
-    <origin rpy="0 0 0" xyz="-0.033926 0.00678 0.0002"/>
+    <origin rpy="0 0 0" xyz="-0.033927 0.00678 0.0002"/>
     <parent link="back_right_leg_HMMR_Leg_J2_v1_1"/>
     <child link="back_right_leg_HMMR_Leg_J3_v1_1"/>
     <axis xyz="0.0 -1.0 0.0"/>
@@ -209,7 +209,7 @@
   </joint>
   <link name="back_left_leg_base_link">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.028184578381233765 0.0020392786644214244 -9.813214185615953e-06"/>
+      <origin rpy="0 0 0" xyz="0.029044932513473305 0.010265080427010284 -0.03814827760382364"/>
       <mass value="0.15187448298114298"/>
       <inertia ixx="5.3e-05" ixy="-6e-06" ixz="0.0" iyy="6.1e-05" iyz="0.0" izz="6.9e-05"/>
     </inertial>
@@ -229,19 +229,19 @@
   </link>
   <link name="back_left_leg_HMMR_Leg_J2_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.04078345991823647 -0.01323108575665483 0.00021630889019305232"/>
+      <origin rpy="0 0 0" xyz="-0.04078394902352935 -0.013231283994066126 0.00021684450055575039"/>
       <mass value="0.09734685103972182"/>
       <inertia ixx="2.2e-05" ixy="-2e-06" ixz="0.0" iyy="3.6e-05" iyz="0.0" izz="4e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -249,19 +249,19 @@
   </link>
   <link name="back_left_leg_HMMR_Leg_J3_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06366993215147018 -0.021943102238793904 0.0024098327148608222"/>
+      <origin rpy="0 0 0" xyz="-0.06366942125676311 -0.021943300476205383 0.0024103683252244337"/>
       <mass value="0.1208747488020619"/>
       <inertia ixx="3.4e-05" ixy="1.4e-05" ixz="2e-06" iyy="0.000102" iyz="-1e-06" izz="0.000104"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -269,37 +269,37 @@
   </link>
   <link name="back_left_leg_HMMR_Leg_J4_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06827232180237036 0.01066109112327507 0.02089322420417813"/>
+      <origin rpy="0 0 0" xyz="-0.06827181090766318 0.01066089288586344 0.020893759814543007"/>
       <mass value="0.052701725493830516"/>
       <inertia ixx="1.8e-05" ixy="1.4e-05" ixz="-1e-06" iyy="7.3e-05" iyz="0.0" izz="7.2e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
   <joint name="back_left_leg_system_connection" type="fixed">
-    <origin rpy="0 0 0" xyz="-0.20 -0.15 0"/>
+    <origin rpy="0 0 0" xyz="-0.1438 -0.1250 0.0381"/>
     <parent link="core"/>
     <child link="back_left_leg_base_link"/>
   </joint>
   <joint name="back_left_leg_Rev1" type="continuous">
-    <origin rpy="0 0 0" xyz="-0.04375 -0.00555 0.0"/>
+    <origin rpy="0 0 0" xyz="0.01348 0.002676 -0.038139"/>
     <parent link="back_left_leg_base_link"/>
     <child link="back_left_leg_HMMR_Leg_J2_v1_1"/>
-    <axis xyz="1.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 -0.0"/>
   </joint>
   <joint name="back_left_leg_Rev2" type="revolute">
-    <origin rpy="0 0 0" xyz="-0.033926 0.00678 0.0002"/>
+    <origin rpy="0 0 0" xyz="-0.033927 0.00678 0.0002"/>
     <parent link="back_left_leg_HMMR_Leg_J2_v1_1"/>
     <child link="back_left_leg_HMMR_Leg_J3_v1_1"/>
     <axis xyz="0.0 -1.0 0.0"/>
@@ -314,7 +314,7 @@
   </joint>
   <link name="front_right_leg_base_link">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.028184578381233765 0.0020392786644214244 -9.813214185615953e-06"/>
+      <origin rpy="0 0 0" xyz="0.029044932513473305 0.010265080427010284 -0.03814827760382364"/>
       <mass value="0.15187448298114298"/>
       <inertia ixx="5.3e-05" ixy="-6e-06" ixz="0.0" iyy="6.1e-05" iyz="0.0" izz="6.9e-05"/>
     </inertial>
@@ -334,19 +334,19 @@
   </link>
   <link name="front_right_leg_HMMR_Leg_J2_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.04078345991823647 -0.01323108575665483 0.00021630889019305232"/>
+      <origin rpy="0 0 0" xyz="-0.04078394902352935 -0.013231283994066126 0.00021684450055575039"/>
       <mass value="0.09734685103972182"/>
       <inertia ixx="2.2e-05" ixy="-2e-06" ixz="0.0" iyy="3.6e-05" iyz="0.0" izz="4e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -354,19 +354,19 @@
   </link>
   <link name="front_right_leg_HMMR_Leg_J3_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06366993215147018 -0.021943102238793904 0.0024098327148608222"/>
+      <origin rpy="0 0 0" xyz="-0.06366942125676311 -0.021943300476205383 0.0024103683252244337"/>
       <mass value="0.1208747488020619"/>
       <inertia ixx="3.4e-05" ixy="1.4e-05" ixz="2e-06" iyy="0.000102" iyz="-1e-06" izz="0.000104"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -374,37 +374,37 @@
   </link>
   <link name="front_right_leg_HMMR_Leg_J4_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06827232180237036 0.01066109112327507 0.02089322420417813"/>
+      <origin rpy="0 0 0" xyz="-0.06827181090766318 0.01066089288586344 0.020893759814543007"/>
       <mass value="0.052701725493830516"/>
       <inertia ixx="1.8e-05" ixy="1.4e-05" ixz="-1e-06" iyy="7.3e-05" iyz="0.0" izz="7.2e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
   <joint name="front_right_leg_system_connection" type="fixed">
-    <origin rpy="3.14159 3.14159 0" xyz="0.20 0.15 0"/>
+    <origin rpy="3.14159 3.14159 0" xyz="0.1438 0.1250 0.0381"/>
     <parent link="core"/>
     <child link="front_right_leg_base_link"/>
   </joint>
   <joint name="front_right_leg_Rev1" type="continuous">
-    <origin rpy="0 0 0" xyz="-0.04375 -0.00555 0.0"/>
+    <origin rpy="0 0 0" xyz="0.01348 0.002676 -0.038139"/>
     <parent link="front_right_leg_base_link"/>
     <child link="front_right_leg_HMMR_Leg_J2_v1_1"/>
-    <axis xyz="1.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 -0.0"/>
   </joint>
   <joint name="front_right_leg_Rev2" type="revolute">
-    <origin rpy="0 0 0" xyz="-0.033926 0.00678 0.0002"/>
+    <origin rpy="0 0 0" xyz="-0.033927 0.00678 0.0002"/>
     <parent link="front_right_leg_HMMR_Leg_J2_v1_1"/>
     <child link="front_right_leg_HMMR_Leg_J3_v1_1"/>
     <axis xyz="0.0 -1.0 0.0"/>
@@ -419,7 +419,7 @@
   </joint>
   <link name="front_left_leg_base_link">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.028184578381233765 0.0020392786644214244 -9.813214185615953e-06"/>
+      <origin rpy="0 0 0" xyz="0.029044932513473305 0.010265080427010284 -0.03814827760382364"/>
       <mass value="0.15187448298114298"/>
       <inertia ixx="5.3e-05" ixy="-6e-06" ixz="0.0" iyy="6.1e-05" iyz="0.0" izz="6.9e-05"/>
     </inertial>
@@ -439,19 +439,19 @@
   </link>
   <link name="front_left_leg_HMMR_Leg_J2_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.04078345991823647 -0.01323108575665483 0.00021630889019305232"/>
+      <origin rpy="0 0 0" xyz="-0.04078394902352935 -0.013231283994066126 0.00021684450055575039"/>
       <mass value="0.09734685103972182"/>
       <inertia ixx="2.2e-05" ixy="-2e-06" ixz="0.0" iyy="3.6e-05" iyz="0.0" izz="4e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.04375 0.00555 0.0"/>
+      <origin rpy="0 0 0" xyz="-0.01348 -0.002676 0.038139"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -459,19 +459,19 @@
   </link>
   <link name="front_left_leg_HMMR_Leg_J3_v1_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06366993215147018 -0.021943102238793904 0.0024098327148608222"/>
+      <origin rpy="0 0 0" xyz="-0.06366942125676311 -0.021943300476205383 0.0024103683252244337"/>
       <mass value="0.1208747488020619"/>
       <inertia ixx="3.4e-05" ixy="1.4e-05" ixz="2e-06" iyy="0.000102" iyz="-1e-06" izz="0.000104"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.077676 -0.00123 -0.0002"/>
+      <origin rpy="0 0 0" xyz="0.020447 -0.009456 0.037939"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -479,37 +479,37 @@
   </link>
   <link name="front_left_leg_HMMR_Leg_J4_1">
     <inertial>
-      <origin rpy="0 0 0" xyz="-0.06827232180237036 0.01066109112327507 0.02089322420417813"/>
+      <origin rpy="0 0 0" xyz="-0.06827181090766318 0.01066089288586344 0.020893759814543007"/>
       <mass value="0.052701725493830516"/>
       <inertia ixx="1.8e-05" ixy="1.4e-05" ixz="-1e-06" iyy="7.3e-05" iyz="0.0" izz="7.2e-05"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.142683 0.01877 0.019275"/>
+      <origin rpy="0 0 0" xyz="0.085454 0.010544 0.057414"/>
       <geometry>
         <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
   <joint name="front_left_leg_system_connection" type="fixed">
-    <origin rpy="3.14159 0 0" xyz="-0.20 0.15 0"/>
+    <origin rpy="3.14159 0 0" xyz="-0.1438 0.1250 -0.0381"/>
     <parent link="core"/>
     <child link="front_left_leg_base_link"/>
   </joint>
   <joint name="front_left_leg_Rev1" type="continuous">
-    <origin rpy="0 0 0" xyz="-0.04375 -0.00555 0.0"/>
+    <origin rpy="0 0 0" xyz="0.01348 0.002676 -0.038139"/>
     <parent link="front_left_leg_base_link"/>
     <child link="front_left_leg_HMMR_Leg_J2_v1_1"/>
-    <axis xyz="1.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 -0.0"/>
   </joint>
   <joint name="front_left_leg_Rev2" type="revolute">
-    <origin rpy="0 0 0" xyz="-0.033926 0.00678 0.0002"/>
+    <origin rpy="0 0 0" xyz="-0.033927 0.00678 0.0002"/>
     <parent link="front_left_leg_HMMR_Leg_J2_v1_1"/>
     <child link="front_left_leg_HMMR_Leg_J3_v1_1"/>
     <axis xyz="0.0 -1.0 0.0"/>
