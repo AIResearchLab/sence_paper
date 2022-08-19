@@ -8,6 +8,7 @@
 
 #include <sence_msgs/SENCE.h>
 #include <sence_msgs/Target_Buffer.h>
+#include <sence_msgs/Target.h>
 
 #include "ros/publisher.h"
 #include <std_msgs/String.h>
@@ -21,6 +22,69 @@
 #define WriteSerialRate 25     //20Hz
 
 sence_msgs::SENCE control_system;
+
+void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
+{
+    sence_msgs::Target targets[] = msg->Buffer_To_Send;
+    int arrSize = *(&arr + 1) - arr;
+
+    for (int i = 0; i < arrSize; i++) {
+        switch (targets[i].TARGET_ID)
+        {
+        case D_1:
+            control_system.Back_Left.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Back_Left.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_2:
+            control_system.Back_Left.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Back_Left.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_3:
+            control_system.Back_Left.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Back_Left.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_4:
+            control_system.Back_Right.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Back_Right.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_5:
+            control_system.Back_Right.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Back_Right.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_6:
+            control_system.Back_Right.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Back_Right.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_7:
+            control_system.Front_Right.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Front_Right.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_8:
+            control_system.Front_Right.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Front_Right.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_9:
+            control_system.Front_Right.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Front_Right.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_10:
+            control_system.Front_Left.J0.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Front_Left.J0.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_11:
+            control_system.Front_Left.J1.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Front_Left.J1.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        case D_12:
+            control_system.Front_Left.J2.TARGET_POSITION = targets[i].TARGET_POSITION;
+            control_system.Front_Left.J2.TARGET_VELOCITY = targets[i].TARGET_VELOCITY;
+            break;
+        default:
+            // code block
+            std::cout << "Not Handled Yet";
+        }
+    }
+}
 
 void readSerial(serial::Serial &opencm_serial, int recursiveCounter)
 {
@@ -73,40 +137,40 @@ void assignVelocityDynamixelFeedback(int jID, uint16_t velocity)
     switch (jID)
     {
     case D_1:
-        control_system.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_2:
-        control_system.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_3:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_4:
-        control_system.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_5:
-        control_system.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_6:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_7:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_8:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_9:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_10:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_11:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_12:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     default:
         // code block
@@ -119,40 +183,40 @@ void assignPositionDynamixelFeedback(int jID, uint16_t position)
     switch (jID)
     {
     case D_1:
-        control_system.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_2:
-        control_system.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_3:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_4:
-        control_system.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_5:
-        control_system.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_6:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_7:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_8:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_9:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_10:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_11:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_12:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     default:
         // code block
@@ -165,40 +229,40 @@ void assignTemperatureDynamixelFeedback(int jID, uint16_t temperature)
     switch (jID)
     {
     case D_1:
-        control_system.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_2:
-        control_system.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_3:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_4:
-        control_system.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_5:
-        control_system.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_6:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Back_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_7:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_8:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_9:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Right.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_10:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J0 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_11:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J1 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     case D_12:
-        control_system.J3.PRESENT_VELOCITY = convertDynamixelSpeedToFloatSpeed(velocity);
+        control_system.Front_Left.J2 = convertDynamixelSpeedToFloatSpeed(velocity);
         break;
     default:
         // code block
@@ -226,20 +290,29 @@ void processIncomingMessage(int cmd_id, int motor, uint16_t data)
     return;
 }
 
+vector<uint8_t> commandVector;
+void addItem(uint8_t motor, uint8_t cmd, uint16_t data)
+{
+    commandVector.push_back(motor);
+    commandVector.push_back(cmd);
+    commandVector.push_back(UPPER_BYTE(data));
+    commandVector.push_back(LOWER_BYTE(data));
+}
+
 
 int main(int argc, char **argv)
 {
     //Start off by initialising the leg connection and variables to 0
-    control_system.Back_Left.J0.TARGET_POSITION=0
-    control_system.Back_Left.J0.TARGET_VELOCITY=0
-    control_system.Back_Left.J0.PRESENT_VELOCITY=0
-    control_system.Back_Left.J0.PRESENT_POSITION=0
-    control_system.Back_Left.J0.PRESENT_TEMPERATURE=0
-    control_system.Back_Left.J1 = control_system.Back_Left.J0
-    control_system.Back_Left.J2 = control_system.Back_Left.J0
-    control_system.Back_Right = control_system.Back_Left
-    control_system.Back_Right = control_system.Front_Left
-    control_system.Back_Right = control_system.Front_Right
+    control_system.Back_Left.J0.TARGET_POSITION=0;
+    control_system.Back_Left.J0.TARGET_VELOCITY=0;
+    control_system.Back_Left.J0.PRESENT_VELOCITY=0;
+    control_system.Back_Left.J0.PRESENT_POSITION=0;
+    control_system.Back_Left.J0.PRESENT_TEMPERATURE=0;
+    control_system.Back_Left.J1 = control_system.Back_Left.J0;
+    control_system.Back_Left.J2 = control_system.Back_Left.J0;
+    control_system.Back_Right = control_system.Back_Left;
+    control_system.Front_Left = control_system.Back_Left;
+    control_system.Front_Right = control_system.Back_Left;
 
     std::string port = detectPort();
     std::cout << "Port for openCM is" << port << std::endl;
@@ -250,7 +323,6 @@ int main(int argc, char **argv)
     ros::Publisher system_publisher = node.advertise<sence_msgs::SENCE>("randle_state", 3);
 
     ros::Subscriber target_updater = node.subscribe("randle_target", 2, updateTargetsCallback);
-    ros::Subscriber force_updater = node.subscribe("/hub_0/sensor_0", 1, forceSensorCallback);
 
     uint64_t write_serial_time = getClockTime();
     uint64_t publish_feedback_time = getClockTime();
@@ -271,6 +343,7 @@ int main(int argc, char **argv)
         std::cout << "Port was not opened correctly" << std::endl;
         return 0;
     }
+    std::this_thread::sleep_for(3std::chrono_literals::s);
 
     while (1)
     {
@@ -281,6 +354,34 @@ int main(int argc, char **argv)
             control_system.Front_Right.J0.PRESENT_POSITION != 0)
         {
             std::cout << "syncingSystems" << std::endl;
+            control_system.Back_Left.J0.TARGET_POSITION=control_system.Back_Left.J0.PRESENT_POSITION;
+            control_system.Back_Left.J0.TARGET_VELOCITY=0;
+            control_system.Back_Left.J1.TARGET_POSITION=control_system.Back_Left.J1.PRESENT_POSITION;
+            control_system.Back_Left.J1.TARGET_VELOCITY=0;
+            control_system.Back_Left.J2.TARGET_POSITION=control_system.Back_Left.J1.PRESENT_POSITION;
+            control_system.Back_Left.J3.TARGET_VELOCITY=0;
+
+            control_system.Front_Left.J0.TARGET_POSITION=control_system.Front_Left.J0.PRESENT_POSITION;
+            control_system.Front_Left.J0.TARGET_VELOCITY=0;
+            control_system.Front_Left.J1.TARGET_POSITION=control_system.Front_Left.J1.PRESENT_POSITION;
+            control_system.Front_Left.J1.TARGET_VELOCITY=0;
+            control_system.Front_Left.J2.TARGET_POSITION=control_system.Front_Left.J1.PRESENT_POSITION;
+            control_system.Front_Left.J3.TARGET_VELOCITY=0;
+
+            control_system.Front_Right.J0.TARGET_POSITION=control_system.Front_Right.J0.PRESENT_POSITION;
+            control_system.Front_Right.J0.TARGET_VELOCITY=0;
+            control_system.Front_Right.J1.TARGET_POSITION=control_system.Front_Right.J1.PRESENT_POSITION;
+            control_system.Front_Right.J1.TARGET_VELOCITY=0;
+            control_system.Front_Right.J2.TARGET_POSITION=control_system.Front_Right.J1.PRESENT_POSITION;
+            control_system.Front_Right.J3.TARGET_VELOCITY=0;
+
+            control_system.Back_Right.J0.TARGET_POSITION=control_system.Back_Right.J0.PRESENT_POSITION;
+            control_system.Back_Right.J0.TARGET_VELOCITY=0;
+            control_system.Back_Right.J1.TARGET_POSITION=control_system.Back_Right.J1.PRESENT_POSITION;
+            control_system.Back_Right.J1.TARGET_VELOCITY=0;
+            control_system.Back_Right.J2.TARGET_POSITION=control_system.Back_Right.J1.PRESENT_POSITION;
+            control_system.Back_Right.J3.TARGET_VELOCITY=0;
+
             break;
         }
     }
