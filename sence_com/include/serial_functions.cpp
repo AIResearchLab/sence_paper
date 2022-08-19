@@ -43,3 +43,60 @@ void readSerial(serial::Serial &opencm_serial, int recursiveCounter)
         }
     }
 }
+
+std::string detectPort()
+{
+    //todo update code to find open CM board, need to verify pid/vid values
+    std::string hardware_serial_processor = "fff1:ff48"; // If the description of the device contains this then it isn't the coms cable.
+    std::string port;
+    std::string ids;
+
+    // Goes through through all the ports and checks for a device with a vid_pid of a Teensy or Arduino Uno
+    std::vector<serial::PortInfo> devices_found = serial::list_ports();
+    //std::vector<serial::PortInfo>::iterator iter = devices_found.begin();
+
+    for (serial::PortInfo &element : devices_found)
+    {
+        if (element.hardware_id != "n/a")
+        {
+            ids = element.hardware_id;
+            std::cout << "Hardware Info: " << ids<< std::endl;
+            
+            if (ids.find(hardware_serial_processor) != std::string::npos)
+            {
+                port = element.port;
+                std::cout << "Accepted port as custom serial interface object:" << ids;
+                return port;
+            }
+
+            std::string ids = element.hardware_id;
+            std::cout << "Detail port:" << ids;
+        }
+    }
+    throw "No port found matching description!";
+}
+
+vector<uint8_t> writeSerial(serial::Serial &opencm_serial, vector<uint8_t> commandVector)
+{
+    if(commandVector.empty()){
+        return commandVector;
+    }
+    //according to the hardware interface, we should send the vector size as the payload
+    //uint8_t payloadSize = commandVector.size() + 2;
+    uint8_t payloadSize = commandVector.size();
+
+    //inserts the payload at the first element
+    commandVector.insert(commandVector.begin(), payloadSize);
+    //then inserts the value 0 to the first element resulting in a header value of zero
+    commandVector.insert(commandVector.begin(), 0xFF);
+
+    //push the footer to the back
+    commandVector.push_back(0);
+    commandVector.push_back(0);
+
+    uint8_t commandArray[commandVector.size()];
+    std::copy(commandVector.begin(), commandVector.end(), commandArray);
+    opencm_serial.write(commandArray, commandVector.size());
+    commandVector.clear();
+    return commandVector;
+}
