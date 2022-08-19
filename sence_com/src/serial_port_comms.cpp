@@ -13,8 +13,9 @@
 #include <std_msgs/String.h>
 #include <std_msgs/Header.h>
 #include "ros/ros.h"
-#include "Configuration.h"
 #include "serial/serial.h"
+#include "Configuration.h"
+#include "serial_functions.h"
 
 vector<uint8_t> writeSerial(serial::Serial &opencm_serial, vector<uint8_t> commandVector)
 {
