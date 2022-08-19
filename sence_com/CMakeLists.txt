@@ -105,9 +105,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES sence_com
-#  CATKIN_DEPENDS roscpp rospy sence_msgs serial std_msgs
+  CATKIN_DEPENDS roscpp rospy sence_msgs serial std_msgs
 #  DEPENDS system_lib
 )
 
@@ -135,7 +135,9 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/sence_com_node.cpp)
+add_executable(serial_port_comms src/serial_port_comms.cpp)
+target_link_libraries(serial_port_comms ${catkin_LIBRARIES})
+add_dependencies(serial_port_comms ${sence_com_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
