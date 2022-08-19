@@ -3,14 +3,9 @@
 #define LOWER_BYTE(b) (b & 0xff)
 #define INT_JOIN_BYTE(u, l) (u << 8) | l
 #define HeaderValue 60000
-#define M_PI    3.14159265358979323846  /* pi */
-
-#define GOAL_SPEED_RPM_TICK 0.114
-#define SPEED_FEEDBACK_TICK 0.11
-#define GOAL_POSITION_DYNA 0.088
 
 enum JOINT_DEST {
-    D_1 = 20,
+    D_1 = 1,
     D_2,
     D_3,
     D_4,
