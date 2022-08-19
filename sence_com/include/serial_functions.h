@@ -20,11 +20,11 @@ vector<uint8_t> writeSerial(serial::Serial &teensy_serial, vector<uint8_t> comma
 
 uint64_t getClockTime();
 
-float convertDynamixelPoseToFloatPose(uint16_t value, uint16_t offset);
-uint16_t convertFloatPoseToDynamixelPose(float value, uint16_t offset);
 
+float convertDynamixelPoseToFloatPose(uint16_t value);
+uint16_t convertFloatPoseToDynamixelPose(float value);
 uint16_t convertFloatTargetSpeedToDynamixelSpeed(float radiansPerSecond);
-uint16_t convertFloatFeedbackSpeedToDynamixelSpeed(float radiansPerSecond);
+uint16_t convertDynamixelSpeedToFloatFeedbackSpeed(uint16_t feedbackValue);
 
 float convertDynamixelSpeedToFloatSpeed(uint16_t dynamixelMeasuredSpeed);
 std::string detectPort();
