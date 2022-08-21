@@ -574,9 +574,9 @@ int main(int argc, char **argv)
             write_serial_time = getClockTime();
         }
 
+        ros::spinOnce();
         cout << "Looping, will pause if serial error" << time_now << std::endl;
         rate.sleep();
-        ros::spinOnce();
     }
     opencm_serial.close();
 
