@@ -1,0 +1,3 @@
+<launch>
+<node name="sence_coms" pkg="sence_com" type="serial_port_comms"/>
+</launch>
