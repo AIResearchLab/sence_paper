@@ -46,7 +46,7 @@ std::string detectPort()
     std::cout << "Finding required device..." << ids<< std::endl;
     // Goes through through all the ports and checks for a device with a vid_pid of a Teensy or Arduino Uno
     std::vector<serial::PortInfo> devices_found = serial::list_ports();
-    std::cout << devices_found << ids<< std::endl;
+    std::cout << devices_found.size() << ids<< std::endl;
     //std::vector<serial::PortInfo>::iterator iter = devices_found.begin();
 
     for (serial::PortInfo &element : devices_found)
