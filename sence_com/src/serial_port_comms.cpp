@@ -38,17 +38,21 @@ sence_msgs::SENCE control_system;
 
 std::string detectPort()
 {
+
     //todo update code to find open CM board, need to verify pid/vid values
     std::string hardware_serial_processor = "fff1:ff48"; // If the description of the device contains this then it isn't the coms cable.
     std::string port;
     std::string ids;
-
+    std::cout << "Finding required device..." << ids<< std::endl;
     // Goes through through all the ports and checks for a device with a vid_pid of a Teensy or Arduino Uno
     std::vector<serial::PortInfo> devices_found = serial::list_ports();
+    std::cout << devices_found << ids<< std::endl;
     //std::vector<serial::PortInfo>::iterator iter = devices_found.begin();
 
     for (serial::PortInfo &element : devices_found)
     {
+            std::cout << "Evaluating a device:" << std::endl;
+
         if (element.hardware_id != "n/a")
         {
             ids = element.hardware_id;
