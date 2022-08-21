@@ -194,6 +194,7 @@ void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
 {
     for (int i = 0; i < msg->count; i++) {
         sence_msgs::Target target = msg->Buffer_To_Send[i];
+        std::cout << "Message recieved for target : " << target.TARGET_ID << " with updates" << std::endl;
         switch (target.TARGET_ID)
         {
         case D_1:
@@ -476,9 +477,9 @@ int main(int argc, char **argv)
     ros::NodeHandle node;
     ros::Rate rate(1000);
 
-    ros::Publisher system_publisher = node.advertise<sence_msgs::SENCE>("randle_state", 3);
+    ros::Publisher system_publisher = node.advertise<sence_msgs::SENCE>("sence_state", 3);
 
-    ros::Subscriber target_updater = node.subscribe("randle_target", 2, updateTargetsCallback);
+    ros::Subscriber target_updater = node.subscribe("sence_target", 2, updateTargetsCallback);
 
     uint64_t write_serial_time = getClockTime();
     uint64_t publish_feedback_time = getClockTime();
@@ -573,7 +574,7 @@ int main(int argc, char **argv)
             write_serial_time = getClockTime();
         }
 
-        cout << "Looping, will pause if serial error" << time_now << std::endl;
+        //cout << "Looping, will pause if serial error" << time_now << std::endl;
         rate.sleep();
         ros::spinOnce();
     }
