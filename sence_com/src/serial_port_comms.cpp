@@ -40,7 +40,7 @@ std::string detectPort()
 {
 
     //todo update code to find open CM board, need to verify pid/vid values
-    std::string hardware_serial_processor = "fff1:ff48"; // If the description of the device contains this then it isn't the coms cable.
+    std::string hardware_serial_processor = "10c4:ea60"; // If the description of the device contains this then it isn't the coms cable.
     std::string port;
     std::string ids;
     std::cout << "Finding required device..." << ids<< std::endl;
