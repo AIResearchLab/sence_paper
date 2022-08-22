@@ -133,8 +133,11 @@ void addItem(uint8_t motor, uint8_t cmd, uint16_t data)
     commandVector.push_back(LOWER_BYTE(data));
 }
 
+bool switch_op = false;
 void construct_commands(){
-
+    commandVector.clear()
+    if (switch_op==true){
+    switch_op = false;
     uint16_t conversion_positionD_1 = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
     uint16_t conversion_velocityD_1 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J0.TARGET_VELOCITY);
     uint16_t conversion_positionD_2 = convertFloatPoseToDynamixelPose(control_system.Back_Left.J1.TARGET_POSITION);
@@ -148,7 +151,20 @@ void construct_commands(){
     uint16_t conversion_velocityD_5 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J1.TARGET_VELOCITY);
     uint16_t conversion_positionD_6 = convertFloatPoseToDynamixelPose(control_system.Back_Right.J2.TARGET_POSITION);
     uint16_t conversion_velocityD_6 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J2.TARGET_VELOCITY);
-
+    addItem(D_1, TARGET_POSITION, conversion_positionD_1);
+    addItem(D_1, TARGET_VELOCITY, conversion_velocityD_1);
+    addItem(D_2, TARGET_POSITION, conversion_positionD_2);
+    addItem(D_2, TARGET_VELOCITY, conversion_velocityD_2);
+    addItem(D_3, TARGET_POSITION, conversion_positionD_3);
+    addItem(D_3, TARGET_VELOCITY, conversion_velocityD_3);
+    addItem(D_4, TARGET_POSITION, conversion_positionD_4);
+    addItem(D_4, TARGET_VELOCITY, conversion_velocityD_4);
+    addItem(D_5, TARGET_POSITION, conversion_positionD_5);
+    addItem(D_5, TARGET_VELOCITY, conversion_velocityD_5);
+    addItem(D_6, TARGET_POSITION, conversion_positionD_6);
+    addItem(D_6, TARGET_VELOCITY, conversion_velocityD_6);
+    }else{
+    switch_op = true;
     uint16_t conversion_positionD_7 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
     uint16_t conversion_velocityD_7 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
     uint16_t conversion_positionD_8 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J1.TARGET_POSITION);
@@ -162,20 +178,6 @@ void construct_commands(){
     uint16_t conversion_velocityD_11 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
     uint16_t conversion_positionD_12 = convertFloatPoseToDynamixelPose(control_system.Front_Left.J2.TARGET_POSITION);
     uint16_t conversion_velocityD_12 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
-
-
-    addItem(D_1, TARGET_POSITION, conversion_positionD_1);
-    addItem(D_1, TARGET_VELOCITY, conversion_velocityD_1);
-    addItem(D_2, TARGET_POSITION, conversion_positionD_2);
-    addItem(D_2, TARGET_VELOCITY, conversion_velocityD_2);
-    addItem(D_3, TARGET_POSITION, conversion_positionD_3);
-    addItem(D_3, TARGET_VELOCITY, conversion_velocityD_3);
-    addItem(D_4, TARGET_POSITION, conversion_positionD_4);
-    addItem(D_4, TARGET_VELOCITY, conversion_velocityD_4);
-    addItem(D_5, TARGET_POSITION, conversion_positionD_5);
-    addItem(D_5, TARGET_VELOCITY, conversion_velocityD_5);
-    addItem(D_6, TARGET_POSITION, conversion_positionD_6);
-    addItem(D_6, TARGET_VELOCITY, conversion_velocityD_6);
     addItem(D_7, TARGET_POSITION, conversion_positionD_7);
     addItem(D_7, TARGET_VELOCITY, conversion_velocityD_7);
     addItem(D_8, TARGET_POSITION, conversion_positionD_8);
@@ -188,6 +190,7 @@ void construct_commands(){
     addItem(D_11, TARGET_VELOCITY, conversion_velocityD_11);
     addItem(D_12, TARGET_POSITION, conversion_positionD_12);
     addItem(D_12, TARGET_VELOCITY, conversion_velocityD_12);
+    }
 }
 
 void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
