@@ -101,12 +101,9 @@ float convertDynamixelPoseToFloatPose(uint16_t value){
     return (float)value * POSITION_DYNA * M_PI / 180;
 }
 
-uint16_t convertFloatPoseToDynamixelPose(float value){
+int16_t convertFloatPoseToDynamixelPose(float value){
     float convertedValue = round(value * 180 / M_PI / POSITION_DYNA);
-    if(convertedValue<0){
-        throw "NULL ERROR OCCURED";
-    }
-    return (uint16_t)convertedValue;
+    return (int16_t)convertedValue;
 }
 
 uint16_t convertFloatTargetSpeedToDynamixelSpeed(float radiansPerSecond){
@@ -114,10 +111,10 @@ uint16_t convertFloatTargetSpeedToDynamixelSpeed(float radiansPerSecond){
     return (uint16_t)round(RPM / SPEED_RPM_TICK);
 }
 
-uint16_t convertDynamixelSpeedToFloatFeedbackSpeed(uint16_t feedbackValue){
+float convertDynamixelSpeedToFloatFeedbackSpeed(uint16_t feedbackValue){
     int16_t convertedSpeedFromUnsignedInteger = (int16_t)feedbackValue;
     float RPM = SPEED_RPM_TICK * (float)convertedSpeedFromUnsignedInteger;
-    return (float)(RPM / 9.549297);
+    return (float)RPM / 9.549297;
 }
 
 uint64_t getClockTime()
@@ -135,7 +132,7 @@ void addItem(uint8_t motor, uint8_t cmd, uint16_t data)
 
 bool switch_op = false;
 void construct_commands(){
-    commandVector.clear()
+    commandVector.clear();
     if (switch_op==true){
     switch_op = false;
     uint16_t conversion_positionD_1 = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
@@ -163,7 +160,8 @@ void construct_commands(){
     addItem(D_5, TARGET_VELOCITY, conversion_velocityD_5);
     addItem(D_6, TARGET_POSITION, conversion_positionD_6);
     addItem(D_6, TARGET_VELOCITY, conversion_velocityD_6);
-    }else{
+    }
+    else {
     switch_op = true;
     uint16_t conversion_positionD_7 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
     uint16_t conversion_velocityD_7 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
@@ -555,7 +553,6 @@ int main(int argc, char **argv)
         time_now = getClockTime();
 
         readSerial(opencm_serial, 2);
-        commandVector = writeSerial(opencm_serial, commandVector);
 
         //this if statement is to publish at 30 HZ the feedback of motor positions
         //uint32 seq
@@ -574,6 +571,7 @@ int main(int argc, char **argv)
         if ((time_now - write_serial_time) >= WriteSerialRate)
         {
             construct_commands();
+            commandVector = writeSerial(opencm_serial, commandVector);
             write_serial_time = getClockTime();
         }
 
