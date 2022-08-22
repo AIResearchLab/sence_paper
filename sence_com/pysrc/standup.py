@@ -15,21 +15,21 @@ if __name__ == "__main__" :
         j1.TARGET_POSITION = 0.71
         j1.TARGET_VELOCITY = 0.3
         i.Buffer_To_Send.append(j1)
-        # j2 = Target()
-        # j2.TARGET_ID = 2
-        # j2.TARGET_POSITION = -1.58
-        # j2.TARGET_VELOCITY = 0.3
-        # i.Buffer_To_Send.append(j2)
-        # j3 = Target()
-        # j3.TARGET_ID = 3
-        # j3.TARGET_POSITION = 1.05
-        # j3.TARGET_VELOCITY = 0.3
-        # i.Buffer_To_Send.append(j3)
-        # j4 = Target()
-        # j4.TARGET_ID = 4
-        # j4.TARGET_POSITION = -0.71
-        # j4.TARGET_VELOCITY = 0.3
-        # i.Buffer_To_Send.append(j4)
+        j2 = Target()
+        j2.TARGET_ID = 2
+        j2.TARGET_POSITION = -1.58
+        j2.TARGET_VELOCITY = 0.3
+        i.Buffer_To_Send.append(j2)
+        j3 = Target()
+        j3.TARGET_ID = 3
+        j3.TARGET_POSITION = 1.05
+        j3.TARGET_VELOCITY = 0.3
+        i.Buffer_To_Send.append(j3)
+        j4 = Target()
+        j4.TARGET_ID = 4
+        j4.TARGET_POSITION = -0.71
+        j4.TARGET_VELOCITY = 0.3
+        i.Buffer_To_Send.append(j4)
         # j5 = Target()
         # j5.TARGET_ID = 5
         # j5.TARGET_POSITION = 1.58
