@@ -51,10 +51,11 @@ std::string detectPort()
 
     for (serial::PortInfo &element : devices_found)
     {
-            std::cout << "Evaluating a device:" << std::endl;
+            std::cout << "Evaluating a device..." << element.hardware_id << std::endl;
 
         if (element.hardware_id != "n/a")
         {
+
             ids = element.hardware_id;
             std::cout << "Hardware Info: " << ids<< std::endl;
             
@@ -69,6 +70,7 @@ std::string detectPort()
             std::cout << "Detail port:" << ids;
         }
     }
+    
     throw "No port found matching description!";
 }
 
