@@ -75,7 +75,7 @@ if __name__ == "__main__" :
         rospy.init_node('test_stand')
         if h == '1':
             i.Buffer_To_Send[0].TARGET_POSITION = 0.71
-            i.Buffer_To_Send[3].TARGET_POSITION = 0.71
+            i.Buffer_To_Send[3].TARGET_POSITION = -0.71
             i.Buffer_To_Send[6].TARGET_POSITION = 0.71
             i.Buffer_To_Send[9].TARGET_POSITION = -0.71    
             pub.publish(i)
