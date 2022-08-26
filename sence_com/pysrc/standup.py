@@ -68,11 +68,16 @@ if __name__ == "__main__" :
     i.Buffer_To_Send.append(j12)
     i.count = len(i.Buffer_To_Send)
 
+    pub = rospy.Publisher('/sence_target', Target_Buffer, queue_size=3)
+
     while(True):
         h = input('press enter')
         rospy.init_node('test_stand')
-        pub = rospy.Publisher('/sence_target', Target_Buffer, queue_size=3)
-        if h == '1':            
+        if h == '1':
+            i.Buffer_To_Send[0].TARGET_POSITION = 0.71
+            i.Buffer_To_Send[3].TARGET_POSITION = 0.71
+            i.Buffer_To_Send[6].TARGET_POSITION = 0.71
+            i.Buffer_To_Send[9].TARGET_POSITION = -0.71    
             pub.publish(i)
         elif h == '2':
             i.Buffer_To_Send[0].TARGET_POSITION = 1.58
