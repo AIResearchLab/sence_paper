@@ -17,89 +17,26 @@
 #include <std_msgs/String.h>
 #include <std_msgs/Header.h>
 #include "ros/ros.h"
-#include "serial/serial.h"
 #include "Configuration.h"
+#include <dynamixel_workbench_toolbox/dynamixel_workbench.h>
 
 using namespace std;
 using std::vector;
+
+
+#define RateOfUpdate 10000 //100 Hz return structure
 
 #define M_PI    3.14159265358979323846  /* pi */
 
 #define SPEED_RPM_TICK 0.229
 #define POSITION_DYNA 0.088
 
-#define FeedbackPublishRate 25 //20 Hz return structure
-#define WriteSerialRate 150     //20Hz
+#define DYNA_BAUD 3000000
 
-vector<uint8_t> commandVector;
+DynamixelWorkbench dxl_wb;
+
 
 sence_msgs::SENCE control_system;
-
-std::string detectPort()
-{
-
-    //todo update code to find open CM board, need to verify pid/vid values
-    std::string hardware_serial_processor = "10c4:ea60"; // If the description of the device contains this then it isn't the coms cable.
-    std::string port;
-    std::string ids;
-    std::cout << "Finding required device..." << ids<< std::endl;
-    // Goes through through all the ports and checks for a device with a vid_pid of a Teensy or Arduino Uno
-    std::vector<serial::PortInfo> devices_found = serial::list_ports();
-    std::cout << devices_found.size() << ids<< std::endl;
-    //std::vector<serial::PortInfo>::iterator iter = devices_found.begin();
-
-    for (serial::PortInfo &element : devices_found)
-    {
-            std::cout << "Evaluating a device..." << element.hardware_id << std::endl;
-
-        if (element.hardware_id != "n/a")
-        {
-
-            ids = element.hardware_id;
-            std::cout << "Hardware Info: " << ids<< std::endl;
-            
-            if (ids.find(hardware_serial_processor) != std::string::npos)
-            {
-                port = element.port;
-                std::cout << "Accepted port as custom serial interface object:" << ids;
-                return port;
-            }
-
-            std::string ids = element.hardware_id;
-            std::cout << "Detail port:" << ids;
-        }
-    }
-    
-    throw "No port found matching description!";
-}
-
-vector<uint8_t> writeSerial(serial::Serial &opencm_serial, vector<uint8_t> commandVector)
-{
-    if(commandVector.empty()){
-        return commandVector;
-    }
-    //according to the hardware interface, we should send the vector size as the payload
-    //uint8_t payloadSize = commandVector.size() + 2;
-    uint8_t payloadSize = commandVector.size();
-
-    //inserts the payload at the first element
-    commandVector.insert(commandVector.begin(), payloadSize);
-    //then inserts the value 0 to the first element resulting in a header value of zero
-    commandVector.insert(commandVector.begin(), 0xFF);
-
-    //push the footer to the back
-    commandVector.push_back(0);
-    commandVector.push_back(0);
-
-    uint8_t commandArray[commandVector.size()];
-    std::copy(commandVector.begin(), commandVector.end(), commandArray);
-
-    opencm_serial.write(commandArray, commandVector.size());
-
-    commandVector.clear();
-    
-    return commandVector;
-}
 
 float convertDynamixelPoseToFloatPose(uint16_t value){
     return (float)value * POSITION_DYNA * M_PI / 180;
@@ -126,186 +63,198 @@ uint64_t getClockTime()
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void addItem(uint8_t motor, uint8_t cmd, uint16_t data)
-{
-    commandVector.push_back(motor);
-    commandVector.push_back(cmd);
-    commandVector.push_back(UPPER_BYTE(data));
-    commandVector.push_back(LOWER_BYTE(data));
+
+void resend_targets(){
+const char *log;
+for (int i = 1; i<=12; i++) {
+        int32_t pos;
+        int32_t vel;
+        switch (i)
+        {
+        case D_1:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J0.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_2:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J1.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J1.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_3:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J2.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J2.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_4:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J0.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J0.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_5:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J1.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J1.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_6:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J2.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J2.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_7:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_8:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J1.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J1.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_9:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J2.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J2.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_10:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J0.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_11:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J1.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        case D_12:
+            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
+            vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J2.TARGET_POSITION);
+            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
+            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
+            break;
+        default:
+            // code block
+            std::cout << "Not Handled Yet";
+        }
+    }
 }
-
-int switch_op = 0;
-void construct_commands(){
-    commandVector.clear();
-    switch(switch_op){
-    case 0:
-    {
-        uint16_t conversion_velocityD_1 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J0.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_2 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J1.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_3 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J2.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_4 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J0.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_5 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J1.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_6 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J2.TARGET_VELOCITY);
-
-        addItem(D_1, TARGET_VELOCITY, conversion_velocityD_1);
-        addItem(D_2, TARGET_VELOCITY, conversion_velocityD_2);
-        addItem(D_3, TARGET_VELOCITY, conversion_velocityD_3);
-        addItem(D_4, TARGET_VELOCITY, conversion_velocityD_4);
-        addItem(D_5, TARGET_VELOCITY, conversion_velocityD_5);
-        addItem(D_6, TARGET_VELOCITY, conversion_velocityD_6);
-        std::cout << "Sending Velocities 1-6" << std::endl;
-        // std::cout << "Motor 1 to velocity " << conversion_velocityD_1 << std::endl;
-        // std::cout << "Motor 2 to velocity " << conversion_velocityD_2 << std::endl;
-        // std::cout << "Motor 3 to velocity " << conversion_velocityD_3 << std::endl;
-        // std::cout << "Motor 4 to velocity " << conversion_velocityD_4 << std::endl;
-        // std::cout << "Motor 5 to velocity " << conversion_velocityD_5 << std::endl;
-        // std::cout << "Motor 6 to velocity " << conversion_velocityD_6 << std::endl;
-        switch_op++;
-        break;
-    }
-    case 1:
-    {
-        uint16_t conversion_positionD_1 = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
-        uint16_t conversion_positionD_2 = convertFloatPoseToDynamixelPose(control_system.Back_Left.J1.TARGET_POSITION);
-        uint16_t conversion_positionD_3 = convertFloatPoseToDynamixelPose(control_system.Back_Left.J2.TARGET_POSITION);
-        uint16_t conversion_positionD_4 = convertFloatPoseToDynamixelPose(control_system.Back_Right.J0.TARGET_POSITION);
-        uint16_t conversion_positionD_5 = convertFloatPoseToDynamixelPose(control_system.Back_Right.J1.TARGET_POSITION);
-        uint16_t conversion_positionD_6 = convertFloatPoseToDynamixelPose(control_system.Back_Right.J2.TARGET_POSITION);
-
-        addItem(D_1, TARGET_POSITION, (uint16_t)conversion_positionD_1);
-        addItem(D_2, TARGET_POSITION, (uint16_t)conversion_positionD_2);
-        addItem(D_3, TARGET_POSITION, (uint16_t)conversion_positionD_3);
-        addItem(D_4, TARGET_POSITION, (uint16_t)conversion_positionD_4);
-        addItem(D_5, TARGET_POSITION, (uint16_t)conversion_positionD_5);
-        addItem(D_6, TARGET_POSITION, (uint16_t)conversion_positionD_6); 
-
-        std::cout << "Sending Positions 1-6" << std::endl;  
-
-        // std::cout << "Motor 1 to position " << conversion_positionD_1 <<  (int16_t)conversion_positionD_1 << std::endl;
-        // std::cout << "Motor 2 to position " << conversion_positionD_2 <<  (int16_t)conversion_positionD_2 << std::endl;
-        // std::cout << "Motor 3 to position " << conversion_positionD_3 <<  (int16_t)conversion_positionD_3 << std::endl;
-        // std::cout << "Motor 4 to position " << conversion_positionD_4 <<  (int16_t)conversion_positionD_4 << std::endl;
-        // std::cout << "Motor 5 to position " << conversion_positionD_5 <<  (int16_t)conversion_positionD_5 << std::endl;
-        // std::cout << "Motor 6 to position " << conversion_positionD_6 <<  (int16_t)conversion_positionD_6 << std::endl;
-        switch_op++;
-        break;
-    }
-    case 2:
-    {
-        uint16_t conversion_velocityD_7 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_8 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J1.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_9 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J2.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_10 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_11 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_12 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
-        addItem(D_7, TARGET_VELOCITY, conversion_velocityD_7);
-        addItem(D_8, TARGET_VELOCITY, conversion_velocityD_8);
-        addItem(D_9, TARGET_VELOCITY, conversion_velocityD_9);
-        addItem(D_10, TARGET_VELOCITY, conversion_velocityD_10);
-        addItem(D_11, TARGET_VELOCITY, conversion_velocityD_11);
-        addItem(D_12, TARGET_VELOCITY, conversion_velocityD_12);
-
-        std::cout << "Sending Velocities 7-12" << std::endl;  
-        
-        // std::cout << "Motor 7 to velocity " << conversion_velocityD_7 << std::endl;
-        // std::cout << "Motor 8 to velocity " << conversion_velocityD_8 << std::endl;
-        // std::cout << "Motor 9 to velocity " << conversion_velocityD_9 << std::endl;
-        // std::cout << "Motor 10 to velocity " << conversion_velocityD_10 << std::endl;
-        // std::cout << "Motor 11 to velocity " << conversion_velocityD_11 << std::endl;
-        // std::cout << "Motor 12 to velocity " << conversion_velocityD_12 << std::endl;
-        switch_op++;
-        break;
-    }
-    case 3:
-    {
-        uint16_t conversion_positionD_7 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
-        uint16_t conversion_positionD_8 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J1.TARGET_POSITION);
-        uint16_t conversion_positionD_9 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J2.TARGET_POSITION);
-        uint16_t conversion_positionD_10 = convertFloatPoseToDynamixelPose(control_system.Front_Left.J0.TARGET_POSITION);
-        uint16_t conversion_positionD_11 = convertFloatPoseToDynamixelPose(control_system.Front_Left.J1.TARGET_POSITION);
-        uint16_t conversion_positionD_12 = convertFloatPoseToDynamixelPose(control_system.Front_Left.J2.TARGET_POSITION);
-        addItem(D_7, TARGET_POSITION, (uint16_t)conversion_positionD_7);
-        addItem(D_8, TARGET_POSITION, (uint16_t)conversion_positionD_8);
-        addItem(D_9, TARGET_POSITION, (uint16_t)conversion_positionD_9);
-        addItem(D_10, TARGET_POSITION, (uint16_t)conversion_positionD_10);
-        addItem(D_11, TARGET_POSITION, (uint16_t)conversion_positionD_11);
-        addItem(D_12, TARGET_POSITION, (uint16_t)conversion_positionD_12);
-
-        std::cout << "Sending Positions 7-12" << std::endl;  
-
-        // std::cout << "Motor 7 to position " << conversion_positionD_7   <<   (int16_t)conversion_positionD_7 << std::endl;
-        // std::cout << "Motor 8 to position " << conversion_positionD_8   <<   (int16_t)conversion_positionD_8 << std::endl;
-        // std::cout << "Motor 9 to position " << conversion_positionD_9   <<   (int16_t)conversion_positionD_9 << std::endl;
-        // std::cout << "Motor 10 to position " << conversion_positionD_10 <<   (int16_t)conversion_positionD_10 << std::endl;
-        // std::cout << "Motor 11 to position " << conversion_positionD_11 <<   (int16_t)conversion_positionD_11 << std::endl;
-        // std::cout << "Motor 12 to position " << conversion_positionD_12 <<   (int16_t)conversion_positionD_12 << std::endl;
-
-        switch_op = 0;
-        break;
-    }
-    default:
-        switch_op=0;
-        break;
-  }
-        
-    
-    
-    }
 
 void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
 {
+    const char *log;
     for (int i = 0; i < msg->count; i++) {
         sence_msgs::Target target = msg->Buffer_To_Send[i];
         std::cout << "Message recieved for target : " << target.TARGET_ID << " with updates" << std::endl;
+        int32_t pos;
+        int32_t vel;
         switch (target.TARGET_ID)
         {
         case D_1:
             control_system.Back_Left.J0.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Back_Left.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_2:
             control_system.Back_Left.J1.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Back_Left.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_3:
             control_system.Back_Left.J2.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Back_Left.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_4:
             control_system.Back_Right.J0.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Back_Right.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_5:
             control_system.Back_Right.J1.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Back_Right.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_6:
             control_system.Back_Right.J2.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Back_Right.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_7:
             control_system.Front_Right.J0.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Front_Right.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_8:
             control_system.Front_Right.J1.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Front_Right.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_9:
             control_system.Front_Right.J2.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Front_Right.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_10:
             control_system.Front_Left.J0.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Front_Left.J0.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_11:
             control_system.Front_Left.J1.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Front_Left.J1.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         case D_12:
             control_system.Front_Left.J2.TARGET_POSITION = target.TARGET_POSITION;
             control_system.Front_Left.J2.TARGET_VELOCITY = target.TARGET_VELOCITY;
+            // pos = convertFloatTargetSpeedToDynamixelSpeed(target.TARGET_VELOCITY);
+            // vel = convertFloatPoseToDynamixelPose(target.TARGET_POSITION);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Profile_Velocity", vel, &log);
+            // dxl_wb.itemWrite(target.TARGET_ID, "Goal_Position", pos, &log);
             break;
         default:
             // code block
@@ -405,6 +354,52 @@ void assignVelocityDynamixelFeedback(int jID, uint16_t velocity)
     }
 }
 
+void assignLoadDynamixelFeedback(int jID, int32_t load)
+{
+    switch (jID)
+    {
+    case D_1:
+        control_system.Back_Left.J0.PRESENT_LOAD = load;
+        break;
+    case D_2:
+        control_system.Back_Left.J1.PRESENT_LOAD = load;
+        break;
+    case D_3:
+        control_system.Back_Left.J2.PRESENT_LOAD = load;
+        break;
+    case D_4:
+        control_system.Back_Right.J0.PRESENT_LOAD =load;
+        break;
+    case D_5:
+        control_system.Back_Right.J1.PRESENT_LOAD =load;
+        break;
+    case D_6:
+        control_system.Back_Right.J2.PRESENT_LOAD =load;
+        break;
+    case D_7:
+        control_system.Front_Right.J0.PRESENT_LOAD =load;
+        break;
+    case D_8:
+        control_system.Front_Right.J1.PRESENT_LOAD =load;
+        break;
+    case D_9:
+        control_system.Front_Right.J2.PRESENT_LOAD =load;
+        break;
+    case D_10:
+        control_system.Front_Left.J0.PRESENT_LOAD =load;
+        break;
+    case D_11:
+        control_system.Front_Left.J1.PRESENT_LOAD =load;
+        break;
+    case D_12:
+        control_system.Front_Left.J2.PRESENT_LOAD =load;
+        break;
+    default:
+        // code block
+        std::cout << "Not Handled Yet";
+    }
+}
+
 void assignPositionDynamixelFeedback(int jID, uint16_t position)
 {
     switch (jID)
@@ -451,93 +446,238 @@ void assignPositionDynamixelFeedback(int jID, uint16_t position)
     }
 }
 
-void processIncomingMessage(int cmd_id, int motor, uint16_t data)
-{
-    //std::cout << "id: " << cmd_id << " - motor: " << motor << " - value: "<< data << std::endl;
-    switch (cmd_id)
-    {
-    case PRESENT_POSITION:
-        assignPositionDynamixelFeedback(motor, data);
-        break;
-    case PRESENT_VELOCITY:
-        assignVelocityDynamixelFeedback(motor, data);
-        break;
-    case PRESENT_TEMP:
-        assignTemperatureDynamixelFeedback(motor, data);
-        break;
-    default:
-        // code block
-        std::cout << "Not Handled Yet " << cmd_id << "\n";
-    }
-    return;
-}
-
-void readSerial(serial::Serial &opencm_serial, int recursiveCounter)
-{
-
-    uint8_t check_buffer[2];
-    if (recursiveCounter > 5)
-    {
-        return;
-    }
-    // only reads if 3 bytes are available which should be header value + payload
-    if (opencm_serial.available() > 0)
-    {
-        //std::cout << "Reading Available Input Data at "<< getClockTime() << std::endl;
-        opencm_serial.read(check_buffer, 2);
-        // flushes if header value isn't correct
-        if (check_buffer[0] != 255)
+void update_system(){
+    bool result;
+    const char *log;
+    uint16_t model_number = 0;
+    int32_t get_data[3] = {0, 0, 0};
+    for (int leg = 0; leg <=3; leg++) {
+        result = dxl_wb.initBulkRead(&log);
+        if (result == false)
         {
-            opencm_serial.flushInput();
-            ROS_ERROR_STREAM("Read front: check:" << check_buffer);
-            return;
+            printf("%s\n", log);
         }
         else
         {
-            uint8_t payload = check_buffer[1];
-            //add two for footer read
-            uint8_t message_buffer[payload + 2];
-            opencm_serial.read(message_buffer, payload + 2);
-            //TODO: add comment about for loop structure
-            for (int i = 0; i < payload / 4; i++)
-            {
-                uint8_t motorId = message_buffer[i * 4];
-                uint8_t int_id = message_buffer[i * 4 + 1];
-                uint16_t full_byte = INT_JOIN_BYTE(message_buffer[i * 4 + 2], message_buffer[i * 4 + 3]);
-                processIncomingMessage(unsigned(int_id), unsigned(motorId), full_byte);
-            }
-
-            if (message_buffer[sizeof(message_buffer) - 1] != 0 && message_buffer[sizeof(message_buffer) - 2] != 0)
-            {
-                ROS_ERROR_STREAM("Read back check" << message_buffer[payload - 1]);
-                opencm_serial.flushInput();
-            }
-
-            readSerial(opencm_serial, recursiveCounter++);
+            printf("%s\n", log);
         }
-    }
-}
+        for (int ids = (leg*3)+1; ids <= (leg*3)+3; ids++) {
+            result = dxl_wb.addBulkReadParam(ids, "Present_Position", &log);
+            if (result == false)
+            {
+                printf("%s\n", log);
+                printf("Failed to add bulk read Present_Position param\n");
+            }
+            else
+            {
+                printf("%s\n", log);
+            }
 
+            result = dxl_wb.addBulkReadParam(ids, "Present_Velocity", &log);
+            if (result == false)
+            {
+                printf("%s\n", log);
+                printf("Failed to add bulk read Present_Velocity param\n");
+            }
+            else
+            {
+                printf("%s\n", log);
+            }
+
+            result = dxl_wb.addBulkReadParam(ids, "Present_Temperature", &log);
+            if (result == false)
+            {
+                printf("%s\n", log);
+                printf("Failed to add bulk read Present_Temperature param\n");
+            }
+            else
+            {
+                printf("%s\n", log);
+            }
+
+            result = dxl_wb.addBulkReadParam(ids, "Present_Load", &log);
+            if (result == false)
+            {
+                printf("%s\n", log);
+                printf("Failed to add bulk read Present_Load param\n");
+            }
+            else
+            {
+                printf("%s\n", log);
+            }
+        }
+        //read the bulk data
+        result = dxl_wb.bulkRead(&log);
+        if (result == false)
+        {
+            printf("%s\n", log);
+            printf("Failed to bulk read\n");
+        }
+
+        result = dxl_wb.getBulkReadData(&get_data[0], &log);
+        if (result == false)
+        {
+            printf("%s\n", log);
+        }
+        else
+        {
+            //printf("[ID %d]\tGoal Position : %d\tPresent Position : %d, [ID %d]\tLED : %d\n"
+            //        ,dxl_id[0], goal_position[0], get_data[0], dxl_id[1], get_data[1]);
+            printf("[data_test : %d",get_data[0]);
+        }
+
+        //reassign
+        for (int ids = (leg*3)+1; ids <= (leg*3)+3; ids++) {
+
+        }
+
+
+    }
+    /*
+    bool result;
+    const char *log;
+    uint16_t model_number = 0;
+    //in this case we want to bulk read on a leg basis... so
+    
+
+    result = dxl_wb.addBulkReadParam(dxl_id[0], "Present_Position", &log);
+    if (result == false)
+    {
+        printf("%s\n", log);
+        printf("Failed to add bulk read position param\n");
+    }
+    else
+    {
+        printf("%s\n", log);
+    }
+
+    
+    int32_t get_data = 0;
+    for (int i = 1; i <= 2; i++) {
+        result = dxl_wb.ping(i, &model_number, &log);
+        if (result == false)
+        {
+            printf("%s\n", log);
+            printf("Failed to ping\n");
+            cout << "ID: "<<i << std::endl;
+            printf("It looks like the U2D2 cannot find all the required components, please validate that all dynamixels are detectable\n");
+
+        }
+        else
+        {
+
+            result = dxl_wb.itemRead(i, "Present_Position", &get_data, &log);
+            if (result){
+            assignPositionDynamixelFeedback(i,get_data);  
+            }else{
+                cout << log << " for id" << i << "getting the present position" << std::endl;
+            }
+
+            result = dxl_wb.itemRead(i, "Present_Velocity", &get_data, &log);
+            if (result){
+            assignVelocityDynamixelFeedback(i,get_data);  
+            }else{
+                cout << log << " for id" << i << "getting the present velocity" << std::endl;
+            }
+
+            result = dxl_wb.itemRead(i, "Present_Temperature", &get_data, &log);
+            if (result){
+            assignTemperatureDynamixelFeedback(i,get_data);  
+            }else{
+                cout << log << " for id" << i << "getting the present temp" << std::endl;
+            }
+
+             result = dxl_wb.itemRead(i, "Present_Load", &get_data, &log);
+            if (result){
+            assignLoadDynamixelFeedback(i,get_data);  
+            }else{
+                cout << log << " for id" << i << "getting the present load" << std::endl;
+            }
+        }
+    }*/
+}
 
 int main(int argc, char **argv)
 {
-    //Start off by initialising the leg connection and variables to 0
-    control_system.Back_Left.J0.TARGET_POSITION=0;
-    control_system.Back_Left.J0.TARGET_VELOCITY=0;
-    control_system.Back_Left.J0.PRESENT_VELOCITY=0;
-    control_system.Back_Left.J0.PRESENT_POSITION=0;
-    control_system.Back_Left.J0.PRESENT_TEMPERATURE=0;
-    control_system.Back_Left.J1 = control_system.Back_Left.J0;
-    control_system.Back_Left.J2 = control_system.Back_Left.J0;
-    control_system.Back_Right = control_system.Back_Left;
-    control_system.Front_Left = control_system.Back_Left;
-    control_system.Front_Right = control_system.Back_Left;
-
-    std::string port = detectPort();
-    std::cout << "Port for openCM is" << port << std::endl;
+    const char *log;
+    const char* port_name = "/dev/ttyUSB0";
     ros::init(argc, argv, "SENCE_Serial_Interface");
     ros::NodeHandle node;
     ros::Rate rate(1000);
+
+    //wb_result = dxl_wb.init(port_name, baud, &log);
+    bool wb_result = dxl_wb.init(port_name, DYNA_BAUD,&log);
+    if(!wb_result){
+        cout << "Failed to connect, quitting" << std::endl;
+        return 0;
+    } else {
+        //update system parameters.
+        cout << "So far so good" << std::endl;
+    }
+
+    //Next initialize the dynamixel data and check for actuators
+    uint16_t model_number = 0;
+    bool result;
+    for (int i = 1; i <= 12; i++) {
+        result = dxl_wb.ping(i, &model_number, &log);
+        if (result == false)
+        {
+            printf("%s\n", log);
+            printf("Failed to ping\n");
+            printf("It looks like the U2D2 cannot find all the required components, please validate that all dynamixels are detectable\n");
+            return 0;
+        }
+        else
+        {
+            printf("Succeed to ping\n");
+            printf("id : %d, model_number : %d\n", i, model_number);
+            
+            int32_t get_data = 0;
+
+            result = dxl_wb.itemRead(i, "Present_Position", &get_data, &log);
+            cout << "Position of " << i<<" at "<< get_data << " with result " << result << std::endl;
+            cout << log << std::endl;
+            result = dxl_wb.itemRead(i, "Present_Velocity", &get_data, &log);
+            cout << "Velocity of " << i<<" at "<< get_data << " with result " << result << std::endl;
+            cout << log << std::endl;
+            
+            result = dxl_wb.itemRead(i, "Present_Temperature", &get_data, &log);
+            cout << "Temperature of " << i<<" at "<< get_data << " with result " << result << std::endl;
+            cout << log << std::endl;
+            
+            result = dxl_wb.itemRead(i, "Present_Load", &get_data, &log);
+            cout << "Load of " << i<<" at "<< get_data << " with result " << result << std::endl;
+            cout << log << std::endl;
+
+            if (i==1 || i==4 || i==7 || i==10){
+            result = dxl_wb.itemWrite(i, "Position_P_Gain", 425, &log);
+            cout << "read gain for " << i<<" as "<< get_data << " with result " << result << std::endl;
+            cout << log << std::endl;
+            }
+
+            dxl_wb.goalPosition(i, (int32_t)0);
+
+            result = dxl_wb.torqueOn(i ,&log);
+            cout << "torque = " << result <<" for "<< i << std::endl;
+            cout << log << std::endl;
+
+            result = dxl_wb.itemRead(i, "Torque_Enable", &get_data, &log);
+            cout << "torque check = " << get_data <<" for "<< i << std::endl;
+            cout << log << std::endl;
+
+            result = dxl_wb.itemWrite(i, "Profile_Velocity", 10, &log);
+            cout << "wrote goal velocity " << i<<" to "<< 10 << " with result " << result << std::endl;
+            cout << log << std::endl;
+
+            result = dxl_wb.itemWrite(i, "Goal_Position", 0, &log);
+            cout << "wrote goal position " << i<<" to "<< 0 << " with result " << result << std::endl;
+            cout << log << std::endl;
+
+        }
+    }
+
+
+    cout << "All devices found" << std::endl;
 
     ros::Publisher system_publisher = node.advertise<sence_msgs::SENCE>("sence_state", 3);
 
@@ -547,67 +687,8 @@ int main(int argc, char **argv)
     uint64_t publish_feedback_time = getClockTime();
     uint64_t time_now = getClockTime();
 
-    //In this section we open up the port on the appropraite baud rate to listen to the autodetected teensy and establish a connection
-    serial::Serial opencm_serial(port, BAUD_RATE, serial::Timeout::simpleTimeout(1000));
-
-    if (opencm_serial.isOpen())
-    {
-        opencm_serial.flush();
-        opencm_serial.flushInput();
-        opencm_serial.flushOutput();
-        std::cout << "Port is open and active" << std::endl;
-    }
-    else
-    {
-        std::cout << "Port was not opened correctly" << std::endl;
-        return 0;
-    }
+   
     std::this_thread::sleep_for(std::chrono::seconds(3));
-
-    while (1)
-    {
-        readSerial(opencm_serial, 5);
-        if (control_system.Back_Left.J0.PRESENT_POSITION != 0 &&
-            control_system.Back_Right.J0.PRESENT_POSITION != 0 &&
-            control_system.Front_Left.J0.PRESENT_POSITION != 0 &&
-            control_system.Front_Right.J0.PRESENT_POSITION != 0)
-        {
-            std::cout << "syncingSystems" << std::endl;
-            control_system.Back_Left.J0.TARGET_POSITION=control_system.Back_Left.J0.PRESENT_POSITION;
-            control_system.Back_Left.J0.TARGET_VELOCITY=0.2;
-            control_system.Back_Left.J1.TARGET_POSITION=control_system.Back_Left.J1.PRESENT_POSITION;
-            control_system.Back_Left.J1.TARGET_VELOCITY=0.2;
-            control_system.Back_Left.J2.TARGET_POSITION=control_system.Back_Left.J1.PRESENT_POSITION;
-            control_system.Back_Left.J2.TARGET_VELOCITY=0.2;
-
-            control_system.Front_Left.J0.TARGET_POSITION=control_system.Front_Left.J0.PRESENT_POSITION;
-            control_system.Front_Left.J0.TARGET_VELOCITY=0.2;
-            control_system.Front_Left.J1.TARGET_POSITION=control_system.Front_Left.J1.PRESENT_POSITION;
-            control_system.Front_Left.J1.TARGET_VELOCITY=0.2;
-            control_system.Front_Left.J2.TARGET_POSITION=control_system.Front_Left.J1.PRESENT_POSITION;
-            control_system.Front_Left.J2.TARGET_VELOCITY=0.2;
-
-            control_system.Front_Right.J0.TARGET_POSITION=control_system.Front_Right.J0.PRESENT_POSITION;
-            control_system.Front_Right.J0.TARGET_VELOCITY=0.2;
-            control_system.Front_Right.J1.TARGET_POSITION=control_system.Front_Right.J1.PRESENT_POSITION;
-            control_system.Front_Right.J1.TARGET_VELOCITY=0.2;
-            control_system.Front_Right.J2.TARGET_POSITION=control_system.Front_Right.J1.PRESENT_POSITION;
-            control_system.Front_Right.J2.TARGET_VELOCITY=0.2;
-
-            control_system.Back_Right.J0.TARGET_POSITION=control_system.Back_Right.J0.PRESENT_POSITION;
-            control_system.Back_Right.J0.TARGET_VELOCITY=0.2;
-            control_system.Back_Right.J1.TARGET_POSITION=control_system.Back_Right.J1.PRESENT_POSITION;
-            control_system.Back_Right.J1.TARGET_VELOCITY=0.2;
-            control_system.Back_Right.J2.TARGET_POSITION=control_system.Back_Right.J1.PRESENT_POSITION;
-            control_system.Back_Right.J2.TARGET_VELOCITY=0.2;
-
-            break;
-        }else{
-            std::cout << "debugging syncronization system, please wait" << std::endl;
-        }
-    }
-
-    std::cout << "Starting Main Communication" << std::endl;
 
     int publishFrameID = 0;
 
@@ -615,14 +696,14 @@ int main(int argc, char **argv)
     {
         time_now = getClockTime();
 
-        readSerial(opencm_serial, 2);
-
         //this if statement is to publish at 30 HZ the feedback of motor positions
         //uint32 seq
         //time stamp
         //string frame_id
-        if ((time_now - publish_feedback_time) >= FeedbackPublishRate)
+        if ((time_now - publish_feedback_time) >= RateOfUpdate)
         {
+            update_system();
+            //resend_targets();
             ++publishFrameID;
             publish_feedback_time = getClockTime();
             control_system.Header.frame_id = "frame" + std::to_string(publishFrameID);
@@ -630,21 +711,10 @@ int main(int argc, char **argv)
             control_system.Header.stamp = ros::Time::now();
             system_publisher.publish(control_system);
         }
-
-        if ((time_now - write_serial_time) >= WriteSerialRate)
-        {
-            construct_commands();
-
-            commandVector = writeSerial(opencm_serial, commandVector);
-            write_serial_time = getClockTime();
-            std::cout << "Writing at time: " <<write_serial_time << std::endl;  
-        }
-
         ros::spinOnce();
         //cout << "Looping, will pause if serial error" << time_now << std::endl;
         rate.sleep();
     }
-    opencm_serial.close();
 
     return 0;
 }

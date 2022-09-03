@@ -11,8 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   sence_msgs
-  serial
   std_msgs
+  dynamixel_workbench_toolbox
 )
 
 ## System dependencies are found with CMake's conventions

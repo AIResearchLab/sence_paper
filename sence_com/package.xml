@@ -64,6 +64,9 @@
   <exec_depend>sence_msgs</exec_depend>
   <exec_depend>serial</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <build_depend>dynamixel_workbench_toolbox</build_depend>
+  <exec_depend>dynamixel_workbench_toolbox</exec_depend>
+
 
 
   <!-- The export tag contains other, unspecified, tags -->
