@@ -94,8 +94,11 @@ vector<uint8_t> writeSerial(serial::Serial &opencm_serial, vector<uint8_t> comma
 
     uint8_t commandArray[commandVector.size()];
     std::copy(commandVector.begin(), commandVector.end(), commandArray);
+
     opencm_serial.write(commandArray, commandVector.size());
+
     commandVector.clear();
+    
     return commandVector;
 }
 
