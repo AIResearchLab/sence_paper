@@ -186,6 +186,29 @@ void construct_commands(){
     }
     case 2:
     {
+        uint16_t conversion_velocityD_7 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
+        uint16_t conversion_velocityD_8 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J1.TARGET_VELOCITY);
+        uint16_t conversion_velocityD_9 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J2.TARGET_VELOCITY);
+        uint16_t conversion_velocityD_10 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
+        uint16_t conversion_velocityD_11 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
+        uint16_t conversion_velocityD_12 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
+        addItem(D_7, TARGET_VELOCITY, conversion_velocityD_7);
+        addItem(D_8, TARGET_VELOCITY, conversion_velocityD_8);
+        addItem(D_9, TARGET_VELOCITY, conversion_velocityD_9);
+        addItem(D_10, TARGET_VELOCITY, conversion_velocityD_10);
+        addItem(D_11, TARGET_VELOCITY, conversion_velocityD_11);
+        addItem(D_12, TARGET_VELOCITY, conversion_velocityD_12);
+        std::cout << "Motor 7 to velocity " << conversion_velocityD_7 << std::endl;
+        std::cout << "Motor 8 to velocity " << conversion_velocityD_8 << std::endl;
+        std::cout << "Motor 9 to velocity " << conversion_velocityD_9 << std::endl;
+        std::cout << "Motor 10 to velocity " << conversion_velocityD_10 << std::endl;
+        std::cout << "Motor 11 to velocity " << conversion_velocityD_11 << std::endl;
+        std::cout << "Motor 12 to velocity " << conversion_velocityD_12 << std::endl;
+        switch_op++;
+        break;
+    }
+    case 3:
+    {
         uint16_t conversion_positionD_7 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
         uint16_t conversion_positionD_8 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J1.TARGET_POSITION);
         uint16_t conversion_positionD_9 = convertFloatPoseToDynamixelPose(control_system.Front_Right.J2.TARGET_POSITION);
@@ -205,29 +228,6 @@ void construct_commands(){
         std::cout << "Motor 11 to position " << conversion_positionD_11 <<   (int16_t)conversion_positionD_11 << std::endl;
         std::cout << "Motor 12 to position " << conversion_positionD_12 <<   (int16_t)conversion_positionD_12 << std::endl;
 
-        switch_op++;
-        break;
-    }
-    case 3:
-    {
-        uint16_t conversion_velocityD_7 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_8 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J1.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_9 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J2.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_10 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_11 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
-        uint16_t conversion_velocityD_12 = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
-        addItem(D_7, TARGET_VELOCITY, conversion_velocityD_7);
-        addItem(D_8, TARGET_VELOCITY, conversion_velocityD_8);
-        addItem(D_9, TARGET_VELOCITY, conversion_velocityD_9);
-        addItem(D_10, TARGET_VELOCITY, conversion_velocityD_10);
-        addItem(D_11, TARGET_VELOCITY, conversion_velocityD_11);
-        addItem(D_12, TARGET_VELOCITY, conversion_velocityD_12);
-        std::cout << "Motor 7 to velocity " << conversion_velocityD_7 << std::endl;
-        std::cout << "Motor 8 to velocity " << conversion_velocityD_8 << std::endl;
-        std::cout << "Motor 9 to velocity " << conversion_velocityD_9 << std::endl;
-        std::cout << "Motor 10 to velocity " << conversion_velocityD_10 << std::endl;
-        std::cout << "Motor 11 to velocity " << conversion_velocityD_11 << std::endl;
-        std::cout << "Motor 12 to velocity " << conversion_velocityD_12 << std::endl;
         switch_op = 0;
         break;
     }
