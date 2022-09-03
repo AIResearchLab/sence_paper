@@ -9,7 +9,6 @@
 
 #include <chrono>
 #include <thread>
-
 #include <sence_msgs/SENCE.h>
 #include <sence_msgs/Target_Buffer.h>
 #include <sence_msgs/Target.h>
@@ -30,7 +29,7 @@ using std::vector;
 #define POSITION_DYNA 0.088
 
 #define FeedbackPublishRate 25 //20 Hz return structure
-#define WriteSerialRate 40     //20Hz
+#define WriteSerialRate 150     //20Hz
 
 vector<uint8_t> commandVector;
 
