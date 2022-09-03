@@ -457,8 +457,23 @@ void update_system(){
     //bool result;
     const char *log;
     uint16_t model_number = 0;
-    uint8_t dxl_id[2] = {0, 0};
+    uint8_t dxl_id[2] = {1, 2};
     bool result = false;
+
+    for (int cnt = 1; cnt <= 2; cnt++)
+  {
+    result = dxl_wb.ping(dxl_id[cnt], &model_number, &log);
+    if (result == false)
+    {
+      printf("%s\n", log);
+      printf("Failed to ping\n");
+    }
+    else
+    {
+      printf("Succeeded to ping\n");
+      printf("id : %d, model_number : %d\n", dxl_id[cnt], model_number);
+    }
+  }
 
   result = dxl_wb.initBulkRead(&log);
   if (result == false)
@@ -481,29 +496,23 @@ void update_system(){
     printf("%s\n", log);
   }
 
-  result = dxl_wb.addBulkReadParam(dxl_id[1], "LED", &log);
+  result = dxl_wb.addBulkReadParam(dxl_id[1], "Present_Position", &log);
   if (result == false)
   {
     printf("%s\n", log);
-    printf("Failed to add bulk read led param\n");
+    printf("Failed to add bulk read position param\n");
   }
   else
   {
     printf("%s\n", log);
   }
 
-  int32_t goal_position[2] = {0, 1023};
-  int32_t led[2] = {0, 1};
-
   int32_t get_data[2] = {0, 0};
 
   const uint8_t handler_index = 0;
 
-  while(1)
-  {
+  
     
-    do
-    {
       result = dxl_wb.bulkRead(&log);
       if (result == false)
       {
@@ -512,21 +521,17 @@ void update_system(){
       }
 
       result = dxl_wb.getBulkReadData(&get_data[0], &log);
+      std::cout << result << std::endl;
       if (result == false)
       {
         printf("%s\n", log);
       }
       else
       {
-        printf("[ID %d]\tGoal Position : %d\tPresent Position : %d, [ID %d]\tLED : %d\n"
-                ,dxl_id[0], goal_position[0], get_data[0], dxl_id[1], get_data[1]);
-      }
-
-    }while(abs(goal_position[0] - get_data[0]) > 15);
-
-    swap(goal_position);
-    swap(led);
+        std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << std::endl;
   }
+
+  std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 int main(int argc, char **argv)
@@ -601,8 +606,8 @@ int main(int argc, char **argv)
             cout << "wrote goal velocity " << i<<" to "<< 10 << " with result " << result << std::endl;
             cout << log << std::endl;
 
-            result = dxl_wb.itemWrite(i, "Goal_Position", 0, &log);
-            cout << "wrote goal position " << i<<" to "<< 0 << " with result " << result << std::endl;
+            result = dxl_wb.itemWrite(i, "Goal_Position", 35, &log);
+            cout << "wrote goal position " << i<<" to "<< 35 << " with result " << result << std::endl;
             cout << log << std::endl;
 
         }
