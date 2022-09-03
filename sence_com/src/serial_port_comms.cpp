@@ -24,7 +24,7 @@ using namespace std;
 using std::vector;
 
 
-#define RateOfUpdate 10000 //100 Hz return structure
+#define RateOfUpdate 5000 //100 Hz return structure
 
 #define M_PI    3.14159265358979323846  /* pi */
 
@@ -446,155 +446,87 @@ void assignPositionDynamixelFeedback(int jID, uint16_t position)
     }
 }
 
+void swap(int32_t *array)
+{
+  int32_t tmp = array[0];
+  array[0] = array[1];
+  array[1] = tmp;
+}
+
 void update_system(){
-    bool result;
+    //bool result;
     const char *log;
     uint16_t model_number = 0;
-    int32_t get_data[3] = {0, 0, 0};
-    for (int leg = 0; leg <=3; leg++) {
-        result = dxl_wb.initBulkRead(&log);
-        if (result == false)
-        {
-            printf("%s\n", log);
-        }
-        else
-        {
-            printf("%s\n", log);
-        }
-        for (int ids = (leg*3)+1; ids <= (leg*3)+3; ids++) {
-            result = dxl_wb.addBulkReadParam(ids, "Present_Position", &log);
-            if (result == false)
-            {
-                printf("%s\n", log);
-                printf("Failed to add bulk read Present_Position param\n");
-            }
-            else
-            {
-                printf("%s\n", log);
-            }
+    uint8_t dxl_id[2] = {0, 0};
+    bool result = false;
 
-            result = dxl_wb.addBulkReadParam(ids, "Present_Velocity", &log);
-            if (result == false)
-            {
-                printf("%s\n", log);
-                printf("Failed to add bulk read Present_Velocity param\n");
-            }
-            else
-            {
-                printf("%s\n", log);
-            }
+  result = dxl_wb.initBulkRead(&log);
+  if (result == false)
+  {
+    printf("%s\n", log);
+  }
+  else
+  {
+    printf("%s\n", log);
+  }
 
-            result = dxl_wb.addBulkReadParam(ids, "Present_Temperature", &log);
-            if (result == false)
-            {
-                printf("%s\n", log);
-                printf("Failed to add bulk read Present_Temperature param\n");
-            }
-            else
-            {
-                printf("%s\n", log);
-            }
+  result = dxl_wb.addBulkReadParam(dxl_id[0], "Present_Position", &log);
+  if (result == false)
+  {
+    printf("%s\n", log);
+    printf("Failed to add bulk read position param\n");
+  }
+  else
+  {
+    printf("%s\n", log);
+  }
 
-            result = dxl_wb.addBulkReadParam(ids, "Present_Load", &log);
-            if (result == false)
-            {
-                printf("%s\n", log);
-                printf("Failed to add bulk read Present_Load param\n");
-            }
-            else
-            {
-                printf("%s\n", log);
-            }
-        }
-        //read the bulk data
-        result = dxl_wb.bulkRead(&log);
-        if (result == false)
-        {
-            printf("%s\n", log);
-            printf("Failed to bulk read\n");
-        }
+  result = dxl_wb.addBulkReadParam(dxl_id[1], "LED", &log);
+  if (result == false)
+  {
+    printf("%s\n", log);
+    printf("Failed to add bulk read led param\n");
+  }
+  else
+  {
+    printf("%s\n", log);
+  }
 
-        result = dxl_wb.getBulkReadData(&get_data[0], &log);
-        if (result == false)
-        {
-            printf("%s\n", log);
-        }
-        else
-        {
-            //printf("[ID %d]\tGoal Position : %d\tPresent Position : %d, [ID %d]\tLED : %d\n"
-            //        ,dxl_id[0], goal_position[0], get_data[0], dxl_id[1], get_data[1]);
-            printf("[data_test : %d",get_data[0]);
-        }
+  int32_t goal_position[2] = {0, 1023};
+  int32_t led[2] = {0, 1};
 
-        //reassign
-        for (int ids = (leg*3)+1; ids <= (leg*3)+3; ids++) {
+  int32_t get_data[2] = {0, 0};
 
-        }
+  const uint8_t handler_index = 0;
 
-
-    }
-    /*
-    bool result;
-    const char *log;
-    uint16_t model_number = 0;
-    //in this case we want to bulk read on a leg basis... so
+  while(1)
+  {
     
-
-    result = dxl_wb.addBulkReadParam(dxl_id[0], "Present_Position", &log);
-    if (result == false)
+    do
     {
+      result = dxl_wb.bulkRead(&log);
+      if (result == false)
+      {
         printf("%s\n", log);
-        printf("Failed to add bulk read position param\n");
-    }
-    else
-    {
+        printf("Failed to bulk read\n");
+      }
+
+      result = dxl_wb.getBulkReadData(&get_data[0], &log);
+      if (result == false)
+      {
         printf("%s\n", log);
-    }
+      }
+      else
+      {
+        printf("[ID %d]\tGoal Position : %d\tPresent Position : %d, [ID %d]\tLED : %d\n"
+                ,dxl_id[0], goal_position[0], get_data[0], dxl_id[1], get_data[1]);
+      }
 
-    
-    int32_t get_data = 0;
-    for (int i = 1; i <= 2; i++) {
-        result = dxl_wb.ping(i, &model_number, &log);
-        if (result == false)
-        {
-            printf("%s\n", log);
-            printf("Failed to ping\n");
-            cout << "ID: "<<i << std::endl;
-            printf("It looks like the U2D2 cannot find all the required components, please validate that all dynamixels are detectable\n");
+    }while(abs(goal_position[0] - get_data[0]) > 15);
 
-        }
-        else
-        {
-
-            result = dxl_wb.itemRead(i, "Present_Position", &get_data, &log);
-            if (result){
-            assignPositionDynamixelFeedback(i,get_data);  
-            }else{
-                cout << log << " for id" << i << "getting the present position" << std::endl;
-            }
-
-            result = dxl_wb.itemRead(i, "Present_Velocity", &get_data, &log);
-            if (result){
-            assignVelocityDynamixelFeedback(i,get_data);  
-            }else{
-                cout << log << " for id" << i << "getting the present velocity" << std::endl;
-            }
-
-            result = dxl_wb.itemRead(i, "Present_Temperature", &get_data, &log);
-            if (result){
-            assignTemperatureDynamixelFeedback(i,get_data);  
-            }else{
-                cout << log << " for id" << i << "getting the present temp" << std::endl;
-            }
-
-             result = dxl_wb.itemRead(i, "Present_Load", &get_data, &log);
-            if (result){
-            assignLoadDynamixelFeedback(i,get_data);  
-            }else{
-                cout << log << " for id" << i << "getting the present load" << std::endl;
-            }
-        }
-    }*/
+    swap(goal_position);
+    swap(led);
+  }
 }
 
 int main(int argc, char **argv)
