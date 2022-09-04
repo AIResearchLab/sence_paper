@@ -15,7 +15,7 @@
     <geometry>
       <mesh filename="package://sence_leg_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="plastic_matte_black"/>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -36,7 +36,7 @@
     <geometry>
       <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J2_v1_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="plastic_matte_black"/>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="-0.01348 -0.002676 0.038139" rpy="0 0 0"/>
@@ -57,7 +57,7 @@
     <geometry>
       <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J3_v1_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="plastic_matte_black"/>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
@@ -76,14 +76,14 @@
   <visual>
     <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_v1_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
-    <material name="carbon_fiber_twill"/>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_v1_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>

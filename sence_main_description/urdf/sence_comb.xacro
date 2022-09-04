@@ -11,9 +11,9 @@
   
 <link name="core">
   <inertial>
-    <origin xyz="-0.0003058772493282508 -8.555215015878667e-05 -7.892579365353808e-05" rpy="0 0 0"/>
-    <mass value="0.866383082373337"/>
-    <inertia ixx="0.012736" iyy="0.003778" izz="0.016249" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+    <origin xyz="0.00021651891376084524 -0.00010528739970071409 -0.014193022646418384" rpy="0 0 0"/>
+    <mass value="0.4767252028506373"/>
+    <inertia ixx="0.003452" iyy="0.000207" izz="0.003461" ixy="3e-06" iyz="2e-06" ixz="2e-06"/>
   </inertial>
   <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -37,10 +37,10 @@
 </joint>
 
 
-<xacro:sence_leg_macro prefix="back_right_leg_" parent="core" adjT="0.1438 -0.1250 -0.0381" adjR="0 3.14159 0"/>
-<xacro:sence_leg_macro prefix="back_left_leg_" parent="core" adjT="-0.1438 -0.1250 0.0381" adjR="0 0 0"/>
-<xacro:sence_leg_macro prefix="front_right_leg_" parent="core" adjT="0.1438 0.1250 0.0381" adjR="3.14159 3.14159 0"/>
-<xacro:sence_leg_macro prefix="front_left_leg_" parent="core" adjT="-0.1438 0.1250 -0.0381" adjR="3.14159 0 0"/>
+<xacro:sence_leg_macro prefix="back_right_leg_" parent="core" adjT="0.0826 -0.105095 -0.05196" adjR="0 3.14159 0"/>
+<xacro:sence_leg_macro prefix="back_left_leg_" parent="core" adjT="-0.0826 -0.105095 0.024316" adjR="0 0 0"/>
+<xacro:sence_leg_macro prefix="front_right_leg_" parent="core" adjT="0.0826 0.105095 0.024316" adjR="3.14159 3.14159 0"/>
+<xacro:sence_leg_macro prefix="front_left_leg_" parent="core" adjT="-0.0826 0.105095 -0.05196" adjR="3.14159 0 0"/>
 
 
 </robot>

@@ -48,9 +48,9 @@
 
 <link name="${prefix}HMMR_Leg_J3_v1_1">
   <inertial>
-    <origin xyz="-0.06366942125676311 -0.021943300476205383 0.0024103683252244337" rpy="0 0 0"/>
-    <mass value="0.1208747488020619"/>
-    <inertia ixx="3.4e-05" iyy="0.000102" izz="0.000104" ixy="1.4e-05" iyz="-1e-06" ixz="2e-06"/>
+    <origin xyz="-0.05832553714381231 -0.021436456555043018 0.0024477833961314005" rpy="0 0 0"/>
+    <mass value="0.12243154933451669"/>
+    <inertia ixx="3.6e-05" iyy="9.7e-05" izz="9.9e-05" ixy="1e-05" iyz="-0.0" ixz="2e-06"/>
   </inertial>
   <visual>
     <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
@@ -68,22 +68,22 @@
 </link>
 
 <link name="${prefix}HMMR_Leg_J4_1">
-  <inertial>
-    <origin xyz="-0.06827181090766318 0.01066089288586344 0.020893759814543007" rpy="0 0 0"/>
-    <mass value="0.052701725493830516"/>
-    <inertia ixx="1.8e-05" iyy="7.3e-05" izz="7.2e-05" ixy="1.4e-05" iyz="0.0" ixz="-1e-06"/>
+   <inertial>
+    <origin xyz="-0.05691796302157942 0.007704167559869515 0.01964749184467182" rpy="0 0 0"/>
+    <mass value="0.05742201556545181"/>
+    <inertia ixx="2e-05" iyy="5.7e-05" izz="5.2e-05" ixy="8e-06" iyz="-0.0" ixz="1e-06"/>
   </inertial>
   <visual>
-    <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
+    <origin xyz="0.079954 0.010544 0.057414" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_v1_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="silver"/>
   </visual>
   <collision>
-    <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
+    <origin xyz="0.079954 0.010544 0.057414" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://sence_leg_description/meshes/HMMR_Leg_J4_v1_1.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -110,11 +110,11 @@
 </joint>
 
 <joint name="${prefix}Rev3" type="revolute">
-  <origin xyz="-0.065007 -0.02 -0.019475" rpy="0 0 0"/>
+  <origin xyz="-0.059507 -0.02 -0.019475" rpy="0 0 0"/>
   <parent link="${prefix}HMMR_Leg_J3_v1_1"/>
   <child link="${prefix}HMMR_Leg_J4_1"/>
   <axis xyz="-0.0 -0.0 1.0"/>
-  <limit upper="2.356194" lower="-2.268928" effort="100" velocity="100"/>
+  <limit upper="2.094395" lower="-2.094395" effort="100" velocity="100"/>
 </joint>
 </xacro:macro>
 </robot>
