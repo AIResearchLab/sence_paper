@@ -38,3 +38,26 @@ for _ in range(10000000):
 
 
 p.disconnect()
+
+
+'''
+import pybullet as p
+import pybullet_utils.bullet_client as bc
+
+
+class Foo:
+    def __init__(self, counter):
+        self.physicsClient = bc.BulletClient(connection_mode=p.DIRECT)
+
+    def setGravity(self):
+        self.physicsClient.setGravity(0, 0, -9.81)
+
+
+foo1 = Foo(1)
+foo2 = Foo(2)
+foo1.setGravity()
+foo2.setGravity()
+
+print("Adress of  foo1 bullet client 1 : " + str(foo1.physicsClient))
+print("Adress of foo2 bullet client 2  : " + str(foo2.physicsClient))
+'''
