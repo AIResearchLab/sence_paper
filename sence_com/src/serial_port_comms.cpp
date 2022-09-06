@@ -453,6 +453,130 @@ void swap(int32_t *array)
   array[1] = tmp;
 }
 
+int leg_indx=1;
+void update_leg(char *str){
+    int32_t get_data[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    const char *log;
+    uint16_t model_number = 0;
+    bool result = false;
+    result = dxl_wb.initBulkRead(&log);
+    if (result == false)
+    {
+        printf("Log: %s\n", log);
+    }
+    else
+    {
+        printf("Log: %s\n", log);
+    }
+
+    const char* read_strings[4]
+        = { "Present_Position", "Present_Velocity", "Present_Temperature", "Present_Load" };
+ 
+    
+
+    for(int i=leg_indx;i<leg_indx+3;i++){
+        for (int o = 0; o < 4; o++){
+            result = dxl_wb.addBulkReadParam(i, read_strings[o], &log);
+            if (result == false)
+            {
+                printf("Log: %s\n", log);
+                printf("Failed to add bulk read position param\n");
+            }
+            else
+            {
+                printf("Log: %s\n", log);
+            }
+        }    
+    }  
+    
+      result = dxl_wb.bulkRead(&log);
+      if (result == false)
+      {
+        printf("Log: %s\n", log);
+        printf("Failed to bulk read\n");
+      }
+
+      result = dxl_wb.getBulkReadData(&get_data[0], &log);
+      std::cout << result << std::endl;
+      if (result == false)
+      {
+        printf("Log: %s\n", log);
+      }
+      else
+      {
+        std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << std::endl;
+  }
+
+
+    switch (leg_indx)
+    {
+    case 1:
+        leg_indx=4;
+        control_system.Back_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
+        control_system.Back_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
+        control_system.Back_Left.J0.PRESENT_TEMPERATURE = get_data[2];
+        control_system.Back_Left.J0.PRESENT_LOAD = get_data[3];
+        control_system.Back_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
+        control_system.Back_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
+        control_system.Back_Left.J1.PRESENT_TEMPERATURE = get_data[6];
+        control_system.Back_Left.J1.PRESENT_LOAD = get_data[7];
+        control_system.Back_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
+        control_system.Back_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
+        control_system.Back_Left.J2.PRESENT_TEMPERATURE = get_data[10];
+        control_system.Back_Left.J2.PRESENT_LOAD = get_data[11];
+        break;
+    case 4:
+        leg_indx=7;
+        control_system.Back_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
+        control_system.Back_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
+        control_system.Back_Right.J0.PRESENT_TEMPERATURE = get_data[2];
+        control_system.Back_Right.J0.PRESENT_LOAD = get_data[3];
+        control_system.Back_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
+        control_system.Back_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
+        control_system.Back_Right.J1.PRESENT_TEMPERATURE = get_data[6];
+        control_system.Back_Right.J1.PRESENT_LOAD = get_data[7];
+        control_system.Back_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
+        control_system.Back_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
+        control_system.Back_Right.J2.PRESENT_TEMPERATURE = get_data[10];
+        control_system.Back_Right.J2.PRESENT_LOAD = get_data[11];
+        break;
+    case 7:
+        leg_indx=10;
+        control_system.Front_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
+        control_system.Front_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
+        control_system.Front_Right.J0.PRESENT_TEMPERATURE = get_data[2];
+        control_system.Front_Right.J0.PRESENT_LOAD = get_data[3];
+        control_system.Front_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
+        control_system.Front_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
+        control_system.Front_Right.J1.PRESENT_TEMPERATURE = get_data[6];
+        control_system.Front_Right.J1.PRESENT_LOAD = get_data[7];
+        control_system.Front_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
+        control_system.Front_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
+        control_system.Front_Right.J2.PRESENT_TEMPERATURE = get_data[10];
+        control_system.Front_Right.J2.PRESENT_LOAD = get_data[11];
+        break;
+    case 10:
+        leg_indx=1;
+        control_system.Front_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
+        control_system.Front_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
+        control_system.Front_Left.J0.PRESENT_TEMPERATURE = get_data[2];
+        control_system.Front_Left.J0.PRESENT_LOAD = get_data[3];
+        control_system.Front_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
+        control_system.Front_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
+        control_system.Front_Left.J1.PRESENT_TEMPERATURE = get_data[6];
+        control_system.Front_Left.J1.PRESENT_LOAD = get_data[7];
+        control_system.Front_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
+        control_system.Front_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
+        control_system.Front_Left.J2.PRESENT_TEMPERATURE = get_data[10];
+        control_system.Front_Left.J2.PRESENT_LOAD = get_data[11];
+        break;
+    default:
+        leg_indx=1;
+        std::cout << "Not Handled Yet";
+    }
+
+}
+
 void update_system(){
     //bool result;
     const char *log;
@@ -465,7 +589,7 @@ void update_system(){
     result = dxl_wb.ping(dxl_id[cnt], &model_number, &log);
     if (result == false)
     {
-      printf("%s\n", log);
+      printf("Log: %s\n", log);
       printf("Failed to ping\n");
     }
     else
@@ -478,33 +602,33 @@ void update_system(){
   result = dxl_wb.initBulkRead(&log);
   if (result == false)
   {
-    printf("%s\n", log);
+    printf("Log: %s\n", log);
   }
   else
   {
-    printf("%s\n", log);
+    printf("Log: %s\n", log);
   }
 
   result = dxl_wb.addBulkReadParam(dxl_id[0], "Present_Position", &log);
   if (result == false)
   {
-    printf("%s\n", log);
+    printf("Log: %s\n", log);
     printf("Failed to add bulk read position param\n");
   }
   else
   {
-    printf("%s\n", log);
+    printf("Log: %s\n", log);
   }
 
   result = dxl_wb.addBulkReadParam(dxl_id[1], "Present_Position", &log);
   if (result == false)
   {
-    printf("%s\n", log);
+    printf("Log: %s\n", log);
     printf("Failed to add bulk read position param\n");
   }
   else
   {
-    printf("%s\n", log);
+    printf("Log: %s\n", log);
   }
 
   int32_t get_data[2] = {0, 0};
@@ -516,7 +640,7 @@ void update_system(){
       result = dxl_wb.bulkRead(&log);
       if (result == false)
       {
-        printf("%s\n", log);
+        printf("Log: %s\n", log);
         printf("Failed to bulk read\n");
       }
 
@@ -524,7 +648,7 @@ void update_system(){
       std::cout << result << std::endl;
       if (result == false)
       {
-        printf("%s\n", log);
+        printf("Log: %s\n", log);
       }
       else
       {
@@ -559,7 +683,7 @@ int main(int argc, char **argv)
         result = dxl_wb.ping(i, &model_number, &log);
         if (result == false)
         {
-            printf("%s\n", log);
+            printf("Log: %s\n", log);
             printf("Failed to ping\n");
             printf("It looks like the U2D2 cannot find all the required components, please validate that all dynamixels are detectable\n");
             return 0;
@@ -639,6 +763,7 @@ int main(int argc, char **argv)
         //string frame_id
         if ((time_now - publish_feedback_time) >= RateOfUpdate)
         {
+            update_leg();
             update_system();
             //resend_targets();
             ++publishFrameID;
