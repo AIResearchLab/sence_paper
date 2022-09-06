@@ -25,7 +25,7 @@
 
 <transmission name="Rev3_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="Rev3">
+  <joint name="Rev5">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
   <actuator name="Rev3_actr">
