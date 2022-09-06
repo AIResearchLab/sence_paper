@@ -454,7 +454,7 @@ void swap(int32_t *array)
 }
 
 int leg_indx=1;
-void update_leg(char *str){
+void update_leg(const char *str){
     int32_t get_data[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     const char *log;
     uint16_t model_number = 0;
@@ -469,14 +469,8 @@ void update_leg(char *str){
         printf("Log: %s\n", log);
     }
 
-    const char* read_strings[4]
-        = { "Present_Position", "Present_Velocity", "Present_Temperature", "Present_Load" };
- 
-    
-
-    for(int i=leg_indx;i<leg_indx+3;i++){
-        for (int o = 0; o < 4; o++){
-            result = dxl_wb.addBulkReadParam(i, read_strings[o], &log);
+    for(int i=leg_indx;i<=12;i++){
+            result = dxl_wb.addBulkReadParam(i, str, &log);
             if (result == false)
             {
                 printf("Log: %s\n", log);
@@ -485,8 +479,7 @@ void update_leg(char *str){
             else
             {
                 printf("Log: %s\n", log);
-            }
-        }    
+            }           
     }  
     
       result = dxl_wb.bulkRead(&log);
@@ -502,80 +495,78 @@ void update_leg(char *str){
       {
         printf("Log: %s\n", log);
       }
-      else
-      {
-        std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << std::endl;
-  }
+//       else
+//       {
+//         std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << std::endl;
+//   }
 
 
-    switch (leg_indx)
-    {
-    case 1:
-        leg_indx=4;
+    if (strcmp(str, "Present_Position") == 0){
         control_system.Back_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
-        control_system.Back_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
-        control_system.Back_Left.J0.PRESENT_TEMPERATURE = get_data[2];
-        control_system.Back_Left.J0.PRESENT_LOAD = get_data[3];
-        control_system.Back_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
-        control_system.Back_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
-        control_system.Back_Left.J1.PRESENT_TEMPERATURE = get_data[6];
-        control_system.Back_Left.J1.PRESENT_LOAD = get_data[7];
-        control_system.Back_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
-        control_system.Back_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
-        control_system.Back_Left.J2.PRESENT_TEMPERATURE = get_data[10];
-        control_system.Back_Left.J2.PRESENT_LOAD = get_data[11];
-        break;
-    case 4:
-        leg_indx=7;
-        control_system.Back_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
-        control_system.Back_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
-        control_system.Back_Right.J0.PRESENT_TEMPERATURE = get_data[2];
-        control_system.Back_Right.J0.PRESENT_LOAD = get_data[3];
+        control_system.Back_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[1]);
+        control_system.Back_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[2]);
+        control_system.Back_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[3]);
         control_system.Back_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
-        control_system.Back_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
-        control_system.Back_Right.J1.PRESENT_TEMPERATURE = get_data[6];
-        control_system.Back_Right.J1.PRESENT_LOAD = get_data[7];
-        control_system.Back_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
-        control_system.Back_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
-        control_system.Back_Right.J2.PRESENT_TEMPERATURE = get_data[10];
-        control_system.Back_Right.J2.PRESENT_LOAD = get_data[11];
-        break;
-    case 7:
-        leg_indx=10;
-        control_system.Front_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
-        control_system.Front_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
-        control_system.Front_Right.J0.PRESENT_TEMPERATURE = get_data[2];
-        control_system.Front_Right.J0.PRESENT_LOAD = get_data[3];
-        control_system.Front_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
-        control_system.Front_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
-        control_system.Front_Right.J1.PRESENT_TEMPERATURE = get_data[6];
-        control_system.Front_Right.J1.PRESENT_LOAD = get_data[7];
+        control_system.Back_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[5]);
+        control_system.Front_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[6]);
+        control_system.Front_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[7]);        
         control_system.Front_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
-        control_system.Front_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
-        control_system.Front_Right.J2.PRESENT_TEMPERATURE = get_data[10];
-        control_system.Front_Right.J2.PRESENT_LOAD = get_data[11];
-        break;
-    case 10:
+        control_system.Front_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[9]);
+        control_system.Front_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[10]);
+        control_system.Front_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[11]);
+        std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << (int)get_data[2] << std::endl;
+        std::cout << (int)get_data[3] << ", " << (int)get_data[4]  << (int)get_data[5] << std::endl;
+        std::cout << (int)get_data[6] << ", " << (int)get_data[7]  << (int)get_data[8] << std::endl;
+        std::cout << (int)get_data[9] << ", " << (int)get_data[10]  << (int)get_data[11] << std::endl;
+        }
+        else if (strcmp(str, "Present_Velocity") == 0){
+        control_system.Back_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[0]);
+        control_system.Back_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
+        control_system.Back_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[2]);
+        control_system.Back_Right.J0.PRESENT_VELOCITY =convertDynamixelSpeedToFloatFeedbackSpeed(get_data[3]);
+        control_system.Back_Right.J1.PRESENT_VELOCITY =convertDynamixelSpeedToFloatFeedbackSpeed(get_data[4]);
+        control_system.Back_Right.J2.PRESENT_VELOCITY =convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
+        control_system.Front_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[6]);
+        control_system.Front_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[7]);        
+        control_system.Front_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[8]);
+        control_system.Front_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
+        control_system.Front_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[10]);
+        control_system.Front_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[11]);
+        }
+        else if (strcmp(str, "Present_Temperature") == 0){
+        leg_indx=10;
+        control_system.Back_Left.J0.PRESENT_TEMPERATURE = get_data[0];
+        control_system.Back_Left.J1.PRESENT_TEMPERATURE = get_data[1];
+        control_system.Back_Left.J2.PRESENT_TEMPERATURE = get_data[2];
+        control_system.Back_Right.J0.PRESENT_TEMPERATURE =get_data[3];
+        control_system.Back_Right.J1.PRESENT_TEMPERATURE =get_data[4];
+        control_system.Back_Right.J2.PRESENT_TEMPERATURE =get_data[5];
+        control_system.Front_Right.J0.PRESENT_TEMPERATURE = get_data[6];
+        control_system.Front_Right.J1.PRESENT_TEMPERATURE = get_data[7];        
+        control_system.Front_Right.J2.PRESENT_TEMPERATURE = get_data[8];
+        control_system.Front_Left.J0.PRESENT_TEMPERATURE = get_data[9];
+        control_system.Front_Left.J1.PRESENT_TEMPERATURE = get_data[10];
+        control_system.Front_Left.J2.PRESENT_TEMPERATURE = get_data[11];
+        }
+        else if (strcmp(str, "Present_Load") == 0){
         leg_indx=1;
-        control_system.Front_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
-        control_system.Front_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
-        control_system.Front_Left.J0.PRESENT_TEMPERATURE = get_data[2];
-        control_system.Front_Left.J0.PRESENT_LOAD = get_data[3];
-        control_system.Front_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
-        control_system.Front_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
-        control_system.Front_Left.J1.PRESENT_TEMPERATURE = get_data[6];
-        control_system.Front_Left.J1.PRESENT_LOAD = get_data[7];
-        control_system.Front_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
-        control_system.Front_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
-        control_system.Front_Left.J2.PRESENT_TEMPERATURE = get_data[10];
+        control_system.Back_Left.J0.PRESENT_LOAD = get_data[0];
+        control_system.Back_Left.J1.PRESENT_LOAD = get_data[1];
+        control_system.Back_Left.J2.PRESENT_LOAD = get_data[2];
+        control_system.Back_Right.J0.PRESENT_LOAD =get_data[3];
+        control_system.Back_Right.J1.PRESENT_LOAD =get_data[4];
+        control_system.Back_Right.J2.PRESENT_LOAD =get_data[5];
+        control_system.Front_Right.J0.PRESENT_LOAD = get_data[6];
+        control_system.Front_Right.J1.PRESENT_LOAD = get_data[7];        
+        control_system.Front_Right.J2.PRESENT_LOAD = get_data[8];
+        control_system.Front_Left.J0.PRESENT_LOAD = get_data[9];
+        control_system.Front_Left.J1.PRESENT_LOAD = get_data[10];
         control_system.Front_Left.J2.PRESENT_LOAD = get_data[11];
-        break;
-    default:
+        }else{
         leg_indx=1;
         std::cout << "Not Handled Yet";
+        }
     }
-
-}
 
 void update_system(){
     //bool result;
@@ -748,6 +739,9 @@ int main(int argc, char **argv)
     uint64_t publish_feedback_time = getClockTime();
     uint64_t time_now = getClockTime();
 
+    const char* feedback_strings[4]
+        = { "Present_Position", "Present_Velocity", "Present_Temperature", "Present_Load" };
+ 
    
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
@@ -763,8 +757,8 @@ int main(int argc, char **argv)
         //string frame_id
         if ((time_now - publish_feedback_time) >= RateOfUpdate)
         {
-            update_leg();
-            update_system();
+            update_leg(feedback_strings[0]);
+            //update_system();
             //resend_targets();
             ++publishFrameID;
             publish_feedback_time = getClockTime();
