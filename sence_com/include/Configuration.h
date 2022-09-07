@@ -4,7 +4,7 @@
 #define INT_JOIN_BYTE(u, l) (u << 8) | l
 #define HeaderValue 60000
 
-struct feedback_struct
+struct interface_struct
 {
     int actuator_id;
     const char* feedback_string;

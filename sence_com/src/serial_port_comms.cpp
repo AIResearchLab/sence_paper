@@ -24,7 +24,9 @@ using namespace std;
 using std::vector;
 
 //feedback structure 44 elements for parsing
-feedback_struct feedback_updates[44];
+interface_struct feedback_updates[44];
+//command structure 24 commands elements for parsing
+interface_struct command_updates[44];
 
 
 #define RateOfUpdate 10 //20Hz Hz return structure
@@ -68,11 +70,9 @@ uint64_t getClockTime()
 }
 
 
-void resend_targets(){
-const char *log;
-for (int i = 1; i<=12; i++) {
-        int32_t pos;
-        int32_t vel;
+int32_t resend_targets(){
+    int32_t pos;
+    int32_t vel;
         switch (i)
         {
         case D_1:
@@ -144,8 +144,6 @@ for (int i = 1; i<=12; i++) {
         case D_12:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J2.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         default:
             // code block
@@ -453,7 +451,7 @@ void assignPositionDynamixelFeedback(int jID, int32_t position)
 int feedback_index=0;
 void mass_read_data(){
     int32_t get_data[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    feedback_struct to_assign[9];
+    interface_struct to_assign[9];
 
     const char *log;
     uint16_t model_number = 0;
@@ -470,7 +468,7 @@ void mass_read_data(){
     int updates=0;
     while(updates<9){
         result = dxl_wb.addBulkReadParam(feedback_updates[feedback_index].actuator_id, feedback_updates[feedback_index].feedback_string, &log);
-        to_assign[updates] = feedback_struct{feedback_updates[feedback_index].actuator_id, feedback_updates[feedback_index].feedback_string};
+        to_assign[updates] = interface_struct{feedback_updates[feedback_index].actuator_id, feedback_updates[feedback_index].feedback_string};
         feedback_updates[feedback_index];
         if (result == false)
         {
@@ -529,8 +527,77 @@ void mass_read_data(){
     dxl_wb.clearBulkReadParam();    
     }
 
+command_index=0;
 void command_actutors(){
-    
+
+    result = dxl_wb.initBulkWrite(&log);
+    if (result == false)
+    {
+        printf("%s\n", log);
+    }
+    else
+    {
+        printf("%s\n", log);
+    }
+    int updates=0;
+    int value_to_parse = 0
+    while(updates<9){
+
+        result = dxl_wb.addBulkReadParam(command_updates[command_index].actuator_id, command_updates[command_index].feedback_string, &log);
+        to_assign[updates] = interface_struct{feedback_updates[feedback_index].actuator_id, feedback_updates[feedback_index].feedback_string};
+        feedback_updates[feedback_index];
+        if (result == false)
+        {
+            printf("Log: %s\n", log);
+            printf("Failed to add bulk read position param\n");
+            printf("updates = %d\n",updates);
+            printf("feedback_index = %d\n",feedback_index);
+            cout << feedback_updates[feedback_index].actuator_id << feedback_updates[feedback_index].feedback_string << std::endl;
+        }
+        else
+        {
+            printf("Log: %s\n", log);
+        } 
+        updates++;
+        if(feedback_index==43){
+            feedback_index=0;
+        }else{
+            feedback_index++;
+        }
+        if(updates==9){
+            break;
+        }        
+    } 
+
+    result = dxl_wb.addBulkWriteParam(dxl_id[0], "Goal_Position", goal_position[0], &log);
+    if (result == false)
+    {
+      printf("%s\n", log);
+      printf("Failed to add bulk write position param\n");
+    }
+    else
+    {
+      printf("%s\n", log);
+    }
+
+    result = dxl_wb.addBulkWriteParam(dxl_id[1], "LED", led[0], &log);
+    if (result == false)
+    {
+      printf("%s\n", log);
+      printf("Failed to add bulk write led param\n");
+    }
+    else
+    {
+      printf("%s\n", log);
+    }
+
+    result = dxl_wb.bulkWrite(&log);
+    if (result == false)
+    {
+      printf("%s\n", log);
+      printf("Failed to bulk write\n");
+    }
+
 }
 
 int main(int argc, char **argv)
@@ -548,11 +615,21 @@ int main(int argc, char **argv)
     int idx = 0;
     for(int fs=0;fs<=3;fs++){
         for(int dyI=1;dyI<=12;dyI++){
-            feedback_updates[idx] = feedback_struct{dyI,feedback_strings[fs]};
+            feedback_updates[idx] = interface_struct{dyI,feedback_strings[fs]};
             idx++;   
         }
     }
+
     
+    const char* command_strings[4]
+        = { "Profile_Velocity", "Goal_Position"};
+    idx = 0;
+    for(int fs=0;fs<=1;fs++){
+        for(int dyI=1;dyI<=12;dyI++){
+            command_updates[idx] = interface_struct{dyI,command_strings[fs]};
+            idx++;
+        }
+    }
     
     
 
