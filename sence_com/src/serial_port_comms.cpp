@@ -23,8 +23,12 @@
 using namespace std;
 using std::vector;
 
+//feedback structure 44 elements for parsing
+feedback_struct feedback_updates[44];
 
-#define RateOfUpdate 5000 //100 Hz return structure
+
+#define RateOfUpdate 10 //20Hz Hz return structure
+#define RateOfPublish 50 //20Hz Hz return structure
 
 #define M_PI    3.14159265358979323846  /* pi */
 
@@ -262,7 +266,7 @@ void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
         }
     }
 }
-void assignTemperatureDynamixelFeedback(int jID, uint16_t temperature)
+void assignTemperatureDynamixelFeedback(int jID, int32_t temperature)
 {
     switch (jID)
     {
@@ -308,7 +312,7 @@ void assignTemperatureDynamixelFeedback(int jID, uint16_t temperature)
     }
 }
 
-void assignVelocityDynamixelFeedback(int jID, uint16_t velocity)
+void assignVelocityDynamixelFeedback(int jID, int32_t velocity)
 {
     switch (jID)
     {
@@ -400,7 +404,7 @@ void assignLoadDynamixelFeedback(int jID, int32_t load)
     }
 }
 
-void assignPositionDynamixelFeedback(int jID, uint16_t position)
+void assignPositionDynamixelFeedback(int jID, int32_t position)
 {
     switch (jID)
     {
@@ -446,16 +450,11 @@ void assignPositionDynamixelFeedback(int jID, uint16_t position)
     }
 }
 
-void swap(int32_t *array)
-{
-  int32_t tmp = array[0];
-  array[0] = array[1];
-  array[1] = tmp;
-}
+int feedback_index=0;
+void mass_read_data(){
+    int32_t get_data[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    feedback_struct to_assign[9];
 
-int leg_indx=1;
-void update_leg(const char *str){
-    int32_t get_data[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     const char *log;
     uint16_t model_number = 0;
     bool result = false;
@@ -468,19 +467,33 @@ void update_leg(const char *str){
     {
         printf("Log: %s\n", log);
     }
-
-    for(int i=leg_indx;i<=12;i++){
-            result = dxl_wb.addBulkReadParam(i, str, &log);
-            if (result == false)
-            {
-                printf("Log: %s\n", log);
-                printf("Failed to add bulk read position param\n");
-            }
-            else
-            {
-                printf("Log: %s\n", log);
-            }           
-    }  
+    int updates=0;
+    while(updates<9){
+        result = dxl_wb.addBulkReadParam(feedback_updates[feedback_index].actuator_id, feedback_updates[feedback_index].feedback_string, &log);
+        to_assign[updates] = feedback_struct{feedback_updates[feedback_index].actuator_id, feedback_updates[feedback_index].feedback_string};
+        feedback_updates[feedback_index];
+        if (result == false)
+        {
+            printf("Log: %s\n", log);
+            printf("Failed to add bulk read position param\n");
+            printf("updates = %d\n",updates);
+            printf("feedback_index = %d\n",feedback_index);
+            cout << feedback_updates[feedback_index].actuator_id << feedback_updates[feedback_index].feedback_string << std::endl;
+        }
+        else
+        {
+            printf("Log: %s\n", log);
+        } 
+        updates++;
+        if(feedback_index==43){
+            feedback_index=0;
+        }else{
+            feedback_index++;
+        }
+        if(updates==9){
+            break;
+        }        
+    } 
     
       result = dxl_wb.bulkRead(&log);
       if (result == false)
@@ -499,154 +512,25 @@ void update_leg(const char *str){
 //       {
 //         std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << std::endl;
 //   }
-
-
-    if (strcmp(str, "Present_Position") == 0){
-        control_system.Back_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[0]);
-        control_system.Back_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[1]);
-        control_system.Back_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[2]);
-        control_system.Back_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[3]);
-        control_system.Back_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[4]);
-        control_system.Back_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[5]);
-        control_system.Front_Right.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[6]);
-        control_system.Front_Right.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[7]);        
-        control_system.Front_Right.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[8]);
-        control_system.Front_Left.J0.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[9]);
-        control_system.Front_Left.J1.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[10]);
-        control_system.Front_Left.J2.PRESENT_POSITION = convertDynamixelPoseToFloatPose(get_data[11]);
-        std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << (int)get_data[2] << std::endl;
-        std::cout << (int)get_data[3] << ", " << (int)get_data[4]  << (int)get_data[5] << std::endl;
-        std::cout << (int)get_data[6] << ", " << (int)get_data[7]  << (int)get_data[8] << std::endl;
-        std::cout << (int)get_data[9] << ", " << (int)get_data[10]  << (int)get_data[11] << std::endl;
+    for(int i = 0;i<9;i++){
+        if (strcmp(to_assign[i].feedback_string, "Present_Position") == 0){
+            assignPositionDynamixelFeedback(to_assign[i].actuator_id,get_data[i]);
+        }else if (strcmp(to_assign[i].feedback_string, "Present_Velocity") == 0){
+            assignVelocityDynamixelFeedback(to_assign[i].actuator_id,get_data[i]);
         }
-        else if (strcmp(str, "Present_Velocity") == 0){
-        control_system.Back_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[0]);
-        control_system.Back_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[1]);
-        control_system.Back_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[2]);
-        control_system.Back_Right.J0.PRESENT_VELOCITY =convertDynamixelSpeedToFloatFeedbackSpeed(get_data[3]);
-        control_system.Back_Right.J1.PRESENT_VELOCITY =convertDynamixelSpeedToFloatFeedbackSpeed(get_data[4]);
-        control_system.Back_Right.J2.PRESENT_VELOCITY =convertDynamixelSpeedToFloatFeedbackSpeed(get_data[5]);
-        control_system.Front_Right.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[6]);
-        control_system.Front_Right.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[7]);        
-        control_system.Front_Right.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[8]);
-        control_system.Front_Left.J0.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[9]);
-        control_system.Front_Left.J1.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[10]);
-        control_system.Front_Left.J2.PRESENT_VELOCITY = convertDynamixelSpeedToFloatFeedbackSpeed(get_data[11]);
+        else if (strcmp(to_assign[i].feedback_string, "Present_Temperature") == 0){
+            assignTemperatureDynamixelFeedback(to_assign[i].actuator_id,get_data[i]);
         }
-        else if (strcmp(str, "Present_Temperature") == 0){
-        leg_indx=10;
-        control_system.Back_Left.J0.PRESENT_TEMPERATURE = get_data[0];
-        control_system.Back_Left.J1.PRESENT_TEMPERATURE = get_data[1];
-        control_system.Back_Left.J2.PRESENT_TEMPERATURE = get_data[2];
-        control_system.Back_Right.J0.PRESENT_TEMPERATURE =get_data[3];
-        control_system.Back_Right.J1.PRESENT_TEMPERATURE =get_data[4];
-        control_system.Back_Right.J2.PRESENT_TEMPERATURE =get_data[5];
-        control_system.Front_Right.J0.PRESENT_TEMPERATURE = get_data[6];
-        control_system.Front_Right.J1.PRESENT_TEMPERATURE = get_data[7];        
-        control_system.Front_Right.J2.PRESENT_TEMPERATURE = get_data[8];
-        control_system.Front_Left.J0.PRESENT_TEMPERATURE = get_data[9];
-        control_system.Front_Left.J1.PRESENT_TEMPERATURE = get_data[10];
-        control_system.Front_Left.J2.PRESENT_TEMPERATURE = get_data[11];
-        }
-        else if (strcmp(str, "Present_Load") == 0){
-        leg_indx=1;
-        control_system.Back_Left.J0.PRESENT_LOAD = get_data[0];
-        control_system.Back_Left.J1.PRESENT_LOAD = get_data[1];
-        control_system.Back_Left.J2.PRESENT_LOAD = get_data[2];
-        control_system.Back_Right.J0.PRESENT_LOAD =get_data[3];
-        control_system.Back_Right.J1.PRESENT_LOAD =get_data[4];
-        control_system.Back_Right.J2.PRESENT_LOAD =get_data[5];
-        control_system.Front_Right.J0.PRESENT_LOAD = get_data[6];
-        control_system.Front_Right.J1.PRESENT_LOAD = get_data[7];        
-        control_system.Front_Right.J2.PRESENT_LOAD = get_data[8];
-        control_system.Front_Left.J0.PRESENT_LOAD = get_data[9];
-        control_system.Front_Left.J1.PRESENT_LOAD = get_data[10];
-        control_system.Front_Left.J2.PRESENT_LOAD = get_data[11];
-        }else{
-        leg_indx=1;
-        std::cout << "Not Handled Yet";
+        else if (strcmp(to_assign[i].feedback_string, "Present_Load") == 0){
+            assignLoadDynamixelFeedback(to_assign[i].actuator_id,get_data[i]);
         }
     }
 
-void update_system(){
-    //bool result;
-    const char *log;
-    uint16_t model_number = 0;
-    uint8_t dxl_id[2] = {1, 2};
-    bool result = false;
-
-    for (int cnt = 1; cnt <= 2; cnt++)
-  {
-    result = dxl_wb.ping(dxl_id[cnt], &model_number, &log);
-    if (result == false)
-    {
-      printf("Log: %s\n", log);
-      printf("Failed to ping\n");
+    dxl_wb.clearBulkReadParam();    
     }
-    else
-    {
-      printf("Succeeded to ping\n");
-      printf("id : %d, model_number : %d\n", dxl_id[cnt], model_number);
-    }
-  }
 
-  result = dxl_wb.initBulkRead(&log);
-  if (result == false)
-  {
-    printf("Log: %s\n", log);
-  }
-  else
-  {
-    printf("Log: %s\n", log);
-  }
-
-  result = dxl_wb.addBulkReadParam(dxl_id[0], "Present_Position", &log);
-  if (result == false)
-  {
-    printf("Log: %s\n", log);
-    printf("Failed to add bulk read position param\n");
-  }
-  else
-  {
-    printf("Log: %s\n", log);
-  }
-
-  result = dxl_wb.addBulkReadParam(dxl_id[1], "Present_Position", &log);
-  if (result == false)
-  {
-    printf("Log: %s\n", log);
-    printf("Failed to add bulk read position param\n");
-  }
-  else
-  {
-    printf("Log: %s\n", log);
-  }
-
-  int32_t get_data[2] = {0, 0};
-
-  const uint8_t handler_index = 0;
-
-  
+void command_actutors(){
     
-      result = dxl_wb.bulkRead(&log);
-      if (result == false)
-      {
-        printf("Log: %s\n", log);
-        printf("Failed to bulk read\n");
-      }
-
-      result = dxl_wb.getBulkReadData(&get_data[0], &log);
-      std::cout << result << std::endl;
-      if (result == false)
-      {
-        printf("Log: %s\n", log);
-      }
-      else
-      {
-        std::cout << (int)get_data[0] << ", " << (int)get_data[1]  << std::endl;
-  }
-
-  std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 int main(int argc, char **argv)
@@ -656,6 +540,21 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "SENCE_Serial_Interface");
     ros::NodeHandle node;
     ros::Rate rate(1000);
+
+
+    //initialise the feedback command system
+    const char* feedback_strings[4]
+        = { "Present_Position", "Present_Velocity", "Present_Temperature", "Present_Load" };
+    int idx = 0;
+    for(int fs=0;fs<=3;fs++){
+        for(int dyI=1;dyI<=12;dyI++){
+            feedback_updates[idx] = feedback_struct{dyI,feedback_strings[fs]};
+            idx++;   
+        }
+    }
+    
+    
+    
 
     //wb_result = dxl_wb.init(port_name, baud, &log);
     bool wb_result = dxl_wb.init(port_name, DYNA_BAUD,&log);
@@ -737,10 +636,8 @@ int main(int argc, char **argv)
 
     uint64_t write_serial_time = getClockTime();
     uint64_t publish_feedback_time = getClockTime();
+    uint64_t mass_read_time = getClockTime();
     uint64_t time_now = getClockTime();
-
-    const char* feedback_strings[4]
-        = { "Present_Position", "Present_Velocity", "Present_Temperature", "Present_Load" };
  
    
     std::this_thread::sleep_for(std::chrono::seconds(3));
@@ -755,18 +652,26 @@ int main(int argc, char **argv)
         //uint32 seq
         //time stamp
         //string frame_id
-        if ((time_now - publish_feedback_time) >= RateOfUpdate)
+        if ((time_now - mass_read_time) >= RateOfUpdate)
         {
-            update_leg(feedback_strings[0]);
-            //update_system();
-            //resend_targets();
+            mass_read_time = getClockTime();
+            mass_read_data();
+        }
+
+        if ((time_now - publish_feedback_time) >= RateOfPublish)
+        {
+            command_actutors();
             ++publishFrameID;
             publish_feedback_time = getClockTime();
             control_system.Header.frame_id = "frame" + std::to_string(publishFrameID);
             control_system.Header.seq = publish_feedback_time;
             control_system.Header.stamp = ros::Time::now();
             system_publisher.publish(control_system);
+
         }
+
+            
+        
         ros::spinOnce();
         //cout << "Looping, will pause if serial error" << time_now << std::endl;
         rate.sleep();
