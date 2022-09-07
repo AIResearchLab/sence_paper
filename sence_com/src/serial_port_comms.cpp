@@ -70,7 +70,7 @@ uint64_t getClockTime()
 }
 
 
-int32_t resend_targets(){
+int32_t get_command_value(int id, const char *item_name){
     int32_t pos;
     int32_t vel;
         switch (i)
@@ -78,56 +78,38 @@ int32_t resend_targets(){
         case D_1:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J0.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_2:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J1.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J1.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_3:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J2.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J2.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_4:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J0.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J0.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_5:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J1.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J1.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_6:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J2.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J2.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_7:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_8:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J1.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J1.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_9:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J2.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J2.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_10:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
@@ -149,6 +131,8 @@ int32_t resend_targets(){
             // code block
             std::cout << "Not Handled Yet";
         }
+
+
     }
 }
 
