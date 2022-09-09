@@ -346,40 +346,40 @@ void assignLoadDynamixelFeedback(int jID, int32_t load)
     switch (jID)
     {
     case D_1:
-        control_system.Back_Left.J0.PRESENT_LOAD = load;
+        control_system.Back_Left.J0.PRESENT_LOAD = (int16_t)load;
         break;
     case D_2:
-        control_system.Back_Left.J1.PRESENT_LOAD = load;
+        control_system.Back_Left.J1.PRESENT_LOAD = (int16_t)load;
         break;
     case D_3:
-        control_system.Back_Left.J2.PRESENT_LOAD = load;
+        control_system.Back_Left.J2.PRESENT_LOAD = (int16_t)load;
         break;
     case D_4:
-        control_system.Back_Right.J0.PRESENT_LOAD =load;
+        control_system.Back_Right.J0.PRESENT_LOAD =(int16_t)load;
         break;
     case D_5:
-        control_system.Back_Right.J1.PRESENT_LOAD =load;
+        control_system.Back_Right.J1.PRESENT_LOAD =(int16_t)load;
         break;
     case D_6:
-        control_system.Back_Right.J2.PRESENT_LOAD =load;
+        control_system.Back_Right.J2.PRESENT_LOAD =(int16_t)load;
         break;
     case D_7:
-        control_system.Front_Right.J0.PRESENT_LOAD =load;
+        control_system.Front_Right.J0.PRESENT_LOAD =(int16_t)load;
         break;
     case D_8:
-        control_system.Front_Right.J1.PRESENT_LOAD =load;
+        control_system.Front_Right.J1.PRESENT_LOAD =(int16_t)load;
         break;
     case D_9:
-        control_system.Front_Right.J2.PRESENT_LOAD =load;
+        control_system.Front_Right.J2.PRESENT_LOAD =(int16_t)load;
         break;
     case D_10:
-        control_system.Front_Left.J0.PRESENT_LOAD =load;
+        control_system.Front_Left.J0.PRESENT_LOAD =(int16_t)load;
         break;
     case D_11:
-        control_system.Front_Left.J1.PRESENT_LOAD =load;
+        control_system.Front_Left.J1.PRESENT_LOAD =(int16_t)load;
         break;
     case D_12:
-        control_system.Front_Left.J2.PRESENT_LOAD =load;
+        control_system.Front_Left.J2.PRESENT_LOAD =(int16_t)load;
         break;
     default:
         // code block
