@@ -26,7 +26,7 @@ using std::vector;
 //feedback structure 44 elements for parsing
 interface_struct feedback_updates[44];
 //command structure 24 commands elements for parsing
-interface_struct command_updates[44];
+interface_struct command_updates[24];
 
 
 #define RateOfUpdate 20 //20Hz Hz return structure
@@ -55,9 +55,9 @@ int16_t convertFloatPoseToDynamixelPose(float value){
     return (int16_t)convertedValue;
 }
 
-uint16_t convertFloatTargetSpeedToDynamixelSpeed(float radiansPerSecond){
+int16_t convertFloatTargetSpeedToDynamixelSpeed(float radiansPerSecond){
     float RPM = abs(9.549297 * radiansPerSecond);
-    return (uint16_t)((int)(round(RPM / SPEED_RPM_TICK)));
+    return (int16_t)((int)(round(RPM / SPEED_RPM_TICK)));
 }
 
 float convertDynamixelSpeedToFloatFeedbackSpeed(uint16_t feedbackValue){
@@ -78,52 +78,52 @@ int32_t get_command_value(int id, const char *item_name){
         switch (id)
         {
         case D_1:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J0.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J0.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Back_Left.J0.TARGET_POSITION);
             break;
         case D_2:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J1.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J1.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J1.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Back_Left.J1.TARGET_POSITION);
             break;
         case D_3:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J2.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Back_Left.J2.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J2.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Back_Left.J2.TARGET_POSITION);
             break;
         case D_4:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J0.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J0.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J0.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Back_Right.J0.TARGET_POSITION);
             break;
         case D_5:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J1.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J1.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J1.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Back_Right.J1.TARGET_POSITION);
             break;
         case D_6:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J2.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Back_Right.J2.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Right.J2.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Back_Right.J2.TARGET_POSITION);
             break;
         case D_7:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J0.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Front_Right.J0.TARGET_POSITION);
             break;
         case D_8:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J1.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J1.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J1.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Front_Right.J1.TARGET_POSITION);
             break;
         case D_9:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J2.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Front_Right.J2.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Right.J2.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Front_Right.J2.TARGET_POSITION);
             break;
         case D_10:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J0.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Front_Left.J0.TARGET_POSITION);
             break;
         case D_11:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J1.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Front_Left.J1.TARGET_POSITION);
             break;
         case D_12:
-            pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
-            vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J2.TARGET_POSITION);
+            vel = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
+            pos = convertFloatPoseToDynamixelPose(control_system.Front_Left.J2.TARGET_POSITION);
             break;
         default:
             // code block
@@ -138,6 +138,48 @@ int32_t get_command_value(int id, const char *item_name){
 
 
     }
+
+void sync_system(){
+    //BL
+    control_system.Back_Left.J0.TARGET_POSITION = control_system.Back_Left.J0.PRESENT_POSITION;
+    control_system.Back_Left.J0.TARGET_VELOCITY = 0.3;
+
+    control_system.Back_Left.J1.TARGET_POSITION = control_system.Back_Left.J1.PRESENT_POSITION;
+    control_system.Back_Left.J1.TARGET_VELOCITY = 0.3;
+    
+    control_system.Back_Left.J2.TARGET_POSITION = control_system.Back_Left.J2.PRESENT_POSITION;
+    control_system.Back_Left.J2.TARGET_VELOCITY = 0.3;
+
+    //BR
+    control_system.Back_Right.J0.TARGET_POSITION = control_system.Back_Right.J0.PRESENT_POSITION;
+    control_system.Back_Right.J0.TARGET_VELOCITY = 0.3;
+
+    control_system.Back_Right.J1.TARGET_POSITION = control_system.Back_Right.J1.PRESENT_POSITION;
+    control_system.Back_Right.J1.TARGET_VELOCITY = 0.3;
+    
+    control_system.Back_Right.J2.TARGET_POSITION = control_system.Back_Right.J2.PRESENT_POSITION;
+    control_system.Back_Right.J2.TARGET_VELOCITY = 0.3;
+    
+    //FR
+    control_system.Front_Right.J0.TARGET_POSITION = control_system.Front_Right.J0.PRESENT_POSITION;
+    control_system.Front_Right.J0.TARGET_VELOCITY = 0.3;
+
+    control_system.Front_Right.J1.TARGET_POSITION = control_system.Front_Right.J1.PRESENT_POSITION;
+    control_system.Front_Right.J1.TARGET_VELOCITY = 0.3;
+    
+    control_system.Front_Right.J2.TARGET_POSITION = control_system.Front_Right.J2.PRESENT_POSITION;
+    control_system.Front_Right.J2.TARGET_VELOCITY = 0.3;
+
+    //FL
+    control_system.Front_Left.J0.TARGET_POSITION = control_system.Front_Left.J0.PRESENT_POSITION;
+    control_system.Front_Left.J0.TARGET_VELOCITY = 0.3;
+
+    control_system.Front_Left.J1.TARGET_POSITION = control_system.Front_Left.J1.PRESENT_POSITION;
+    control_system.Front_Left.J1.TARGET_VELOCITY = 0.3;
+    
+    control_system.Front_Left.J2.TARGET_POSITION = control_system.Front_Left.J2.PRESENT_POSITION;
+    control_system.Front_Left.J2.TARGET_VELOCITY = 0.3;
+}
 
 void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
 {
@@ -527,7 +569,7 @@ void command_actutors(){
         printf("%s\n", log);
     }
     int updates=0;
-    int value_to_parse = 0;
+    int32_t value_to_parse = 0;
     while(updates<9){        
         value_to_parse = get_command_value(command_updates[command_index].actuator_id, command_updates[command_index].feedback_string);
         result = dxl_wb.addBulkWriteParam(command_updates[command_index].actuator_id, command_updates[command_index].feedback_string, value_to_parse, &log);
@@ -537,14 +579,16 @@ void command_actutors(){
             printf("Failed to add bulk read position param\n");
             printf("updates = %d\n",updates);
             printf("feedback_index = %d\n",feedback_index);
-            cout << feedback_updates[feedback_index].actuator_id << feedback_updates[feedback_index].feedback_string << std::endl;
+            cout << command_updates[command_index].actuator_id <<','<< command_updates[command_index].feedback_string <<','<<value_to_parse<<  std::endl;
         }
         else
         {
             printf("Log: %s\n", log);
+            printf("Succeeded to add bulk read position param\n");
+            cout << command_updates[command_index].actuator_id << command_updates[command_index].feedback_string <<','<<value_to_parse<<  std::endl;
         } 
         updates++;
-        if(command_index==43){
+        if(command_index==23){
             command_index=0;
         }else{
             command_index++;
@@ -558,6 +602,8 @@ void command_actutors(){
     {
       printf("%s\n", log);
       printf("Failed to bulk write\n");
+    }else{
+        printf("I did a bulk write\n");
     }
 }
 
@@ -584,10 +630,12 @@ int main(int argc, char **argv)
     
     const char* command_strings[4]
         = { "Profile_Velocity", "Goal_Position"};
+    
     idx = 0;
     for(int fs=0;fs<=1;fs++){
         for(int dyI=1;dyI<=12;dyI++){
             command_updates[idx] = interface_struct{dyI,command_strings[fs]};
+
             idx++;
         }
     }
@@ -676,8 +724,12 @@ int main(int argc, char **argv)
     uint64_t mass_read_time = getClockTime();
     uint64_t time_now = getClockTime();
  
-   
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    for(int y = 0; y<100;y++){
+    mass_read_data();
+    sync_system();
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
+    //std::this_thread::sleep_for(std::chrono::seconds(3));
 
     int publishFrameID = 0;
 
@@ -692,7 +744,7 @@ int main(int argc, char **argv)
         if ((time_now - mass_read_time) >= RateOfUpdate)
         {
             mass_read_time = getClockTime();
-            mass_read_data();
+            //mass_read_data();
         }
         else if ((time_now - publish_feedback_time) >= RateOfPublish)
         {
