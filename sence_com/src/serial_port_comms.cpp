@@ -512,10 +512,10 @@ void mass_read_data(){
     dxl_wb.clearBulkReadParam();    
     }
 
-command_index=0;
+int command_index=0;
 void command_actutors(){
-
-    result = dxl_wb.initBulkWrite(&log);
+    const char *log;
+    bool result = dxl_wb.initBulkWrite(&log);
     if (result == false)
     {
         printf("%s\n", log);
@@ -525,12 +525,10 @@ void command_actutors(){
         printf("%s\n", log);
     }
     int updates=0;
-    int value_to_parse = 0
-    while(updates<9){
-
-        result = dxl_wb.addBulkReadParam(command_updates[command_index].actuator_id, command_updates[command_index].feedback_string, &log);
-        to_assign[updates] = interface_struct{feedback_updates[feedback_index].actuator_id, feedback_updates[feedback_index].feedback_string};
-        feedback_updates[feedback_index];
+    int value_to_parse = 0;
+    while(updates<9){        
+        value_to_parse = get_command_value(command_updates[command_index].actuator_id, command_updates[command_index].feedback_string);
+        result = dxl_wb.addBulkWriteParam(command_updates[command_index].actuator_id, command_updates[command_index].feedback_string, value_to_parse, &log);
         if (result == false)
         {
             printf("Log: %s\n", log);
@@ -544,45 +542,21 @@ void command_actutors(){
             printf("Log: %s\n", log);
         } 
         updates++;
-        if(feedback_index==43){
-            feedback_index=0;
+        if(command_index==43){
+            command_index=0;
         }else{
-            feedback_index++;
+            command_index++;
         }
         if(updates==9){
             break;
         }        
     } 
-
-    result = dxl_wb.addBulkWriteParam(dxl_id[0], "Goal_Position", goal_position[0], &log);
-    if (result == false)
-    {
-      printf("%s\n", log);
-      printf("Failed to add bulk write position param\n");
-    }
-    else
-    {
-      printf("%s\n", log);
-    }
-
-    result = dxl_wb.addBulkWriteParam(dxl_id[1], "LED", led[0], &log);
-    if (result == false)
-    {
-      printf("%s\n", log);
-      printf("Failed to add bulk write led param\n");
-    }
-    else
-    {
-      printf("%s\n", log);
-    }
-
     result = dxl_wb.bulkWrite(&log);
     if (result == false)
     {
       printf("%s\n", log);
       printf("Failed to bulk write\n");
     }
-
 }
 
 int main(int argc, char **argv)
@@ -721,7 +695,6 @@ int main(int argc, char **argv)
 
         if ((time_now - publish_feedback_time) >= RateOfPublish)
         {
-            command_actutors();
             ++publishFrameID;
             publish_feedback_time = getClockTime();
             control_system.Header.frame_id = "frame" + std::to_string(publishFrameID);
@@ -730,6 +703,8 @@ int main(int argc, char **argv)
             system_publisher.publish(control_system);
 
         }
+
+        //command_actutors();
 
             
         
