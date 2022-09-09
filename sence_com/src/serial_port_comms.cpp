@@ -73,7 +73,7 @@ uint64_t getClockTime()
 int32_t get_command_value(int id, const char *item_name){
     int32_t pos;
     int32_t vel;
-        switch (i)
+        switch (id)
         {
         case D_1:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Back_Left.J0.TARGET_VELOCITY);
@@ -132,9 +132,14 @@ int32_t get_command_value(int id, const char *item_name){
             std::cout << "Not Handled Yet";
         }
 
+        if (strcmp(item_name, "Goal_Position") == 0){
+            return pos;
+        }else{
+            return vel;
+        }
+
 
     }
-}
 
 void updateTargetsCallback(const sence_msgs::Target_Buffer::ConstPtr &msg)
 {
@@ -687,7 +692,6 @@ int main(int argc, char **argv)
 
         }
     }
-
 
     cout << "All devices found" << std::endl;
 
