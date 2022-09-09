@@ -29,8 +29,9 @@ interface_struct feedback_updates[44];
 interface_struct command_updates[44];
 
 
-#define RateOfUpdate 10 //20Hz Hz return structure
+#define RateOfUpdate 20 //20Hz Hz return structure
 #define RateOfPublish 50 //20Hz Hz return structure
+#define RateOfWrite 20 //20Hz Hz return structure
 
 #define M_PI    3.14159265358979323846  /* pi */
 
@@ -44,8 +45,9 @@ DynamixelWorkbench dxl_wb;
 
 sence_msgs::SENCE control_system;
 
-float convertDynamixelPoseToFloatPose(uint16_t value){
-    return (float)value * POSITION_DYNA * M_PI / 180;
+float convertDynamixelPoseToFloatPose(int32_t value){
+    int16_t conv = (int16_t)value;
+    return (float)conv * POSITION_DYNA * M_PI / 180;
 }
 
 int16_t convertFloatPoseToDynamixelPose(float value){
@@ -692,8 +694,7 @@ int main(int argc, char **argv)
             mass_read_time = getClockTime();
             mass_read_data();
         }
-
-        if ((time_now - publish_feedback_time) >= RateOfPublish)
+        else if ((time_now - publish_feedback_time) >= RateOfPublish)
         {
             ++publishFrameID;
             publish_feedback_time = getClockTime();
@@ -702,9 +703,11 @@ int main(int argc, char **argv)
             control_system.Header.stamp = ros::Time::now();
             system_publisher.publish(control_system);
 
-        }
+        }else if((time_now - write_serial_time) >=RateOfWrite){
+            write_serial_time = getClockTime();
+            command_actutors();
+        }   
 
-        //command_actutors();
 
             
         
