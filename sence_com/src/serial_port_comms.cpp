@@ -114,14 +114,10 @@ int32_t get_command_value(int id, const char *item_name){
         case D_10:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J0.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J0.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_11:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J1.TARGET_VELOCITY);
             vel = convertFloatPoseToDynamixelPose(control_system.Front_Left.J1.TARGET_POSITION);
-            dxl_wb.itemWrite(i, "Profile_Velocity", vel, &log);
-            dxl_wb.itemWrite(i, "Goal_Position", pos, &log);
             break;
         case D_12:
             pos = convertFloatTargetSpeedToDynamixelSpeed(control_system.Front_Left.J2.TARGET_VELOCITY);
