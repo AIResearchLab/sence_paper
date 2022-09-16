@@ -744,7 +744,7 @@ int main(int argc, char **argv)
         if ((time_now - mass_read_time) >= RateOfUpdate)
         {
             mass_read_time = getClockTime();
-            //mass_read_data();
+            mass_read_data();
         }
         else if ((time_now - publish_feedback_time) >= RateOfPublish)
         {
