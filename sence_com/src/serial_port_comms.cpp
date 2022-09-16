@@ -506,6 +506,9 @@ void mass_read_data(){
             printf("updates = %d\n",updates);
             printf("feedback_index = %d\n",feedback_index);
             cout << feedback_updates[feedback_index].actuator_id << feedback_updates[feedback_index].feedback_string << std::endl;
+            //TODO: On failure, skipping to zero occasionally, no idea why
+            dxl_wb.clearBulkReadParam();   
+            return;
         }
         else
         {
@@ -527,6 +530,9 @@ void mass_read_data(){
       {
         printf("Log: %s\n", log);
         printf("Failed to bulk read\n");
+        //TODO: On failure, skipping to zero occasionally, no idea why
+        dxl_wb.clearBulkReadParam();   
+            return;
       }
 
       result = dxl_wb.getBulkReadData(&get_data[0], &log);
