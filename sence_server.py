@@ -7,7 +7,7 @@ def load_server():
     p.resetSimulation()
     p.setRealTimeSimulation(1)
     p.setGravity(0, 0, -9.81)
-    plane = p.loadURDF("plane.urdf")
+    plane = p.loadSDF("stadium.sdf")
     return
 
 def command_actuator(robot,M_ID,target_position,target_velocity):
@@ -16,6 +16,5 @@ def command_actuator(robot,M_ID,target_position,target_velocity):
         jointIndex=M_ID,
         controlMode=p.POSITION_CONTROL,
         targetPosition=target_position,
-        maxVelocity=target_velocity,
-        force=2.5) 
+        maxVelocity=target_velocity) 
     return
