@@ -9,7 +9,7 @@ if __name__ == "__main__" :
     i = Target_Buffer()
     j1 = Target()
     j1.TARGET_ID = 1
-    j1.TARGET_POSITION = -1.570796
+    j1.TARGET_POSITION = 0
     j1.TARGET_VELOCITY = 0.4
     i.Buffer_To_Send.append(j1)
     j2 = Target()
@@ -24,7 +24,7 @@ if __name__ == "__main__" :
     i.Buffer_To_Send.append(j3)
     j4 = Target()
     j4.TARGET_ID = 4
-    j4.TARGET_POSITION = 1.570796
+    j4.TARGET_POSITION = 0
     j4.TARGET_VELOCITY = 0.4
     i.Buffer_To_Send.append(j4)
     j5 = Target()
@@ -39,7 +39,7 @@ if __name__ == "__main__" :
     i.Buffer_To_Send.append(j6)
     j7 = Target()
     j7.TARGET_ID = 7
-    j7.TARGET_POSITION = -1.570796
+    j7.TARGET_POSITION = 0
     j7.TARGET_VELOCITY = 0.4
     i.Buffer_To_Send.append(j7)
     j8 = Target()
@@ -54,7 +54,7 @@ if __name__ == "__main__" :
     i.Buffer_To_Send.append(j9)
     j10 = Target()
     j10.TARGET_ID = 10
-    j10.TARGET_POSITION = 1.570796
+    j10.TARGET_POSITION = 0
     j10.TARGET_VELOCITY = 0.4
     i.Buffer_To_Send.append(j10)
     j11 = Target()
@@ -90,6 +90,10 @@ if __name__ == "__main__" :
             i.Buffer_To_Send[11].TARGET_POSITION = 0
             pub.publish(i)
         if h == '1': #Reset to zero position on startup and initial prestand
+            i.Buffer_To_Send[0].TARGET_POSITION = -1.570796
+            i.Buffer_To_Send[3].TARGET_POSITION = 1.570796
+            i.Buffer_To_Send[6].TARGET_POSITION = -1.570796
+            i.Buffer_To_Send[9].TARGET_POSITION = 1.570796
             pub.publish(i)
             sleep(4)
             i.Buffer_To_Send[1].TARGET_POSITION = 0.785398
@@ -106,7 +110,6 @@ if __name__ == "__main__" :
         elif h == '3': #Single walk cycle
             #step1
             i.Buffer_To_Send[2].TARGET_POSITION = -0.9 #Lift J3 from contact
-            pub.publish(i)
             i.Buffer_To_Send[0].TARGET_POSITION = -1.22173 #swing j1 to side to keep balance
             i.Buffer_To_Send[1].TARGET_POSITION = 1.570796 #pivot j2 to new position
             pub.publish(i)
@@ -117,7 +120,6 @@ if __name__ == "__main__" :
             
             #step2
             i.Buffer_To_Send[8].TARGET_POSITION = -0.9 #Lift J3 from contact
-            pub.publish(i)
             i.Buffer_To_Send[6].TARGET_POSITION = -1.919862 #swing j1 to side to keep balance
             i.Buffer_To_Send[7].TARGET_POSITION = 0 #pivot j2 to new position
             pub.publish(i)
@@ -128,7 +130,6 @@ if __name__ == "__main__" :
             sleep(0.8)
             #step3
             i.Buffer_To_Send[5].TARGET_POSITION = -0.9 #Lift J3 from contact
-            pub.publish(i)
             i.Buffer_To_Send[3].TARGET_POSITION = 1.22173 #swing j1 to side to keep balance
             i.Buffer_To_Send[4].TARGET_POSITION = -1.570796 #pivot j2 to new position
             pub.publish(i)
@@ -139,7 +140,6 @@ if __name__ == "__main__" :
             
             #step4
             i.Buffer_To_Send[11].TARGET_POSITION = -0.9 #Lift J3 from contact
-            pub.publish(i)
             i.Buffer_To_Send[9].TARGET_POSITION = 1.919862 #swing j1 to side to keep balance
             i.Buffer_To_Send[10].TARGET_POSITION = 0 #pivot j2 to new position
             pub.publish(i)
@@ -161,7 +161,6 @@ if __name__ == "__main__" :
             while cc < 3:
                 #step1
                 i.Buffer_To_Send[2].TARGET_POSITION = -0.9 #Lift J3 from contact
-                pub.publish(i)
                 i.Buffer_To_Send[0].TARGET_POSITION = -1.919862 #swing j1 to side to keep balance
                 i.Buffer_To_Send[1].TARGET_POSITION = 1.570796 #pivot j2 to new position
                 pub.publish(i)
@@ -172,7 +171,6 @@ if __name__ == "__main__" :
                 
                 #step2
                 i.Buffer_To_Send[8].TARGET_POSITION = -0.9 #Lift J3 from contact
-                pub.publish(i)
                 i.Buffer_To_Send[6].TARGET_POSITION = -1.22173 #swing j1 to side to keep balance
                 i.Buffer_To_Send[7].TARGET_POSITION = 0 #pivot j2 to new position
                 pub.publish(i)
@@ -183,7 +181,6 @@ if __name__ == "__main__" :
                 sleep(0.8)
                 #step3
                 i.Buffer_To_Send[5].TARGET_POSITION = -0.9 #Lift J3 from contact
-                pub.publish(i)
                 i.Buffer_To_Send[3].TARGET_POSITION = 1.919862 #swing j1 to side to keep balance
                 i.Buffer_To_Send[4].TARGET_POSITION = -1.570796 #pivot j2 to new position
                 pub.publish(i)
@@ -194,7 +191,6 @@ if __name__ == "__main__" :
                 
                 #step4
                 i.Buffer_To_Send[11].TARGET_POSITION = -0.9 #Lift J3 from contact
-                pub.publish(i)
                 i.Buffer_To_Send[9].TARGET_POSITION = 1.22173 #swing j1 to side to keep balance
                 i.Buffer_To_Send[10].TARGET_POSITION = 0 #pivot j2 to new position
                 pub.publish(i)
