@@ -74,6 +74,21 @@ if __name__ == "__main__" :
     while(True):
         h = input('input command and press enter: ')
         rospy.init_node('test_stand')
+        if h == '0': #Reset to zero position outside of startup
+            sleep(4)
+            i.Buffer_To_Send[0].TARGET_POSITION = 0
+            i.Buffer_To_Send[1].TARGET_POSITION = 0
+            i.Buffer_To_Send[2].TARGET_POSITION = 0
+            i.Buffer_To_Send[3].TARGET_POSITION = 0
+            i.Buffer_To_Send[4].TARGET_POSITION = 0
+            i.Buffer_To_Send[5].TARGET_POSITION = 0
+            i.Buffer_To_Send[6].TARGET_POSITION = 0
+            i.Buffer_To_Send[7].TARGET_POSITION = 0
+            i.Buffer_To_Send[8].TARGET_POSITION = 0
+            i.Buffer_To_Send[9].TARGET_POSITION = 0
+            i.Buffer_To_Send[10].TARGET_POSITION = 0
+            i.Buffer_To_Send[11].TARGET_POSITION = 0
+            pub.publish(i)
         if h == '1': #Reset to zero position on startup and initial prestand
             pub.publish(i)
             sleep(4)
