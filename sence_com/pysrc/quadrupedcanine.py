@@ -75,7 +75,6 @@ if __name__ == "__main__" :
         h = input('input command and press enter: ')
         rospy.init_node('test_stand')
         if h == '0': #Reset to zero position outside of startup
-            sleep(4)
             i.Buffer_To_Send[0].TARGET_POSITION = 0
             i.Buffer_To_Send[1].TARGET_POSITION = 0
             i.Buffer_To_Send[2].TARGET_POSITION = 0
@@ -89,6 +88,7 @@ if __name__ == "__main__" :
             i.Buffer_To_Send[10].TARGET_POSITION = 0
             i.Buffer_To_Send[11].TARGET_POSITION = 0
             pub.publish(i)
+            sleep(4)
         if h == '1': #Initial prestand
             i.Buffer_To_Send[0].TARGET_POSITION = 2.94
             i.Buffer_To_Send[3].TARGET_POSITION = -2.94

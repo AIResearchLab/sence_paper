@@ -75,7 +75,6 @@ if __name__ == "__main__" :
         h = input('input command and press enter: ')
         rospy.init_node('test_stand')
         if h == '0': #Reset to zero position outside of startup
-            sleep(4)
             i.Buffer_To_Send[0].TARGET_POSITION = 0
             i.Buffer_To_Send[1].TARGET_POSITION = 0
             i.Buffer_To_Send[2].TARGET_POSITION = 0
@@ -89,13 +88,14 @@ if __name__ == "__main__" :
             i.Buffer_To_Send[10].TARGET_POSITION = 0
             i.Buffer_To_Send[11].TARGET_POSITION = 0
             pub.publish(i)
+            sleep(4)
         if h == '1': #Reset to zero position on startup and initial prestand
             i.Buffer_To_Send[0].TARGET_POSITION = 0.21
             i.Buffer_To_Send[3].TARGET_POSITION = -0.21
             i.Buffer_To_Send[6].TARGET_POSITION = 0.21
             i.Buffer_To_Send[9].TARGET_POSITION = -0.21
             pub.publish(i)
-            sleep(8)
+            sleep(2)
             i.Buffer_To_Send[1].TARGET_POSITION = -1.57
             i.Buffer_To_Send[2].TARGET_POSITION = 2.09
             i.Buffer_To_Send[4].TARGET_POSITION = 1.57
@@ -106,28 +106,110 @@ if __name__ == "__main__" :
             i.Buffer_To_Send[11].TARGET_POSITION = 2.09
             pub.publish(i)
         elif h == '2': #stand
-            i.Buffer_To_Send[0].TARGET_POSITION = 2.09
-            i.Buffer_To_Send[3].TARGET_POSITION = -2.09
-            i.Buffer_To_Send[6].TARGET_POSITION = 2.09
-            i.Buffer_To_Send[9].TARGET_POSITION = -2.09
+            i.Buffer_To_Send[0].TARGET_POSITION = 2.15
+            i.Buffer_To_Send[3].TARGET_POSITION = -2.15
+            i.Buffer_To_Send[6].TARGET_POSITION = 2.15
+            i.Buffer_To_Send[9].TARGET_POSITION = -2.15
             pub.publish(i)
             sleep(2)
-            i.Buffer_To_Send[2].TARGET_POSITION = 1.15
-            i.Buffer_To_Send[5].TARGET_POSITION = 1.15
-            i.Buffer_To_Send[8].TARGET_POSITION = 1.15
-            i.Buffer_To_Send[11].TARGET_POSITION = 1.15    
+            i.Buffer_To_Send[2].TARGET_POSITION = 1.25
+            i.Buffer_To_Send[5].TARGET_POSITION = 1.25
+            i.Buffer_To_Send[8].TARGET_POSITION = 1.25
+            i.Buffer_To_Send[11].TARGET_POSITION = 1.25    
             pub.publish(i)
         elif h == '3': #Single walk cycle
-            i.Buffer_To_Send[0].TARGET_POSITION = 2.09
-            i.Buffer_To_Send[3].TARGET_POSITION = -2.09
-            i.Buffer_To_Send[6].TARGET_POSITION = 2.09
-            i.Buffer_To_Send[9].TARGET_POSITION = -2.09
+            #Temp setup for movement, set to end of first pull push setup
+            i.Buffer_To_Send[2].TARGET_POSITION = 1.48353 #reach for pull
+            i.Buffer_To_Send[8].TARGET_POSITION = 1.48353 #reach for pull
+            i.Buffer_To_Send[5].TARGET_POSITION = 1.25
+            i.Buffer_To_Send[11].TARGET_POSITION = 0.959931
+            i.Buffer_To_Send[0].TARGET_POSITION = 1.396263 #reach for pull
+            i.Buffer_To_Send[6].TARGET_POSITION = 2.268928 #reach for pull
+            i.Buffer_To_Send[3].TARGET_POSITION = -2.268928
+            i.Buffer_To_Send[9].TARGET_POSITION = -2.007129
             pub.publish(i)
-            sleep(3)
-            i.Buffer_To_Send[2].TARGET_POSITION = 0.87
-            i.Buffer_To_Send[5].TARGET_POSITION = 0.87
-            i.Buffer_To_Send[8].TARGET_POSITION = 0.87
-            i.Buffer_To_Send[11].TARGET_POSITION = 0.87    
+            sleep(0.4)
+            #Feet down
+            i.Buffer_To_Send[2].TARGET_POSITION = 0.959931 #reach for pull
+            i.Buffer_To_Send[0].TARGET_POSITION = 2.007129 #reach for pull
+            i.Buffer_To_Send[8].TARGET_POSITION = 1.22173 #reach for pull
             pub.publish(i)
+            sleep(0.75)
+            #stride 2
+            i.Buffer_To_Send[5].TARGET_POSITION = 1.48353 #reach for pull
+            i.Buffer_To_Send[11].TARGET_POSITION = 1.48353 #reach for pull
+            i.Buffer_To_Send[2].TARGET_POSITION = 1.25
+            i.Buffer_To_Send[8].TARGET_POSITION = 0.959931
+            i.Buffer_To_Send[3].TARGET_POSITION = -1.396263 #reach for pull
+            i.Buffer_To_Send[9].TARGET_POSITION = -2.268928 #reach for pull
+            i.Buffer_To_Send[0].TARGET_POSITION = 2.268928
+            i.Buffer_To_Send[6].TARGET_POSITION = 2.007129
+            pub.publish(i)
+            sleep(0.4)
+            #Feet down
+            i.Buffer_To_Send[5].TARGET_POSITION = 0.959931 #reach for pull
+            i.Buffer_To_Send[3].TARGET_POSITION = -2.007129 #reach for pull
+            i.Buffer_To_Send[11].TARGET_POSITION = 1.22173 #reach for pull
+            pub.publish(i)
+
+
+        elif h == '4': #Single walk cycle
+            #Temp setup for movement, set to end of first pull push setup
+            cc=0
+            while cc < 3:
+                i.Buffer_To_Send[2].TARGET_POSITION = 1.48353 #reach for pull
+                i.Buffer_To_Send[8].TARGET_POSITION = 1.48353 #reach for pull
+                i.Buffer_To_Send[5].TARGET_POSITION = 1.25
+                i.Buffer_To_Send[11].TARGET_POSITION = 0.959931
+                i.Buffer_To_Send[0].TARGET_POSITION = 1.396263 #reach for pull
+                i.Buffer_To_Send[6].TARGET_POSITION = 2.268928 #reach for pull
+                i.Buffer_To_Send[3].TARGET_POSITION = -2.268928
+                i.Buffer_To_Send[9].TARGET_POSITION = -2.007129
+                pub.publish(i)
+                sleep(0.4)
+                #Feet down
+                i.Buffer_To_Send[2].TARGET_POSITION = 0.959931 #reach for pull
+                i.Buffer_To_Send[0].TARGET_POSITION = 2.007129 #reach for pull
+                i.Buffer_To_Send[8].TARGET_POSITION = 1.22173 #reach for pull
+                pub.publish(i)
+                sleep(0.75)
+                #stride 2
+                i.Buffer_To_Send[5].TARGET_POSITION = 1.48353 #reach for pull
+                i.Buffer_To_Send[11].TARGET_POSITION = 1.48353 #reach for pull
+                i.Buffer_To_Send[2].TARGET_POSITION = 1.25
+                i.Buffer_To_Send[8].TARGET_POSITION = 0.959931
+                i.Buffer_To_Send[3].TARGET_POSITION = -1.396263 #reach for pull
+                i.Buffer_To_Send[9].TARGET_POSITION = -2.268928 #reach for pull
+                i.Buffer_To_Send[0].TARGET_POSITION = 2.268928
+                i.Buffer_To_Send[6].TARGET_POSITION = 2.007129
+                pub.publish(i)
+                sleep(0.4)
+                #Feet down
+                i.Buffer_To_Send[5].TARGET_POSITION = 0.959931 #reach for pull
+                i.Buffer_To_Send[3].TARGET_POSITION = -2.007129 #reach for pull
+                i.Buffer_To_Send[11].TARGET_POSITION = 1.22173 #reach for pull
+                pub.publish(i)
+                sleep(0.75)
+                cc += 1
+            #end stride, return to base pose
+            i.Buffer_To_Send[2].TARGET_POSITION = 1.48353 #reach for pull
+            i.Buffer_To_Send[8].TARGET_POSITION = 1.48353 #reach for pull
+            i.Buffer_To_Send[5].TARGET_POSITION = 1.25
+            i.Buffer_To_Send[11].TARGET_POSITION = 1.25
+            i.Buffer_To_Send[0].TARGET_POSITION = 1.396263 #reach for pull
+            i.Buffer_To_Send[6].TARGET_POSITION = 2.268928 #reach for pull
+            i.Buffer_To_Send[3].TARGET_POSITION = -2.15
+            i.Buffer_To_Send[9].TARGET_POSITION = -2.15
+            pub.publish(i)
+            sleep(0.4)
+            #Feet down
+            i.Buffer_To_Send[2].TARGET_POSITION = 1.25 #reach for pull
+            i.Buffer_To_Send[0].TARGET_POSITION = 2.15 #reach for pull
+            i.Buffer_To_Send[8].TARGET_POSITION = 1.25 #reach for pull
+            i.Buffer_To_Send[6].TARGET_POSITION = 2.15
+
+
+            pub.publish(i)
+            
         if h=='q':
             exit()
