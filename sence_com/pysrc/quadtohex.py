@@ -117,72 +117,8 @@ if __name__ == "__main__" :
             i.Buffer_To_Send[8].TARGET_POSITION = 1.25
             i.Buffer_To_Send[11].TARGET_POSITION = 1.25    
             pub.publish(i)
-        elif h == '3': #Single walk cycle
-            #Temp setup for movement, set to end of first pull push setup
-            i.Buffer_To_Send[2].TARGET_POSITION = 1.745329
-            i.Buffer_To_Send[8].TARGET_POSITION = 1.745329
-            i.Buffer_To_Send[3].TARGET_POSITION = -1.22173
-            i.Buffer_To_Send[9].TARGET_POSITION = -1.919862
-            pub.publish(i)
-            sleep(0.4)
-            i.Buffer_To_Send[0].TARGET_POSITION = 0.698132
-            i.Buffer_To_Send[6].TARGET_POSITION = 2.268928
-            pub.publish(i)
-            sleep(0.4)
-            #First Pull Push / stride, Lift leg and start rotating j1 to end position
-            i.Buffer_To_Send[2].TARGET_POSITION = 1.047198
-            i.Buffer_To_Send[5].TARGET_POSITION = 1.22173
-            i.Buffer_To_Send[8].TARGET_POSITION = 1.047198
-            i.Buffer_To_Send[11].TARGET_POSITION = 1.22173
-            pub.publish(i)
-            sleep(0.25)
-            #Lower leg as j1 reaches target to make contact and reach pull pose
-            i.Buffer_To_Send[2].TARGET_POSITION = 1.25
-            i.Buffer_To_Send[8].TARGET_POSITION = 1.25
-            pub.publish(i)
-            sleep(0.3)
-            #Stride 2, first full stride
-            i.Buffer_To_Send[5].TARGET_POSITION = 1.745329
-            i.Buffer_To_Send[11].TARGET_POSITION = 1.745329
-            i.Buffer_To_Send[0].TARGET_POSITION = 1.22173
-            i.Buffer_To_Send[6].TARGET_POSITION = 1.919862
-            pub.publish(i)
-            sleep(0.3)
-            i.Buffer_To_Send[3].TARGET_POSITION = -0.698132
-            i.Buffer_To_Send[9].TARGET_POSITION = -2.268928
-            pub.publish(i)
-            sleep(0.3)
-            #Second Pull Push / stride, Lift leg and start rotating j1 to end position
-            i.Buffer_To_Send[5].TARGET_POSITION = 1.047198
-            i.Buffer_To_Send[2].TARGET_POSITION = 1.22173
-            i.Buffer_To_Send[11].TARGET_POSITION = 1.047198
-            i.Buffer_To_Send[8].TARGET_POSITION = 1.22173
-            pub.publish(i)
-            sleep(0.25)
-            #Lower leg as j1 reaches target to make contact and reach pull pose
-            i.Buffer_To_Send[5].TARGET_POSITION = 1.25
-            i.Buffer_To_Send[11].TARGET_POSITION = 1.25
-            pub.publish(i)
-            sleep(0.3)
-            #end stride to base posture
-            #return pull legs to base posture
-            i.Buffer_To_Send[2].TARGET_POSITION = 1.745329
-            i.Buffer_To_Send[8].TARGET_POSITION = 1.745329
-            i.Buffer_To_Send[3].TARGET_POSITION = -0.99
-            i.Buffer_To_Send[9].TARGET_POSITION = -2.15
-            pub.publish(i)
-            sleep(0.3)
-            i.Buffer_To_Send[0].TARGET_POSITION = 0.99
-            i.Buffer_To_Send[6].TARGET_POSITION = 2.15
-            pub.publish(i)
-            sleep(0.3)
-            i.Buffer_To_Send[5].TARGET_POSITION = 1.25
-            i.Buffer_To_Send[2].TARGET_POSITION = 1.25
-            i.Buffer_To_Send[11].TARGET_POSITION = 1.25
-            i.Buffer_To_Send[8].TARGET_POSITION = 1.25
-            pub.publish(i)
 
-        elif h == '4': #Four walk cycles
+        elif h == '3': #Four walk cycles then transition, then four more, then back to 0
             #Temp setup for movement, set to end of first pull push setup
             cc=0
             while cc < 3:
@@ -249,6 +185,79 @@ if __name__ == "__main__" :
             i.Buffer_To_Send[11].TARGET_POSITION = 1.25
             i.Buffer_To_Send[8].TARGET_POSITION = 1.25
             pub.publish(i)
+            sleep(1)
+            #transition to hexmode
+            i.Buffer_To_Send[1].TARGET_VELOCITY = 0.6
+            i.Buffer_To_Send[4].TARGET_VELOCITY = 0.6
+            i.Buffer_To_Send[7].TARGET_VELOCITY = 0.6
+            i.Buffer_To_Send[10].TARGET_VELOCITY = 0.6
+            i.Buffer_To_Send[0].TARGET_POSITION = 1.570796
+            i.Buffer_To_Send[3].TARGET_POSITION = -1.570796
+            i.Buffer_To_Send[6].TARGET_POSITION = 1.570796
+            i.Buffer_To_Send[9].TARGET_POSITION = -1.570796
+            i.Buffer_To_Send[1].TARGET_POSITION = -0.785398
+            i.Buffer_To_Send[4].TARGET_POSITION = 0.785398
+            i.Buffer_To_Send[7].TARGET_POSITION = -0.785398
+            i.Buffer_To_Send[10].TARGET_POSITION = 0.785398
+            pub.publish(i)
+            sleep(4)
+            i.Buffer_To_Send[2].TARGET_POSITION = 1.30
+            i.Buffer_To_Send[5].TARGET_POSITION = 1.30
+            i.Buffer_To_Send[8].TARGET_POSITION = 1.30
+            i.Buffer_To_Send[11].TARGET_POSITION = 1.30   
+            pub.publish(i)
+            sleep(2)
+            cc=0
+            while cc < 3:
+                #step1
+                i.Buffer_To_Send[2].TARGET_POSITION = 0.9 #Lift J3 from contact
+                i.Buffer_To_Send[0].TARGET_POSITION = 1.22173 #swing j1 to side to keep balance
+                i.Buffer_To_Send[1].TARGET_POSITION = -1.570796 #pivot j2 to new position
+                pub.publish(i)
+                sleep(0.4)
+                i.Buffer_To_Send[0].TARGET_POSITION = 1.570796 #return j1 to home
+                i.Buffer_To_Send[2].TARGET_POSITION = 1.30 #J3 return to supporting 
+                pub.publish(i)
+                
+                #step2
+                i.Buffer_To_Send[8].TARGET_POSITION = 0.9 #Lift J3 from contact
+                i.Buffer_To_Send[6].TARGET_POSITION = 1.919862 #swing j1 to side to keep balance
+                i.Buffer_To_Send[7].TARGET_POSITION = 0 #pivot j2 to new position
+                pub.publish(i)
+                sleep(0.4)
+                i.Buffer_To_Send[6].TARGET_POSITION = 1.570796 #return j1 to home
+                i.Buffer_To_Send[8].TARGET_POSITION = 1.30 #J3 return to supporting 
+                pub.publish(i)
+                sleep(0.8)
+                #step3
+                i.Buffer_To_Send[5].TARGET_POSITION = 0.9 #Lift J3 from contact
+                i.Buffer_To_Send[3].TARGET_POSITION = -1.22173 #swing j1 to side to keep balance
+                i.Buffer_To_Send[4].TARGET_POSITION = 1.570796 #pivot j2 to new position
+                pub.publish(i)
+                sleep(0.4)
+                i.Buffer_To_Send[3].TARGET_POSITION = -1.570796 #return j1 to home
+                i.Buffer_To_Send[5].TARGET_POSITION = 1.30 #J3 return to supporting 
+                pub.publish(i)
+                
+                #step4
+                i.Buffer_To_Send[11].TARGET_POSITION = 0.9 #Lift J3 from contact
+                i.Buffer_To_Send[9].TARGET_POSITION = -1.919862 #swing j1 to side to keep balance
+                i.Buffer_To_Send[10].TARGET_POSITION = 0 #pivot j2 to new position
+                pub.publish(i)
+                sleep(0.4)
+                i.Buffer_To_Send[9].TARGET_POSITION = -1.570796 #return j1 to home
+                i.Buffer_To_Send[11].TARGET_POSITION = 1.30 #J3 return to supporting 
+                pub.publish(i)
+                sleep(0.9)
+
+                #Reset
+                i.Buffer_To_Send[1].TARGET_POSITION = -0.785398
+                i.Buffer_To_Send[4].TARGET_POSITION = 0.785398
+                i.Buffer_To_Send[7].TARGET_POSITION = -0.785398
+                i.Buffer_To_Send[10].TARGET_POSITION = 0.785398
+                pub.publish(i)
+                sleep(1.4)
+                cc += 1
 
         if h=='q':
             exit()

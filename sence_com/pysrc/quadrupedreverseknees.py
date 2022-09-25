@@ -72,7 +72,7 @@ if __name__ == "__main__" :
     pub = rospy.Publisher('/sence_target', Target_Buffer, queue_size=3)
 
     while(True):
-        h = input('press enter')
+        h = input('input command and press enter: ')
         rospy.init_node('test_stand')
         if h == '0': #Reset to zero position outside of startup
             sleep(4)
