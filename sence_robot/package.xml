@@ -18,6 +18,8 @@
   <exec_depend>sence_msgs</exec_depend>
   <exec_depend>sence_paper</exec_depend>
   <exec_depend>sence_hardware</exec_depend>
+  <exec_depend>sence_controllers</exec_depend>
+  <exec_depend>sence_deployment</exec_depend>
 
   <export>
     <metapackage />
