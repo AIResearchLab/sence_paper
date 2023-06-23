@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+  <rosparam file="$(find sence_controllers)/config/controllers.yaml" command="load"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" ns="sence_main_controller" args="
+    joint_state_controller
+  "/>
+
+</launch>
