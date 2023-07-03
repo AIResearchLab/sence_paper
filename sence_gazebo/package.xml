@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>sence_robot</name>
+  <name>sence_gazebo</name>
   <version>0.0.0</version>
-  <description>The sence_robot meta package</description>
+  <description>The sence_gazebo package</description>
 
   <maintainer email="mik-p@github.com">mik-p</maintainer>
 
@@ -12,16 +12,12 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>sence_com</exec_depend>
   <exec_depend>sence_leg_description</exec_depend>
   <exec_depend>sence_main_description</exec_depend>
   <exec_depend>sence_msgs</exec_depend>
   <exec_depend>sence_paper</exec_depend>
-  <exec_depend>sence_hardware</exec_depend>
   <exec_depend>sence_controllers</exec_depend>
-  <exec_depend>sence_deployment</exec_depend>
 
   <export>
-    <metapackage />
   </export>
 </package>
