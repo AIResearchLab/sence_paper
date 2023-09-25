@@ -1,0 +1,16 @@
+<launch>
+
+  <arg name="namespace" default="sence_hardware" />
+
+  <rosparam file="$(find sence_hardware)/config/sence.yaml" command="load" ns="$(arg namespace)" />
+
+  <rosparam file="$(find sence_hardware)/config/controllers.yaml" command="load" ns="$(arg namespace)" />
+
+  <node name="$(arg namespace)" pkg="sence_hardware" type="sence_hardware_node" output="screen" />
+
+  <!-- load the controllers -->
+  <node name="position_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg namespace)" args="controller/joint_position_controller"/>
+
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg namespace)" args="controller/joint_state_controller" />
+
+</launch>
