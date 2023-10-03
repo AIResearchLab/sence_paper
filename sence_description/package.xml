@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>sence_description</name>
+    <version>0.0.1</version>
+    <description>The sence robot description package</description>
+
+    <maintainer email="mik-p@github.com">mik-p</maintainer>
+
+    <license>MIT</license>
+
+    <author email="ben.worth@gmail.com">ben worth</author>
+    <author email="michael.pritchard@canberra.edu.au">michael pritchard</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <depend>urdf</depend>
+    <depend>xacro</depend>
+
+    <export>
+    </export>
+</package>
