@@ -33,12 +33,20 @@
     </xacro:body>
 
     <!-- arms -->
-    <xacro:arm name="arm1" parent="base_link">
-        <origin xyz="0 0 0" rpy="0 0 0" />
+    <xacro:arm name="lf" parent="base_link">
+        <origin xyz="0.076509 0.076509 0" rpy="0 0 0" />
     </xacro:arm>
 
-    <xacro:arm name="arm2" parent="base_link">
-        <origin xyz="0 0 0" rpy="0 0 0" />
+    <xacro:arm name="rf" parent="base_link">
+        <origin xyz="0.076509 -0.076509 0" rpy="0 0 0" />
+    </xacro:arm>
+
+    <xacro:arm name="lm" parent="base_link">
+        <origin xyz="0 0.1082 0" rpy="0 0 0" />
+    </xacro:arm>
+
+    <xacro:arm name="rm" parent="base_link">
+        <origin xyz="0 -0.1082 0" rpy="0 0 0" />
     </xacro:arm>
 
     <!-- attach sensor packages -->

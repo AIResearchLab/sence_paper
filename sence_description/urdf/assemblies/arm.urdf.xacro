@@ -36,6 +36,7 @@
             <collision >
                 <geometry>
                     <box size="${collision_box_x} ${collision_box_y} ${collision_box_z}"/>
+                    <!-- <mesh filename="package://sence_description/meshes/upper_shoulder.stl"/> -->
                 </geometry>
             </collision>
 
@@ -54,17 +55,17 @@
         <!-- part attachments -->
         <!-- shoulder -->
         <xacro:shoulder name="${name}_shoulder" parent="${name}" >
-            <origin xyz="0 0 0.035" rpy="0 0 0" />
+            <origin xyz="0 0 -0.018396" rpy="0 0 0" />
         </xacro:shoulder>
 
         <!-- elbow -->
         <xacro:elbow name="${name}_elbow" parent="${name}_shoulder" >
-            <origin xyz="0 0 0.035" rpy="0 0 0" />
+            <origin xyz="0.044234 0 -0.027266" rpy="0 0 0" />
         </xacro:elbow>
 
         <!-- wrist -->
         <xacro:wrist name="${name}_wrist" parent="${name}_elbow" >
-            <origin xyz="0 0 0.035" rpy="0 0 0" />
+            <origin xyz="0.140 0 0" rpy="0 0 0" />
         </xacro:wrist>
 
     </xacro:macro>
