@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 <launch>
 
-  <rosparam file="$(find sence_controllers)/config/controllers.yaml" command="load" ns="sense_hw"/>
+  <rosparam file="$(find sence_controllers)/config/controllers.yaml" command="load" ns="sence_hw"/>
 
   <node name="controller_spawner" pkg="controller_manager" type="spawner" ns="sence_hw" args="
     controllers/joint_state
+    controllers/lf_position_trajectory
+    controllers/rf_position_trajectory
+    controllers/lm_position_trajectory
+    controllers/rm_position_trajectory
+    controllers/lb_position_trajectory
+    controllers/rb_position_trajectory
   "/>
 
 </launch>

@@ -84,6 +84,26 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        lb:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lb_elbow:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lb_shoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lb_wrist:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         lf:
           Alpha: 1
           Show Axes: false
@@ -128,6 +148,26 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        rb:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rb_elbow:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rb_shoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rb_wrist:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         rf:
           Alpha: 1
           Show Axes: false
@@ -199,6 +239,14 @@ Visualization Manager:
           Value: true
         inertia_package:
           Value: true
+        lb:
+          Value: true
+        lb_elbow:
+          Value: true
+        lb_shoulder:
+          Value: true
+        lb_wrist:
+          Value: true
         lf:
           Value: true
         lf_elbow:
@@ -216,6 +264,14 @@ Visualization Manager:
         lm_wrist:
           Value: true
         range_package:
+          Value: true
+        rb:
+          Value: true
+        rb_elbow:
+          Value: true
+        rb_shoulder:
+          Value: true
+        rb_wrist:
           Value: true
         rf:
           Value: true
@@ -253,6 +309,11 @@ Visualization Manager:
             {}
           inertia_package:
             {}
+          lb:
+            lb_shoulder:
+              lb_elbow:
+                lb_wrist:
+                  {}
           lf:
             lf_shoulder:
               lf_elbow:
@@ -265,6 +326,11 @@ Visualization Manager:
                   {}
           range_package:
             {}
+          rb:
+            rb_shoulder:
+              rb_elbow:
+                rb_wrist:
+                  {}
           rf:
             rf_shoulder:
               rf_elbow:
@@ -309,7 +375,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.8523881435394287
+      Distance: 1.0700980424880981
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -325,9 +391,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.3247960805892944
+      Pitch: 0.4397968053817749
       Target Frame: <Fixed Frame>
-      Yaw: 0.8435821533203125
+      Yaw: 0.4785824716091156
     Saved: ~
 Window Geometry:
   Displays:
@@ -345,5 +411,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1216
-  X: 342
-  Y: 13
+  X: 310
+  Y: -19

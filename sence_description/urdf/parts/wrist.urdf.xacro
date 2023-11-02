@@ -11,7 +11,7 @@
             <child link="${name}" />
             <xacro:insert_block name="origin" />
             <axis xyz="0 0 1" rpy="0 0 0" />
-            <limit upper="2" lower="-2" effort="2.5" velocity="0.2" />
+            <limit upper="2" lower="-2" effort="2.5" velocity="5.5" />
         </joint>
 
         <!-- wrist link -->
