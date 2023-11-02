@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <launch>
   <!-- robot model -->
-  <include file="$(find sence_main_description)/launch/robot.launch"/>
+  <include file="$(find sence_description)/launch/robot.launch"/>
 
   <!-- load model in gazebo -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model sence_main"/>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model senio"/>
 
   <!-- load controllers -->
-  <include file="$(find sence_main_controllers)/launch/sence_controllers.launch"/>
+  <include file="$(find sence_controllers)/launch/sence_controllers.launch"/>
 
   <!-- gazebo_ros -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">

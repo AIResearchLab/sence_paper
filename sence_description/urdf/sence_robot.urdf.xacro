@@ -4,6 +4,9 @@
     <!-- materials -->
     <xacro:include filename="$(find sence_description)/urdf/common/materials.urdf.xacro" />
 
+    <!-- common -->
+    <xacro:include filename="$(find sence_description)/urdf/common/math.urdf.xacro" />
+
     <!-- assemblies -->
     <xacro:include filename="$(find sence_description)/urdf/assemblies/arm.urdf.xacro" />
 
@@ -29,24 +32,32 @@
 
     <!-- body and base link inertia -->
     <xacro:body name="base_link_inertia" parent="base_link">
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 -0.0515" rpy="0 0 0" />
     </xacro:body>
 
     <!-- arms -->
     <xacro:arm name="lf" parent="base_link">
-        <origin xyz="0.076509 0.076509 0" rpy="0 0 0" />
+        <origin xyz="0.076509 0.076509 0" rpy="0 0 ${M_PI/4}" />
     </xacro:arm>
 
     <xacro:arm name="rf" parent="base_link">
-        <origin xyz="0.076509 -0.076509 0" rpy="0 0 0" />
+        <origin xyz="0.076509 -0.076509 0" rpy="0 0 ${-M_PI/4}" />
     </xacro:arm>
 
     <xacro:arm name="lm" parent="base_link">
-        <origin xyz="0 0.1082 0" rpy="0 0 0" />
+        <origin xyz="0 0.1082 0" rpy="0 0 ${M_PI/2}" />
     </xacro:arm>
 
     <xacro:arm name="rm" parent="base_link">
-        <origin xyz="0 -0.1082 0" rpy="0 0 0" />
+        <origin xyz="0 -0.1082 0" rpy="0 0 ${-M_PI/2}" />
+    </xacro:arm>
+
+    <xacro:arm name="lb" parent="base_link">
+        <origin xyz="-0.076509 0.076509 0" rpy="0 0 ${3*M_PI/4}" />
+    </xacro:arm>
+
+    <xacro:arm name="rb" parent="base_link">
+        <origin xyz="-0.076509 -0.076509 0" rpy="0 0 ${-3*M_PI/4}" />
     </xacro:arm>
 
     <!-- attach sensor packages -->
