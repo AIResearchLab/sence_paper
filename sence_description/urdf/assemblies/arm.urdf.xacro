@@ -23,6 +23,7 @@
             <!-- visual -->
             <visual>
                 <geometry>
+                    <!-- <mesh filename="package://sence_description/meshes/upper_shoulder.stl"/> -->
                     <mesh filename="package://sence_description/meshes/upper_shoulder.dae"/>
                 </geometry>
                 <material name="LightGrey2"/>

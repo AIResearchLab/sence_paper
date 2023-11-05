@@ -27,7 +27,7 @@
         <child link="base_footprint" />
         <origin xyz="0 0 0" rpy="0 0 0" />
         <axis xyz="0 0 1" rpy="0 0 0" />
-        <limit upper="0" lower="-1" effort="1000" velocity="1000" />
+        <limit upper="-0.09" lower="-0.45" effort="1000" velocity="1000" />
     </joint>
 
     <!-- body and base link inertia -->

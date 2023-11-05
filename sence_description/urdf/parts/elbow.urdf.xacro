@@ -11,7 +11,7 @@
             <child link="${name}" />
             <xacro:insert_block name="origin" />
             <axis xyz="0 0 1" rpy="0 0 0" />
-            <limit upper="2" lower="-2" effort="2.5" velocity="5.5" />
+            <limit upper="1.05" lower="-1.6" effort="2.5" velocity="5.5" />
         </joint>
 
         <!-- elbow link -->
@@ -19,6 +19,7 @@
             <!-- visual -->
             <visual>
                 <geometry>
+                    <!-- <mesh filename="package://sence_description/meshes/elbow.stl"/> -->
                     <mesh filename="package://sence_description/meshes/elbow.dae"/>
                 </geometry>
                 <material name="LightGrey2"/>

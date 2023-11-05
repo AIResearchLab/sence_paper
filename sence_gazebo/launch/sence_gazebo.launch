@@ -4,10 +4,15 @@
   <include file="$(find sence_description)/launch/robot.launch"/>
 
   <!-- load model in gazebo -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model senio -z 0.1"/>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-unpause -param robot_description -urdf -model senio -z 0.1"/>
 
   <!-- load controllers -->
-  <include file="$(find sence_controllers)/launch/sence_controllers.launch"/>
+  <rosparam file="$(find sence_controllers)/config/controllers.yaml" command="load"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" args="
+    controllers/joint_state
+    controllers/group_position_trajectory
+  "/>
 
   <!-- gazebo_ros -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -15,6 +20,5 @@
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
     <arg name="headless" value="false"/>
-    <arg name="debug" value="false"/>
   </include>
 </launch>

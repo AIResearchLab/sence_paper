@@ -4,66 +4,31 @@ controllers:
     type: joint_state_controller/JointStateController
     publish_rate: 200
 
-  # position trajectory controllers for each of the six legs
-  # left front leg
-  lf_position_trajectory:
+  # position trajectory controller for all six legs
+  group_position_trajectory:
     type: position_controllers/JointTrajectoryController
     joints:
+      # left front leg
       - lf_shoulder_joint
       - lf_elbow_joint
       - lf_wrist_joint
-    constraints:
-      goal_time: 0.6
-      stopped_velocity_tolerance: 0.05
-
-  # right front leg
-  rf_position_trajectory:
-    type: position_controllers/JointTrajectoryController
-    joints:
+      # right front leg
       - rf_shoulder_joint
       - rf_elbow_joint
       - rf_wrist_joint
-    constraints:
-      goal_time: 0.6
-      stopped_velocity_tolerance: 0.05
-
-  # left middle leg
-  lm_position_trajectory:
-    type: position_controllers/JointTrajectoryController
-    joints:
+      # left middle leg
       - lm_shoulder_joint
       - lm_elbow_joint
       - lm_wrist_joint
-    constraints:
-      goal_time: 0.6
-      stopped_velocity_tolerance: 0.05
-
-  # right middle leg
-  rm_position_trajectory:
-    type: position_controllers/JointTrajectoryController
-    joints:
+      # right middle leg
       - rm_shoulder_joint
       - rm_elbow_joint
       - rm_wrist_joint
-    constraints:
-      goal_time: 0.6
-      stopped_velocity_tolerance: 0.05
-
-  # left back leg
-  lb_position_trajectory:
-    type: position_controllers/JointTrajectoryController
-    joints:
+      # left back leg
       - lb_shoulder_joint
       - lb_elbow_joint
       - lb_wrist_joint
-    constraints:
-      goal_time: 0.6
-      stopped_velocity_tolerance: 0.05
-
-  # right back leg
-  rb_position_trajectory:
-    type: position_controllers/JointTrajectoryController
-    joints:
+      # right back leg
       - rb_shoulder_joint
       - rb_elbow_joint
       - rb_wrist_joint

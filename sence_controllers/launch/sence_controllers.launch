@@ -5,12 +5,7 @@
 
   <node name="controller_spawner" pkg="controller_manager" type="spawner" ns="sence_hw" args="
     controllers/joint_state
-    controllers/lf_position_trajectory
-    controllers/rf_position_trajectory
-    controllers/lm_position_trajectory
-    controllers/rm_position_trajectory
-    controllers/lb_position_trajectory
-    controllers/rb_position_trajectory
+    controllers/group_position_trajectory
   "/>
 
 </launch>

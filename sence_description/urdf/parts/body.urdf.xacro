@@ -17,19 +17,23 @@
             <!-- visual -->
             <visual>
                 <geometry>
-                    <mesh filename="package://sence_description/meshes/body.dae"/>
+                    <mesh filename="package://sence_description/meshes/body.stl"/>
+                    <!-- <mesh filename="package://sence_description/meshes/body.dae"/> -->
                 </geometry>
                 <material name="LightGrey2"/>
             </visual>
 
             <!-- collision -->
-            <xacro:property name="collision_box_x" value="0.075" />
+            <xacro:property name="collision_box_x" value="0.10" />
             <xacro:property name="collision_box_y" value="0.055" />
-            <xacro:property name="collision_box_z" value="0.035" />
+            <xacro:property name="collision_box_z" value="0.08" />
 
             <collision >
+                <!-- the origin is higher than the mesh origin -->
+                <origin xyz="0 0 ${collision_box_z}" rpy="0 0 0" />
                 <geometry>
-                    <box size="${collision_box_x} ${collision_box_y} ${collision_box_z}"/>
+                    <!-- a sphere -->
+                    <sphere radius="${collision_box_x}"/>
                 </geometry>
             </collision>
 
