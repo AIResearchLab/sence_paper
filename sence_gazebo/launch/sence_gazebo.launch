@@ -4,7 +4,9 @@
   <include file="$(find sence_description)/launch/robot.launch"/>
 
   <!-- load model in gazebo -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-unpause -param robot_description -urdf -model senio -z 0.1"/>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
+    -unpause -param robot_description -urdf -model senio -z 0.1"
+  />
 
   <!-- load controllers -->
   <rosparam file="$(find sence_controllers)/config/controllers.yaml" command="load"/>

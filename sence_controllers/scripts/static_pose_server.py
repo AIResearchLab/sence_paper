@@ -21,7 +21,7 @@ class StaticPoseServer(object):
         self.poses = rospy.get_param('~poses', [])
         self.sequences = rospy.get_param('~sequences', [])
         self.joints = rospy.get_param('~joints', [])
-        self.vel = rospy.get_param('~sequence_velocity', 0.1)
+        self.seq_time = rospy.get_param('~sequence_time', 0.1)
 
         rospy.loginfo('static pose sequences: %s', self.sequences)
 
@@ -84,9 +84,9 @@ class StaticPoseServer(object):
             # append a point to the trajectory
             point = JointTrajectoryPoint()
             point.positions = positions
-            point.velocities = [self.vel for p in positions]
+            # point.velocities = [self.vel for p in positions]
             # point.accelerations = [0.0 for p in positions]
-            point.time_from_start = rospy.Duration(2.0)
+            point.time_from_start = rospy.Duration(self.seq_time)
             fjt_goal.trajectory.points.append(point)
 
             rospy.loginfo('sending trajectory for static pose: %s', pose)
