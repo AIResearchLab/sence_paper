@@ -2,8 +2,8 @@ rate_hertz: 25
 
 joints:
   - joint01
-  # - joint02
-  # - joint03
+  - joint02
+  - joint03
   # - joint04
   # - joint05
   # - joint06
