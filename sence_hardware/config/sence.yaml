@@ -1,15 +1,15 @@
 rate_hertz: 25
 
 joints:
-  - joint01
-  - joint02
-  - joint03
-  # - joint04
-  # - joint05
-  # - joint06
-  # - joint07
-  # - joint08
-  # - joint09
-  # - joint10
-  # - joint11
-  # - joint12
+  - fl_joint1
+  - fl_joint2
+  - fl_joint3
+  - fr_joint1
+  - fr_joint2
+  - fr_joint3
+  - br_joint1
+  - br_joint2
+  - br_joint3
+  - bl_joint1
+  - bl_joint2
+  - bl_joint3

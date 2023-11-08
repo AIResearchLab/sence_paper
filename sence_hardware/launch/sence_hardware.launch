@@ -1,16 +1,53 @@
+
 <launch>
-  <!-- set the namespace -->
   <arg name="namespace" default="sence_hardware" />
 
-  <!-- load parameters from config -->
+  <!-- Define model arguments -->
+  <arg name="model" default="$(find sence_description)/urdf/quad/main.urdf.xacro" />
+  <arg name="rvizconfig" default="$(find sence_hardware)/rviz/urdf.rviz" />
+
+  <!-- load URDF -->
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+  
+  <!-- Load configs-->
   <rosparam file="$(find sence_hardware)/config/sence.yaml" command="load" ns="$(arg namespace)" />
-  <rosparam file="$(find sence_hardware)/config/controllers.yaml" command="load" ns="$(arg namespace)" />
+    
+  <rosparam command="load"
+    file="$(find sence_hardware)/config/controllers.yaml"
+    ns="/sence/controllers" />
 
-  <!-- start the hardware interface -->
-  <node name="$(arg namespace)" pkg="sence_hardware" type="sence_hardware_node" output="screen" />
+  <!-- Start RViz-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
 
-  <!-- load the controllers -->
-  <node name="position_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg namespace)" args="controller/joint_position_controller"/>
-  <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="$(arg namespace)" args="controller/joint_state_controller" />
+  <!-- Start Gazebo -->
+  <!-- <include file="$(find sence_hardware)/launch/gazebo.launch">
+    <arg name="model" value="$(arg model)" />
+  </include> -->
+
+  <!-- Start the hardware node -->
+  <node name="$(arg namespace)" pkg="sence_hardware" type="sence_hardware_node" output="screen" >
+    <remap from="~joint_states" to="/joint_states"/>
+  </node>
+
+  <!-- start robot state publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher" />
+
+  <!-- Spawn Controllers-->
+  <node name="sence_controller_spawner" pkg="controller_manager" type="spawner" ns="$(arg namespace)"
+    args="
+      /sence/controllers/state
+      /sence/controllers/position/fl_joint1
+      /sence/controllers/position/fl_joint2
+      /sence/controllers/position/fl_joint3
+      /sence/controllers/position/fr_joint1
+      /sence/controllers/position/fr_joint2
+      /sence/controllers/position/fr_joint3
+      /sence/controllers/position/bl_joint1
+      /sence/controllers/position/bl_joint2
+      /sence/controllers/position/bl_joint3
+      /sence/controllers/position/br_joint1
+      /sence/controllers/position/br_joint2
+      /sence/controllers/position/br_joint3
+    " />
 
 </launch>

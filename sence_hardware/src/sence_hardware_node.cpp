@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 
   controller_manager::ControllerManager cm(&hw, robot_nh);
 
-  ros::AsyncSpinner cm_spinner(0); // arg is the number of threads to use (0 is all of them)
+  ros::AsyncSpinner cm_spinner(1); // arg is the number of threads to use (0 is all of them)
   cm_spinner.start();
 
   // get the config rate setting or use 1Hz default
@@ -46,8 +46,9 @@ int main(int argc, char** argv) {
     hw.read(current_time, period);
     cm.update(current_time, period);
     hw.write(current_time, period);
+    
     rate_hertz.sleep();
-    ROS_INFO("looped ok");
+    ROS_DEBUG("looped ok");
   }
 
   cm_spinner.stop();

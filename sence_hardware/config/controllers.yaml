@@ -1,25 +1,64 @@
-controller:
-  joint_state_controller:
-    type: joint_state_controller/JointStateController
-    publish_rate: 50
+state:
+  type: joint_state_controller/JointStateController
+  publish_rate: 1000
+  
+position:
+  fl_joint1:
+    joint: fl_joint1
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
 
-  joint_position_controller:
-    type: position_controllers/JointPositionController
-    joint: joint02
-    pid: {p: 500.0, i: 0.01, d: 50.0, i_clamp_min: -100.0, i_clamp_max: 100.0}
+  fl_joint2:
+    joint: fl_joint2
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
 
-  # group_position_control:
-  #   type: position_controllers/JointGroupPositionController
-  #   joints: 
-  #     - joint01
-  #     - joint02
-  #     - joint03
-  #     - joint04
-  #     - joint05
-  #     - joint06
-  #     - joint07
-  #     - joint08
-  #     - joint09
-  #     - joint10
-  #     - joint11
-  #     - joint12
+  fl_joint3:
+    joint: fl_joint3
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  fr_joint1:
+    joint: fr_joint1
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  fr_joint2:
+    joint: fr_joint2
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  fr_joint3:
+    joint: fr_joint3
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  bl_joint1:
+    joint: bl_joint1
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  bl_joint2:
+    joint: bl_joint2
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  bl_joint3:
+    joint: bl_joint3
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  br_joint1:
+    joint: br_joint1
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  br_joint2:
+    joint: br_joint2
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}
+
+  br_joint3:
+    joint: br_joint3
+    type: "position_controllers/JointPositionController"
+    pid: {p: 1,  d: 0, i: 0.1, i_clamp: 1}

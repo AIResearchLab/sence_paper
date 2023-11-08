@@ -7,9 +7,9 @@ namespace sence_hardware
   namespace
   {
 
+    // creates a vector of joints from the list of joints defined in ROS parameter server
     std::vector<Joint> init_joints(const ros::NodeHandle &robot_nh)
     {
-      // get joint names from the parameter server
       std::vector<std::string> joint_names;
       robot_nh.getParam("joints", joint_names);
       printf(">>>>>> Found %i joints in config!\n", (int)joint_names.size());
@@ -23,10 +23,9 @@ namespace sence_hardware
       }
       return joints;
     }
+
     // some functions to convert between radians and dynamixel ticks
-
     double tick2Rad(uint32_t tick) { return tick * (2 * M_PI / 4096) - M_PI; }
-
     uint32_t rad2Tick(double rad) { return (rad + M_PI) * (4096 / (2 * M_PI)); }
   }
 
@@ -177,7 +176,7 @@ namespace sence_hardware
         {
           read_value = groupSyncRead.getData(joint.id, ADDR_PRESENT_POSITION, LEN_PRESENT_POSITION);
           joint.pos = tick2Rad(read_value);
-          printf("read [id:%03d] ticks: %03f pos:%03d\n", joint.id, joint.pos, read_value);
+          // printf("read [id:%03d] ticks: %03f pos:%03d\n", joint.id, joint.pos, read_value);
         }
         else
         {
@@ -212,7 +211,7 @@ namespace sence_hardware
       else
       {
         // ROS_INFO("GroupSyncWrite addParam success!");
-        printf("writing [id:%03d] cmd:%03f ticks:%03d\n", joint.id, joint.cmd, write_value);
+        // printf("writing [id:%03d] cmd:%03f ticks:%03d\n", joint.id, joint.cmd, write_value);
       }
     }
 
