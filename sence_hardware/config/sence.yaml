@@ -1,4 +1,4 @@
-rate_hertz: 25
+rate_hertz: 1000
 
 joints:
   - fl_joint1
