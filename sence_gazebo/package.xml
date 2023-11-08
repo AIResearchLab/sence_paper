@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>sence_gazebo</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>The sence_gazebo package</description>
 
   <maintainer email="mik-p@github.com">mik-p</maintainer>
@@ -12,6 +12,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <exec_depend>sence_description</exec_depend>
   <exec_depend>sence_leg_description</exec_depend>
   <exec_depend>sence_main_description</exec_depend>
   <exec_depend>sence_msgs</exec_depend>

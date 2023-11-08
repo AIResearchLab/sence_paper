@@ -1,7 +1,37 @@
-sence_main_controller:
-  # Publish all joint states -----------------------------------
-  joint_state_controller:
+controllers:
+  # joint states
+  joint_state:
     type: joint_state_controller/JointStateController
-    publish_rate: 50
+    publish_rate: 200
 
-  # Position Controllers --------------------------------------
+  # position trajectory controller for all six legs
+  group_position_trajectory:
+    type: position_controllers/JointTrajectoryController
+    joints:
+      # left front leg
+      - lf_shoulder_joint
+      - lf_elbow_joint
+      - lf_wrist_joint
+      # right front leg
+      - rf_shoulder_joint
+      - rf_elbow_joint
+      - rf_wrist_joint
+      # left middle leg
+      - lm_shoulder_joint
+      - lm_elbow_joint
+      - lm_wrist_joint
+      # right middle leg
+      - rm_shoulder_joint
+      - rm_elbow_joint
+      - rm_wrist_joint
+      # left back leg
+      - lb_shoulder_joint
+      - lb_elbow_joint
+      - lb_wrist_joint
+      # right back leg
+      - rb_shoulder_joint
+      - rb_elbow_joint
+      - rb_wrist_joint
+    constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05

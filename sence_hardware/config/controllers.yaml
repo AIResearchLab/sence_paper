@@ -5,7 +5,7 @@ controller:
 
   joint_position_controller:
     type: position_controllers/JointPositionController
-    joint: joint01
+    joint: joint02
     pid: {p: 500.0, i: 0.01, d: 50.0, i_clamp_min: -100.0, i_clamp_max: 100.0}
 
   # group_position_control:
