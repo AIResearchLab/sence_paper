@@ -16,7 +16,10 @@
   <depend>actionlib_msgs</depend>
   <depend>message_generation</depend>
   <depend>message_runtime</depend>
-  <depend>ros_controllers</depend>
+  <depend>joint_state_controller</depend>
+  <depend>position_controllers</depend>
+  <depend>joint_trajectory_controllers</depend>
+  <depend>cartesian_trajectory_controllers</depend>
 
   <exec_depend>sence_description</exec_depend>
   <exec_depend>sence_hardware</exec_depend>

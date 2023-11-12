@@ -13,8 +13,27 @@
 
   <node name="controller_spawner" pkg="controller_manager" type="spawner" args="
     controllers/joint_state
-    controllers/group_position_trajectory
+    controllers/lf_shoulder_position
+    controllers/lm_shoulder_position
+    controllers/lb_shoulder_position
+    controllers/rf_shoulder_position
+    controllers/rm_shoulder_position
+    controllers/rb_shoulder_position
+    controllers/lf_elbow_position
+    controllers/lm_elbow_position
+    controllers/lb_elbow_position
+    controllers/rf_elbow_position
+    controllers/rm_elbow_position
+    controllers/rb_elbow_position
+    controllers/lf_wrist_position
+    controllers/lm_wrist_position
+    controllers/lb_wrist_position
+    controllers/rf_wrist_position
+    controllers/rm_wrist_position
+    controllers/rb_wrist_position
   "/>
+    <!-- controllers/lf_cartesian_trajectory -->
+    <!-- controllers/group_position_trajectory -->
 
   <!-- gazebo_ros -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">

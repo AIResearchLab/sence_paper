@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# a static manuever service to perform pre-defined poses ans sequences of poses
+# a static manuever service to perform pre-defined poses and sequences of poses in joint space
 #
 
 import rospy
@@ -29,10 +29,6 @@ class StaticPoseServer(object):
         self.jta = actionlib.SimpleActionClient(
             'controllers/group_position_trajectory/follow_joint_trajectory', FollowJointTrajectoryAction)
 
-        # topic interface
-        self.static_sequence_sub = rospy.Subscriber(
-            'static_pose', String, self.static_sequence_cb)
-
         # create a static sequence action server
         self.static_sequence_action = actionlib.SimpleActionServer(
             'static_pose', StaticPoseAction, self.static_sequence_action_cb, False)
@@ -41,17 +37,6 @@ class StaticPoseServer(object):
         self.static_sequence_action.start()
 
     # callbacks
-    # topic cb
-    def static_sequence_cb(self, msg):
-        rospy.loginfo('static pose rcvd: %s', msg.data)
-
-        # create a new action request
-        goal = StaticPoseGoal()
-        goal.pose = msg.data
-
-        # call the action cb
-        self.static_sequence_action_cb(goal)
-
     # action cb
     def static_sequence_action_cb(self, goal):
         rospy.loginfo('new static pose action: %s', goal.pose)

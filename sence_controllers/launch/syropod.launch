@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="syropod_highlevel_controller" pkg="syropod_highlevel_controller" type="syropod_highlevel_controller_node" output="screen"/>
+
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find syropod_highlevel_controller)/rviz_cfg/SHC_display.rviz"/>
+</launch>
