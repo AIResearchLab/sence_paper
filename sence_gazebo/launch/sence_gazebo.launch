@@ -7,7 +7,7 @@
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-unpause -param robot_description -urdf -model senio -z 0.1"/>
 
   <!-- load controllers -->
-  <rosparam file="$(find sence_controllers)/config/controllers.yaml" command="load"/>
+  <rosparam file="$(find sence_hardware)/config/controllers.yaml" command="load"/>
 
   <node name="controller_spawner" pkg="controller_manager" type="spawner" args="
     controllers/joint_state
