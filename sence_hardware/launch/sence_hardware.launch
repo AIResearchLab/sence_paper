@@ -21,14 +21,14 @@
   <node name="my_rqt_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find sence_hardware)/rqt/rqt_standup_pub.perspective"/>
 
     <!-- Start Gazebo -->
-    <include file="$(find sence_hardware)/launch/gazebo.launch">
+    <!-- <include file="$(find sence_hardware)/launch/gazebo.launch">
       <arg name="model" value="$(arg model)" />
-    </include>
+    </include> -->
 
   <!-- Start the hardware node -->
-  <!-- <node name="$(arg namespace)" pkg="sence_hardware" type="sence_hardware_node" output="screen" >
+  <node name="$(arg namespace)" pkg="sence_hardware" type="sence_hardware_node" output="screen" >
     <remap from="~joint_states" to="/joint_states"/>
-  </node> -->
+  </node>
 
   <!-- start robot state publisher -->
   <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher" />
