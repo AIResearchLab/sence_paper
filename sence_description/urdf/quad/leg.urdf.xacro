@@ -17,14 +17,14 @@
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/base_link.stl" />
+            <mesh filename="package://sence_description/meshes/base_link.stl" />
           </geometry>
           <material name="silver"/>
         </visual>
         <collision>
           <origin xyz="0 0 0" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/base_link.stl" />
+            <mesh filename="package://sence_description/meshes/base_link.stl" />
           </geometry>
         </collision>
     </link>
@@ -38,14 +38,14 @@
         <visual>
           <origin xyz="-0.01348 -0.002676 0.038139" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/HMMR_Leg_J2_v1_1.stl" />
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J2_v1_1.stl" />
           </geometry>
           <material name="silver"/>
         </visual>
         <collision>
           <origin xyz="-0.01348 -0.002676 0.038139" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/HMMR_Leg_J2_v1_1.stl" />
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J2_v1_1.stl" />
           </geometry>
         </collision>
     </link>
@@ -59,14 +59,14 @@
         <visual>
           <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/HMMR_Leg_J3_v1_1.stl" />
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J3_v1_1.stl" />
           </geometry>
           <material name="silver"/>
         </visual>
         <collision>
           <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/HMMR_Leg_J3_v1_1.stl" />
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J3_v1_1.stl" />
           </geometry>
         </collision>
     </link>
@@ -80,14 +80,14 @@
         <visual>
           <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/HMMR_Leg_J4_v1_1.stl" />
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J4_v1_1.stl" />
           </geometry>
           <material name="silver"/>
         </visual>
         <collision>
           <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
           <geometry>
-            <mesh filename="package://sence_description/quad_meshes/HMMR_Leg_J4_v1_1.stl" />
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J4_v1_1.stl" />
           </geometry>
         </collision>
     </link>
