@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <!-- robot model -->
-  <arg name="model" default="$(find sence_description)/urdf/quad/main.urdf.xacro" />
+  <arg name="model" default="$(find sence_description)/urdf/main.urdf.xacro" />
 
   <!-- load URDF -->
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />

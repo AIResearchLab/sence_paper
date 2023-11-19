@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="sence" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find sence_description)/urdf/quad/leg.urdf.xacro"/>
+  <xacro:include filename="$(find sence_description)/urdf/leg.urdf.xacro"/>
 
   <material name="silver">
     <color rgba="0.7 0.7 0.7 1"/>
