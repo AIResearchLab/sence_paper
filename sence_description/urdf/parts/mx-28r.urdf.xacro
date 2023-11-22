@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="mx-28r" params="name">
+
+        <!-- transmission -->
+        <transmission name="${name}_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${name}_joint">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${name}_motor">
+                <mechanicalReduction>1.0</mechanicalReduction>
+                <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            </actuator>
+        </transmission>
+
+    </xacro:macro>
+
+</robot>
