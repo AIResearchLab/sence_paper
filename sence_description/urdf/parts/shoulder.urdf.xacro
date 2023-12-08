@@ -46,14 +46,15 @@
         </link>
 
         <!-- transmission -->
-        <transmission name="${name}_trans" type="SimpleTransmission">
+        <transmission name="${name}_trans">
             <type>transmission_interface/SimpleTransmission</type>
-            <actuator name="${name}_motor">
-                <mechanicalReduction>1</mechanicalReduction>
-            </actuator>
             <joint name="${name}_joint">
                 <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
             </joint>
+            <actuator name="${name}_motor">
+                <mechanicalReduction>1.0</mechanicalReduction>
+                <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+            </actuator>
         </transmission>
 
         <!-- gazebo colour -->
@@ -62,13 +63,13 @@
         </gazebo>
 
         <!-- gazebo physics properties -->
-        <gazebo reference="${name}">
+        <!-- <gazebo reference="${name}">
 			<mu1 value="0.8"/>
 			<mu2 value="0.8"/>
-			<kp value="10000000.0" />
-			<kd value="1.0" />
+			<kp value="1000000.0" />
+			<kd value="100.0" />
 			<fdir1 value="1 0 0"/>
-		</gazebo>
+		</gazebo> -->
 
     </xacro:macro>
 

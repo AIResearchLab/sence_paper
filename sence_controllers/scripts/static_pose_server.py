@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# a static manuever service to perform pre-defined poses ans sequences of poses
+# a static manuever service to perform pre-defined poses and sequences of poses in joint space
 #
 
 import rospy
@@ -21,17 +21,13 @@ class StaticPoseServer(object):
         self.poses = rospy.get_param('~poses', [])
         self.sequences = rospy.get_param('~sequences', [])
         self.joints = rospy.get_param('~joints', [])
-        self.vel = rospy.get_param('~sequence_velocity', 0.1)
+        self.seq_time = rospy.get_param('~sequence_time', 0.1)
 
         rospy.loginfo('static pose sequences: %s', self.sequences)
 
         # action server for the joint trajectory action of the controller
         self.jta = actionlib.SimpleActionClient(
             'controllers/group_position_trajectory/follow_joint_trajectory', FollowJointTrajectoryAction)
-
-        # topic interface
-        self.static_sequence_sub = rospy.Subscriber(
-            'static_pose', String, self.static_sequence_cb)
 
         # create a static sequence action server
         self.static_sequence_action = actionlib.SimpleActionServer(
@@ -41,17 +37,6 @@ class StaticPoseServer(object):
         self.static_sequence_action.start()
 
     # callbacks
-    # topic cb
-    def static_sequence_cb(self, msg):
-        rospy.loginfo('static pose rcvd: %s', msg.data)
-
-        # create a new action request
-        goal = StaticPoseGoal()
-        goal.pose = msg.data
-
-        # call the action cb
-        self.static_sequence_action_cb(goal)
-
     # action cb
     def static_sequence_action_cb(self, goal):
         rospy.loginfo('new static pose action: %s', goal.pose)
@@ -84,9 +69,9 @@ class StaticPoseServer(object):
             # append a point to the trajectory
             point = JointTrajectoryPoint()
             point.positions = positions
-            point.velocities = [self.vel for p in positions]
+            # point.velocities = [self.vel for p in positions]
             # point.accelerations = [0.0 for p in positions]
-            point.time_from_start = rospy.Duration(2.0)
+            point.time_from_start = rospy.Duration(self.seq_time)
             fjt_goal.trajectory.points.append(point)
 
             rospy.loginfo('sending trajectory for static pose: %s', pose)

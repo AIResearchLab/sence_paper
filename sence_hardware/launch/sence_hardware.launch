@@ -2,7 +2,7 @@
   <arg name="namespace" default="sence_hardware" />
 
   <!-- Define model arguments -->
-  <arg name="model" default="$(find sence_description)/urdf/quad/main.urdf.xacro" />
+  <arg name="model" default="$(find sence_description)/urdf/main.urdf.xacro" />
   <arg name="rvizconfig" default="$(find sence_hardware)/rviz/urdf.rviz" />
 
   <!-- load URDF -->
@@ -19,11 +19,6 @@
 
   <!-- Start RQT -->
   <node name="my_rqt_dashboard" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(find sence_hardware)/rqt/rqt_standup_pub.perspective"/>
-
-    <!-- Start Gazebo -->
-    <!-- <include file="$(find sence_hardware)/launch/gazebo.launch">
-      <arg name="model" value="$(arg model)" />
-    </include> -->
 
   <!-- Start the hardware node -->
   <node name="$(arg namespace)" pkg="sence_hardware" type="sence_hardware_node" output="screen" >

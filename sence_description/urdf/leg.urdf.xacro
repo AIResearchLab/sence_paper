@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<robot name="sence" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <xacro:macro name="leg" params="name parent *origin">
+  
+  <xacro:property name="torque_limit" value="2.5"/>
+  <xacro:property name="velocity_limit" value="5.8"/>
+
+    <!-- Define Links-->
+    <link name="${name}_link0">
+      <inertial>
+          <origin xyz="0.029044932513473305 0.010265080427010284 -0.03814827760382364" rpy="0 0 0"/>
+          <mass value="0.15187448298114298"/>
+          <inertia ixx="5.3e-05" iyy="6.1e-05" izz="6.9e-05" ixy="-6e-06" iyz="0.0" ixz="0.0"/>
+        </inertial>
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/base_link.stl" />
+          </geometry>
+          <material name="silver"/>
+        </visual>
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/base_link.stl" />
+          </geometry>
+        </collision>
+    </link>
+
+    <link name="${name}_link1">
+      <inertial>
+          <origin xyz="-0.04078394902352935 -0.013231283994066126 0.00021684450055575039" rpy="0 0 0"/>
+          <mass value="0.09734685103972182"/>
+          <inertia ixx="2.2e-05" iyy="3.6e-05" izz="4e-05" ixy="-2e-06" iyz="0.0" ixz="0.0"/>
+        </inertial>
+        <visual>
+          <origin xyz="-0.01348 -0.002676 0.038139" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J2_v1_1.stl" />
+          </geometry>
+          <material name="silver"/>
+        </visual>
+        <collision>
+          <origin xyz="-0.01348 -0.002676 0.038139" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J2_v1_1.stl" />
+          </geometry>
+        </collision>
+    </link>
+
+    <link name="${name}_link2">
+      <inertial>
+          <origin xyz="-0.06366942125676311 -0.021943300476205383 0.0024103683252244337" rpy="0 0 0"/>
+          <mass value="0.1208747488020619"/>
+          <inertia ixx="3.4e-05" iyy="0.000102" izz="0.000104" ixy="1.4e-05" iyz="-1e-06" ixz="2e-06"/>
+        </inertial>
+        <visual>
+          <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J3_v1_1.stl" />
+          </geometry>
+          <material name="silver"/>
+        </visual>
+        <collision>
+          <origin xyz="0.020447 -0.009456 0.037939" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J3_v1_1.stl" />
+          </geometry>
+        </collision>
+    </link>
+
+    <link name="${name}_link3">
+      <inertial>
+          <origin xyz="-0.06827181090766318 0.01066089288586344 0.020893759814543007" rpy="0 0 0"/>
+          <mass value="0.052701725493830516"/>
+          <inertia ixx="1.8e-05" iyy="7.3e-05" izz="7.2e-05" ixy="1.4e-05" iyz="0.0" ixz="-1e-06"/>
+        </inertial>
+        <visual>
+          <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J4_v1_1.stl" />
+          </geometry>
+          <material name="silver"/>
+        </visual>
+        <collision>
+          <origin xyz="0.085454 0.010544 0.057414" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://sence_description/meshes/HMMR_Leg_J4_v1_1.stl" />
+          </geometry>
+        </collision>
+    </link>
+
+
+    <!-- Define Joints -->
+    <joint name="${name}_joint0" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${name}_link0"/>
+      <axis xyz="0 0 1"/>
+      <xacro:insert_block name="origin" />
+    </joint>
+
+    <joint name="${name}_joint1" type="revolute">
+      <parent link="${name}_link0"/>
+      <child link="${name}_link1"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0.01348 0.002676 -0.038139" rpy="0 0 0"/>
+      <limit upper="4" lower="-4" effort="${torque_limit}" velocity="${velocity_limit}"/>
+    </joint>
+
+    <joint name="${name}_joint2" type="revolute">
+      <parent link="${name}_link1"/>
+      <child link="${name}_link2"/>
+      <axis xyz="0 -1 0"/>
+      <origin xyz="-0.033927 0.00678 0.0002" rpy="0 0 0"/>
+      <limit upper="1.919862" lower="-1.919862" effort="${torque_limit}" velocity="${velocity_limit}"/>
+    </joint>
+
+    <joint name="${name}_joint3" type="revolute">
+      <parent link="${name}_link2"/>
+      <child link="${name}_link3"/>
+      <axis xyz="0 0 1"/>
+      <origin xyz="-0.065007 -0.02 -0.019475" rpy="0 0 0"/>
+      <limit upper="2.356194" lower="-2.268928" effort="${torque_limit}" velocity="${velocity_limit}"/>
+    </joint>
+
+
+    <!-- Define Transmissions -->
+    <transmission name="${name}_joint1_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${name}_joint1_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${name}_joint1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <transmission name="${name}_joint2_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${name}_joint2_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${name}_joint2">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <transmission name="${name}_joint3_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${name}_joint3_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${name}_joint3">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+  </xacro:macro>
+
+</robot>
