@@ -1,0 +1,15 @@
+{
+  "name": "noetic desktop-full",
+  "dockerFile": "Dockerfile",
+  "remoteUser": "vscode",
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
+  "runArgs": [
+    "--privileged",
+    "--network=host"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/catkin_ws/src/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/home/vscode/catkin_ws",
+  "postCreateCommand": "rosdep update && rosdep install --from-paths src --ignore-src -y && catkin_make"
+}
