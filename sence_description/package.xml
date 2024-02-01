@@ -1,21 +1,32 @@
 <?xml version="1.0"?>
-<package format="2">
-    <name>sence_description</name>
-    <version>0.0.1</version>
-    <description>The sence robot description package</description>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>sence_description</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="benjamin.worth@canberra.edu.au">Ben Worth</maintainer>
+  <license>Apache 2.0</license>
 
-    <maintainer email="mik-p@github.com">mik-p</maintainer>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-    <license>MIT</license>
+  <depend>joint_state_publisher</depend>
+  <depend>joint_state_publisher_gui</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>xacro</depend>
+  <depend>urdf</depend>
+  <depend>rviz2</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>dynamixel_hardware</depend>
+  <depend>rqt_joint_trajectory_controller</depend>
+  <exec_depend>ign_ros2_control</exec_depend>
 
-    <author email="ben.worth@gmail.com">ben worth</author>
-    <author email="michael.pritchard@canberra.edu.au">michael pritchard</author>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
 
-    <buildtool_depend>catkin</buildtool_depend>
-
-    <depend>urdf</depend>
-    <depend>xacro</depend>
-
-    <export>
-    </export>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

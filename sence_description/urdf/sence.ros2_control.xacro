@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="sence_ros2_control" params="name">
+
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <plugin>dynamixel_hardware/DynamixelHardware</plugin>
+        <param name="usb_port">/dev/ttyUSB0</param>
+        <param name="baud_rate">3000000</param>
+        <param name="use_dummy">true</param>
+      </hardware>
+
+      <joint name="fl_joint1">
+        <param name="id">001</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="fl_joint2">
+        <param name="id">002</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="fl_joint3">
+        <param name="id">003</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="fr_joint1">
+        <param name="id">004</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="fr_joint2">
+        <param name="id">005</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="fr_joint3">
+        <param name="id">006</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="br_joint1">
+        <param name="id">007</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="br_joint2">
+        <param name="id">008</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="br_joint3">
+        <param name="id">009</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="bl_joint1">
+        <param name="id">010</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="bl_joint2">
+        <param name="id">011</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+      <joint name="bl_joint3">
+        <param name="id">012</param>
+        <command_interface name="position"/>
+        <!-- <command_interface name="velocity"/> -->
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <!-- <state_interface name="effort"/> -->
+      </joint>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>

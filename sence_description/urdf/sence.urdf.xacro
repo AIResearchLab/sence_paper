@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot name="sence" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find sence_description)/urdf/main.urdf.xacro" />
+
+  <xacro:include filename="$(find sence_description)/urdf/sence.ros2_control.xacro" />
+
+  <link name="base_link"/>
+
+  <xacro:sence parent="base_link">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:sence>
+
+  <xacro:sence_ros2_control name="sence_ros2_control" />
+</robot>

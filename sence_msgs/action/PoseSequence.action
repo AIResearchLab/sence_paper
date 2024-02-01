@@ -1,0 +1,5 @@
+string sequence #goal
+---
+bool success #result
+---
+string currentgoal #feedback

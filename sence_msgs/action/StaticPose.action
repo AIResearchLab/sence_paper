@@ -1,0 +1,5 @@
+string pose #goal
+---
+bool success #result
+---
+float32[] error #feedback

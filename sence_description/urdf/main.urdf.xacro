@@ -1,39 +1,44 @@
 <?xml version="1.0"?>
-<robot name="sence" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find sence_description)/urdf/leg.urdf.xacro"/>
+<xacro:include filename="$(find sence_description)/urdf/sence.material.xacro" />
 
-  <material name="silver">
-    <color rgba="0.7 0.7 0.7 1"/>
-  </material>
+<xacro:include filename="$(find sence_description)/urdf/leg.urdf.xacro" />
 
-  <link name="base_link"/>
 
+<!-- Main Sence Macro -->
+<xacro:macro name="sence" params="parent *origin">
   <link name="chassis">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find sence_description)/meshes/lores/sence_chassis.stl"/>
+        <!-- <box size="0.1 0.24 0.1"/> -->
+      </geometry>
+      <material name="silver"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <!-- <mesh filename="file://$(find sence_description)/meshes/lores/sence_chassis.stl"/> -->
+        <box size="0.1 0.24 0.1"/>
+
+      </geometry>
+    </collision>
+
     <inertial>
       <origin xyz="0.00021651891376084524 -0.00010528739970071409 -0.014193022646418384" rpy="0 0 0"/>
       <mass value="0.4767252028506373"/>
       <inertia ixx="0.003452" iyy="0.000207" izz="0.003461" ixy="3e-06" iyz="2e-06" ixz="2e-06"/>
     </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="package://sence_description/meshes/chassis.stl"/>
-      </geometry>
-      <material name="silver"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="package://sence_description/meshes/chassis.stl"/>
-      </geometry>
-    </collision>
   </link>
 
-  <joint name="base_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="chassis"/>
+  <joint name="origin_to_link1" type="fixed">
+    <xacro:insert_block name="origin" />
+    <parent link="${parent}" />
+    <child link="chassis" />
+    <axis xyz="0 0 1" />
   </joint>
 
   <xacro:leg parent="chassis" name="fl">
@@ -52,11 +57,6 @@
     <origin rpy="0 ${pi} 0" xyz="0.0826 -0.105095 -0.05196"/>
   </xacro:leg>
 
-  <!-- Gazebo plugin for ROS Control -->
-  <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>/</robotNamespace>
-    </plugin>
-  </gazebo>
+  </xacro:macro>
 
 </robot>
