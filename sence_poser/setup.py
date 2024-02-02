@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'py_pub'
+package_name = 'sence_poser'
 
 setup(
     name=package_name,
@@ -13,15 +13,20 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ben',
-    maintainer_email='benjamin.worth@canberra.edu.au',
+    maintainer='Ben Worth',
+    maintainer_email='u3243222@uni.canberra.edu.au',
     description='TODO: Package description',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'sencetalk = py_pub.sence_pub:main',
-            'blockytalk = py_pub.blocky_pub:main',
+                'trajectory_pub = sence_poser.trajectory_pub:main',
+
+                'send_goal_demo = sence_poser.send_goal_demo:main',
+
+                'sequence_action_server = sence_poser.sequence_action_server:main',
+
+                'action_menu = sence_poser.action_menu:main',
 
         ],
     },
