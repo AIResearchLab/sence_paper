@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(sence_description)
+project(sence_hardware)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -24,15 +24,10 @@ find_package(rviz2 REQUIRED)
 find_package(ros2_control REQUIRED)
 find_package(ros2_controllers REQUIRED)
 find_package(dynamixel_hardware REQUIRED)
-find_package(ros_gz_sim REQUIRED)
-find_package(ros_gz_bridge REQUIRED)
+
 
 install(DIRECTORY
-  controllers
   launch
-  meshes
-  rviz
-  urdf
   DESTINATION share/${PROJECT_NAME}
 )
 

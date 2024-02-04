@@ -10,16 +10,18 @@ import xacro
 
 def generate_launch_description():
     robot_name = "sence"
-    package_name = robot_name + "_description"
+    description_package_name = robot_name + "_description"
+    
     rviz_config = os.path.join(get_package_share_directory(
-        package_name), "launch", robot_name + ".rviz")
+        description_package_name), "rviz", robot_name + ".rviz")
+    
     robot_description = os.path.join(get_package_share_directory(
-        package_name), "urdf", robot_name + ".urdf.xacro")
+        description_package_name), "urdf", robot_name + ".urdf.xacro")
     robot_description_config = xacro.process_file(robot_description)
 
     controller_config = os.path.join(
         get_package_share_directory(
-            package_name), "controllers", "controllers.yaml"
+            description_package_name), "controllers", "controllers.yaml"
     )
 
     return LaunchDescription([
@@ -62,26 +64,10 @@ def generate_launch_description():
             output="screen",
         ),
 
-        # Node(
-        #     package="rqt_joint_trajectory_controller",
-        #     executable="rqt_joint_trajectory_controller",
-        #     name="rqt_joint_trajectory_controller",
-        #     arguments=["--force-discover"],
-        #     output="screen",
-        # ),
-
-        # Node(
-        #     package="sence_poser",
-        #     executable="pose_action_server",
-        #     name="pose_action_server",
-        #     output="screen"
-        # ),
-
         Node(
             package="sence_poser",
             executable="sequence_action_server",
             name="sequence_action_server",
             output="screen"
         )
-
     ])

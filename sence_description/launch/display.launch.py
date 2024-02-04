@@ -10,12 +10,15 @@ import xacro
 def generate_launch_description():
     robot_name = "sence"
     package_name = robot_name + "_description"
-    rviz_config = os.path.join(get_package_share_directory(
-        package_name), "launch", robot_name + ".rviz")
+
+    # load and process URDF
     robot_description = os.path.join(get_package_share_directory(
         package_name), "urdf", robot_name + ".urdf.xacro")
-    
     robot_description_config = xacro.process_file(robot_description)
+
+    # load rviz config
+    rviz_config = os.path.join(get_package_share_directory(
+        package_name), "launch", robot_name + ".rviz")
 
     return LaunchDescription([
         Node(

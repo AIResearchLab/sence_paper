@@ -15,16 +15,19 @@ class SenceActionMenu(Node):
             print("""Sence Action Menu
 0. Pose Client
 1. Sequence Client
-2. Loop Client""")
+2. Loop Client
+q. Quit""")
             try:
-                choice = int(input(">> "))
+                choice = input(">> ")
                 match choice:
-                    case 0:
+                    case '0':
                         self.poseMenu()
-                    case 1:
+                    case '1':
                         self.sequenceMenu()
-                    case 2:
+                    case '2':
                         self.loopMenu()
+                    case 'q':
+                        break
                     case _:
                         print("Not an option")
             except Exception as e:
@@ -56,7 +59,7 @@ class SenceActionMenu(Node):
                 goal_msg.pose = selected_pose
 
                 self.get_logger().info('Sending goal request...')
-                print(self.pose_action_client.send_goal_async(goal_msg))
+                self.pose_action_client.send_goal_async(goal_msg)
 
             except Exception as e:
                 print(e)
@@ -89,7 +92,7 @@ class SenceActionMenu(Node):
                 goal_msg.sequence = selected_sequence
 
                 self.get_logger().info('Sending goal request...')
-                print(self.sequence_action_client.send_goal_async(goal_msg))
+                self.sequence_action_client.send_goal_async(goal_msg)
 
             except Exception as e:
                 print(e)
@@ -121,7 +124,7 @@ class SenceActionMenu(Node):
                 goal_msg.sequence = selected_sequence
 
                 self.get_logger().info('Sending goal request...')
-                print(self.loop_action_client.send_goal_async(goal_msg))
+                self.loop_action_client.send_goal_async(goal_msg)
 
             except Exception as e:
                 print(e)
@@ -132,7 +135,7 @@ def main(args=None):
 
     action_menu = SenceActionMenu()
 
-    rclpy.spin(action_menu)
+    # rclpy.spin(action_menu)
 
     action_menu.destroy_node()
 

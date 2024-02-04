@@ -15,9 +15,10 @@ import xacro
 
 def generate_launch_description():
     robot_name = "sence"
-    package_name = robot_name + "_description"
     this_package_path = os.path.join(
-        get_package_share_directory(package_name))
+        get_package_share_directory(robot_name + "_gazebo"))
+    description_package_path = os.path.join(
+        get_package_share_directory(robot_name + "_description"))
     worlds_path = os.path.join(this_package_path, 'worlds')
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
 
@@ -28,20 +29,19 @@ def generate_launch_description():
     )
 
     # Process Xacro
-    sence_xacro_file = os.path.join(this_package_path,
+    sence_xacro_file = os.path.join(description_package_path,
                               'urdf',
                               'sence_gazebo.urdf.xacro')
     sencedoc = xacro.parse(open(sence_xacro_file))
     xacro.process_doc(sencedoc)
     docxml = sencedoc.toxml()
 
-    brick_urdf_file = os.path.join(this_package_path,
+    brick_urdf_file = os.path.join(description_package_path,
                               'urdf',
                               'brick.urdf')
     brickdoc = xacro.parse(open(brick_urdf_file))
     xacro.process_doc(brickdoc)
     brickxml = brickdoc.toxml()
-
 
 
     params = {'robot_description': docxml, 'use_sim_time': use_sim_time}
@@ -104,7 +104,7 @@ def generate_launch_description():
         executable="rviz2",
         arguments=[
             "-d",
-            os.path.join(this_package_path, "launch/sence.rviz"),
+            os.path.join(description_package_path, "rviz/sence.rviz"),
         ],
         output="screen",
     )
@@ -115,22 +115,6 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
         output='screen'
-    )
-
-    # RQT Joint Trajectory Controller
-    rqt_jtc = Node(
-        package="rqt_joint_trajectory_controller",
-        executable="rqt_joint_trajectory_controller",
-        name="rqt_joint_trajectory_controller",
-        arguments=["--force-discover"],
-        output="screen"
-    )
-
-    pose_server = Node(
-        package="sence_poser",
-        executable="pose_action_server",
-        name="pose_action_server",
-        output="screen"
     )
 
     sequence_server = Node(
@@ -162,11 +146,8 @@ def generate_launch_description():
         spawn_brick,
         spawn_robot,
         bridge,
-        # pose_server,
         sequence_server,
         # rviz,
-        # rqt_jtc,
-
 
         # Launch Arguments
         DeclareLaunchArgument(
@@ -174,3 +155,4 @@ def generate_launch_description():
             default_value=use_sim_time,
             description='If true, use simulated clock'),
     ])
+
