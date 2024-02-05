@@ -120,7 +120,7 @@
 
     <gazebo>
       <plugin filename="libign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-        <parameters>$(find sence_description)/controllers/controllers.yaml</parameters>
+        <parameters>$(find sence_controllers)/config/controllers.yaml</parameters>
       </plugin>
     </gazebo>
 

@@ -28,6 +28,7 @@ find_package(dynamixel_hardware REQUIRED)
 
 install(DIRECTORY
   launch
+  urdf
   DESTINATION share/${PROJECT_NAME}
 )
 

@@ -29,14 +29,14 @@ def generate_launch_description():
     )
 
     # Process Xacro
-    sence_xacro_file = os.path.join(description_package_path,
+    sence_xacro_file = os.path.join(this_package_path,
                               'urdf',
                               'sence_gazebo.urdf.xacro')
     sencedoc = xacro.parse(open(sence_xacro_file))
     xacro.process_doc(sencedoc)
     docxml = sencedoc.toxml()
 
-    brick_urdf_file = os.path.join(description_package_path,
+    brick_urdf_file = os.path.join(this_package_path,
                               'urdf',
                               'brick.urdf')
     brickdoc = xacro.parse(open(brick_urdf_file))

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(sence_gazebo)
+project(sence_controllers)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -17,16 +17,11 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(sence_description REQUIRED)
 find_package(ros2_control REQUIRED)
 find_package(ros2_controllers REQUIRED)
-find_package(ros_gz_sim REQUIRED)
-find_package(ros_gz_bridge REQUIRED)
 
 install(DIRECTORY
-  launch
-  urdf
-  worlds
+  config
   DESTINATION share/${PROJECT_NAME}
 )
 

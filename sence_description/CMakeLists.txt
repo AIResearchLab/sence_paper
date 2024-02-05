@@ -28,7 +28,6 @@ find_package(ros_gz_sim REQUIRED)
 find_package(ros_gz_bridge REQUIRED)
 
 install(DIRECTORY
-  controllers
   launch
   meshes
   rviz
