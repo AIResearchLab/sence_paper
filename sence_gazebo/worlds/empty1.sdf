@@ -1,5 +1,6 @@
-<sdf version="1.6">
-  <world name="bens_empty_world">
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <world name="bens_world">
 
     <plugin
       filename="ignition-gazebo-physics-system"
@@ -17,6 +18,13 @@
       filename="ignition-gazebo-contact-system"
       name="gz::sim::systems::Contact">
     </plugin>
+
+    <!-- gui tag not working?! -->
+    <gui> 
+      <camera name="gzclient_camera">
+        <pose rotation_format="quat_xyzw">0 0 0 0 0 0 0</pose>
+      </camera>
+    </gui>
 
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
