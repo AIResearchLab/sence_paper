@@ -22,7 +22,7 @@ def generate_launch_description():
         description_package_name), "rviz", robot_name + ".rviz")
     
     robot_description_path = os.path.join(get_package_share_directory(
-        hardware_package_name), "urdf", robot_name + ".urdf.xacro")
+        hardware_package_name), "urdf", robot_name + "_hardware.urdf.xacro")
     robot_description_config = xacro.process_file(robot_description_path,
                                                   mappings={'use_dummy': 'true'}
                                                   ).toxml()

@@ -13,7 +13,7 @@ def generate_launch_description():
 
     # load and process URDF
     robot_description = os.path.join(get_package_share_directory(
-        package_name), "urdf", robot_name + ".urdf.xacro")
+        package_name), "urdf", robot_name + "_display.urdf.xacro")
     robot_description_config = xacro.process_file(robot_description)
 
     # load rviz config
