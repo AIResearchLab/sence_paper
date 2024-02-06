@@ -4,7 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, TextSubstitution
 
 
 from launch_ros.actions import Node
@@ -20,11 +20,11 @@ def generate_launch_description():
 
     rviz_config = os.path.join(get_package_share_directory(
         description_package_name), "rviz", robot_name + ".rviz")
-    
+
     robot_description_path = os.path.join(get_package_share_directory(
         hardware_package_name), "urdf", robot_name + "_hardware.urdf.xacro")
     robot_description_config = xacro.process_file(robot_description_path,
-                                                  mappings={'use_dummy': 'true'}
+                                                  mappings={'use_dummy': 'false'}
                                                   ).toxml()
     robot_description = {'robot_description': robot_description_config}
 
@@ -34,6 +34,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+
         Node(
             package="controller_manager",
             executable="ros2_control_node",
