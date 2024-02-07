@@ -19,25 +19,28 @@
       name="gz::sim::systems::Contact">
     </plugin>
 
-    <!-- gui tag not working?! -->
-    <gui> 
-      <camera name="gzclient_camera">
-        <pose rotation_format="quat_xyzw">0 0 0 0 0 0 0</pose>
-      </camera>
+    <gui>
+      
+      <plugin filename="GzScene3D" name="3D View">
+        <ignition-gui>
+          <title>3D View</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </ignition-gui><!-- 
+        <engine>ogre2</engine>
+        <scene>scene</scene> -->
+        <background_color>0.5 0.7 1.0</background_color>
+        <ambient_light>1.0 1.0 1.0</ambient_light>
+
+        <camera_pose>0.4 0.4 0.4 0.15 0.05 -1</camera_pose>
+
+      </plugin>
     </gui>
 
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>0 0 10 0 0 0</pose>
-      <diffuse>0.8 0.8 0.8 1</diffuse>
-      <specular>0.2 0.2 0.2 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
+      <pose>10 10 10 0 0 0</pose>
+      <diffuse>1.0 1.0 1.0 1.0</diffuse>
     </light>
 
     <model name="ground_plane">

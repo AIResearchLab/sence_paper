@@ -18,7 +18,7 @@ def generate_launch_description():
 
     # load rviz config
     rviz_config = os.path.join(get_package_share_directory(
-        package_name), "launch", robot_name + ".rviz")
+        package_name), "rviz", robot_name + ".rviz")
 
     return LaunchDescription([
         Node(
