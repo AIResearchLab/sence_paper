@@ -24,6 +24,8 @@ setup(
 
                 'send_goal_demo = sence_poser.send_goal_demo:main',
 
+                'test_async_client = sence_poser.test_async_client:main',
+
                 'sequence_action_server = sence_poser.sequence_action_server:main',
 
                 'action_menu = sence_poser.action_menu:main',

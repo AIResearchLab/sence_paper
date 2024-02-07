@@ -25,14 +25,16 @@ def send_joint_trajectory_goal():
 
         # Define trajectory points
         points = [
-            {'positions': [1.0], 'time_from_start': Duration(sec=2)},
-            {'positions': [-1.0], 'time_from_start': Duration(sec=4)},
-            {'positions': [0.0], 'time_from_start': Duration(sec=6)},
+            {'positions': [0.0], 'velocities': [1.0], 'time_from_start': Duration(sec=1)},
+            {'positions': [0.0], 'velocities': [-3.0], 'time_from_start': Duration(sec=2)},
+            {'positions': [0.0], 'velocities': [6.0], 'time_from_start': Duration(sec=3)},
+            {'positions': [0.0], 'velocities': [0.0], 'time_from_start': Duration(sec=4)},
         ]
 
         for point_data in points:
             point_msg = JointTrajectoryPoint()
             point_msg.positions = point_data['positions']
+            point_msg.velocities = point_data['velocities']
             point_msg.time_from_start = point_data['time_from_start']
             goal_msg.trajectory.points.append(point_msg)
 
@@ -42,9 +44,9 @@ def send_joint_trajectory_goal():
 
         result = future.result()
         if result:
-            node.get_logger().info('Goal succeeded!')
+            node.get_logger().info('Goal accepted!')
         else:
-            node.get_logger().warning('Goal failed!')
+            node.get_logger().warning('Goal rejected!')
 
     finally:
         # Cleanup
