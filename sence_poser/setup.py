@@ -30,6 +30,10 @@ setup(
 
                 'action_menu = sence_poser.action_menu:main',
 
+                'nu_menu = sence_poser.nu_menu:main',
+
+                'chat_client = sence_poser.chat_client:main'
+
         ],
     },
 )
