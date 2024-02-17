@@ -4,10 +4,16 @@ import threading
 
 import rclpy
 from rclpy.node import Node
+from rclpy.action import ActionClient
 
 from std_msgs.msg import String
 
-from .sence_poses import sequences
+from action_msgs.msg import GoalStatus
+from control_msgs.action import FollowJointTrajectory
+from builtin_interfaces.msg import Duration
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+
+from .sence_poses import jointNames, sequences, poses, poseSec, poseNano
 
 
 class CommandInterface(Node):
@@ -18,27 +24,59 @@ class CommandInterface(Node):
 
         self._command_sub = self.create_subscription(String, "sence_commands",  self.command_callback, 10);
 
+        self._action_client = ActionClient(
+            self,
+            FollowJointTrajectory,
+            '/joint_trajectory_controller/follow_joint_trajectory')
+
     def command_callback(self, msg):
         self.get_logger().info(f'appending command {msg}')
         self.schedule.append(msg.data)
 
-    def doNextAction(self):
-        if len(self.schedule) > 0:
-            next_action = self.schedule.pop(0)
+    def build_goal_msg(self, goal_sequence):
+        # # Create the goal message
+        goal_msg = FollowJointTrajectory.Goal()
+        goal_msg.trajectory = JointTrajectory()
+        goal_msg.trajectory.joint_names = jointNames
 
-            try:
-                desired_sequence = sequences[next_action]
+        for (index, pose) in list(enumerate(sequences[goal_sequence])):
+            self.get_logger().info('adding trajectory point ' + str(index) + " " "pose " + str(pose))
+            point = JointTrajectoryPoint()
+            point.positions = poses[pose]
+            point.time_from_start.sec = poseSec
+            point.time_from_start.nanosec = poseNano + index * poseNano
+            goal_msg.trajectory.points.append(point)
+        
+        return goal_msg
 
-                for pose in desired_sequence:
-                    self.get_logger().info(f'moving to pose {pose}')
 
-            except Exception as e:
-                self.get_logger().info('there was a problem with the last action')
-                self.get_logger().info(str(e))
+    async def send_goal(self, command):
+        self.get_logger().info('Waiting for action server...')
+        self._action_client.wait_for_server()
 
+        goal_msg = self.build_goal_msg(command)
+
+        self.get_logger().info('Sending goal request...')
+
+        goal_handle = await self._action_client.send_goal_async(
+            goal_msg,
+            # feedback_callback=self.feedback_callback
+        )
+
+        if not goal_handle.accepted:
+            self.get_logger().info('Goal rejected :(')
+            return 'failed', 'failed'
+
+        self.get_logger().info('Goal accepted :)')
+
+        res = await goal_handle.get_result_async()
+        result = res.result
+        status = res.status
+        if status == GoalStatus.STATUS_SUCCEEDED:
+            self.get_logger().info('Goal succeeded! Result: {0}'.format(result.error_code))
         else:
-            self.get_logger().info(f'nothing to do...')
-            # self.get_logger().info(str(self.schedule))
+            self.get_logger().info('Goal failed with status: {0}'.format(status))
+        return result, status
 
 
 async def spinning(node):
@@ -60,9 +98,24 @@ async def run(args, loop):
 
     try:
         while rclpy.ok():
-                       
-            node.doNextAction()
+            
+            if len(node.schedule) > 0:
+                next_action = node.schedule.pop(0)
 
+                if next_action in sequences:
+
+                    logger.info(f'running sequence {next_action}')
+
+                    result, status = await loop.create_task(node.send_goal(next_action))
+                    logger.info(f'A) result {result} and status flag {status}')
+
+                else:
+                    logger.info(f'sequence not found {next_action}')
+
+            else:
+                logger.info(f'nothing to do...')
+                # self.get_logger().info(str(self.schedule))
+                
             rate.sleep()
 
     except KeyboardInterrupt:
