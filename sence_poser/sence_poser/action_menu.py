@@ -2,7 +2,11 @@ import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
 
+from action_msgs.msg import GoalStatus
+
 from sence_msgs.action import StaticPose, PoseSequence
+
+from std_msgs.msg import String
 
 from .sence_poses import poses, sequences, loops
 
@@ -11,11 +15,14 @@ class SenceActionMenu(Node):
     def __init__(self):
         super().__init__('sence_action_menu')
 
+        self.publisher_ = self.create_publisher(String, 'sence_commands', 10)
+
         while True:
             print("""Sence Action Menu
 0. Pose Client
 1. Sequence Client
 2. Loop Client
+3. append standup to schedule
 q. Quit""")
             try:
                 choice = input(">> ")
@@ -26,6 +33,11 @@ q. Quit""")
                         self.sequenceMenu()
                     case '2':
                         self.loopMenu()
+                    case '3':
+                        msg = String()
+                        msg.data = "crab_stand_up"
+                        self.publisher_.publish(msg)
+                        self.get_logger().info('Publishing: "%s"' % msg.data)
                     case 'q':
                         break
                     case _:
@@ -97,7 +109,7 @@ q. Quit""")
             except Exception as e:
                 print(e)
 
-    def loopMenu(self):
+    async def loopMenu(self):
         self.loop_action_client = ActionClient(
             self,
             PoseSequence,
@@ -124,7 +136,17 @@ q. Quit""")
                 goal_msg.sequence = selected_sequence
 
                 self.get_logger().info('Sending goal request...')
-                self.loop_action_client.send_goal_async(goal_msg)
+                goal_handle = await self.loop_action_client.send_goal_async(goal_msg)
+            
+                self.get_logger().info('Goal accepted :)')
+
+                res = await goal_handle.get_result_async()
+                result = res.result
+                status = res.status
+                if status == GoalStatus.STATUS_SUCCEEDED:
+                    self.get_logger().info('Goal succeeded! Result: {0}'.format(result.error_code))
+                else:
+                    self.get_logger().info('Goal failed with status: {0}'.format(status))
 
             except Exception as e:
                 print(e)

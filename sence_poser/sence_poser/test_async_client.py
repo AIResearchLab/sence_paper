@@ -24,20 +24,38 @@ import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
 
+from std_msgs.msg import String
 
-class MinimalActionClientAsyncIO(Node):
+from .sence_poses import sequences, poses
+
+schedule = [] #["crab_stand_up"]
+
+
+class CommandSubscriber(Node):
+    def __init__(self):
+        super().__init__('command_subscriber')
+
+        self._command_sub = self.create_subscription(String, "sence_commands",  self.command_callback, 10);
+
+    def command_callback(self, msg):
+        self.get_logger().info(f'appending command {msg}')
+        schedule.append(msg)
+        
+
+class JointTrajectoryClient(Node):
 
     def __init__(self):
-        super().__init__('minimal_action_client_asyncio')
+        super().__init__('joint_trajectory_client')
+
         self._action_client = ActionClient(
             self,
             FollowJointTrajectory,
             '/joint_trajectory_controller/follow_joint_trajectory')
-        
-        self.msg = self.build_goal_msg()
+
 
     def feedback_callback(self, feedback):
         self.get_logger().info('Received feedback: {0}'.format(feedback.feedback.error))
+
 
     def build_goal_msg(self):
         # # Create the goal message
@@ -59,11 +77,12 @@ class MinimalActionClientAsyncIO(Node):
 
         return goal_msg
 
+
     async def send_goal(self):
         self.get_logger().info('Waiting for action server...')
         self._action_client.wait_for_server()
 
-        goal_msg = self.msg
+        goal_msg = self.build_goal_msg()
 
         self.get_logger().info('Sending goal request...')
 
@@ -91,52 +110,73 @@ class MinimalActionClientAsyncIO(Node):
 async def spinning(node):
     while rclpy.ok():
         rclpy.spin_once(node, timeout_sec=0.01)
+
         await asyncio.sleep(0.001)
 
 
 async def run(args, loop):
 
-    logger = rclpy.logging.get_logger('minimal_action_client')
+    logger = rclpy.logging.get_logger('test_async_client')
 
     # init ros2
     rclpy.init(args=args)
 
     # create node
-    action_client = MinimalActionClientAsyncIO()
+    action_client = JointTrajectoryClient()
+    command_sub = CommandSubscriber()
 
     # start spinning
-    spin_task = loop.create_task(spinning(action_client))
+    spin_task1 = loop.create_task(spinning(command_sub))
 
-    # Parallel example
-    # execute goal request and schedule in loop
-    # my_task1 = loop.create_task(action_client.send_goal())
-    # my_task2 = loop.create_task(action_client.send_goal())
+    spin_task2 = loop.create_task(spinning(action_client))
+    # loop.create_task(schedule.append("crab_stand_up"))
 
-    # # glue futures together and wait
-    # wait_future = asyncio.wait([my_task1, my_task2])
-    # # run event loop
-    # finished, unfinished = await wait_future
-    # logger.info(f'unfinished: {len(unfinished)}')
-    # for task in finished:
-    #     logger.info('result {} and status flag {}'.format(*task.result()))
 
-    # Sequence
-    result, status = await loop.create_task(action_client.send_goal())
-    logger.info(f'A) result {result} and status flag {status}')
-    result, status = await loop.create_task(action_client.send_goal())
-    logger.info(f'B) result {result} and status flag {status}')
+    while rclpy.ok():
+        if len(schedule) > 0:
+            next_action = schedule.pop(0)
+
+            desired_sequence = sequences[next_action]
+
+            for pose in desired_sequence:
+                logger.info(f'moving to pose {pose}')
+
+            # result, status = await loop.create_task(action_client.send_goal(pose))
+            # logger.info(f'Completed action {next_action} result {result} and status flag {status}')
+        logger.info(f'nothing to do...')
+        
+        rate = command_sub.create_rate(1)
+        rate.sleep()
+        rclpy.spin(action_client)
+        # print(schedule)
+
+
+
+    # # Sequence goals
+    # result, status = await loop.create_task(action_client.send_goal())
+    # logger.info(f'A) result {result} and status flag {status}')
+    # result, status = await loop.create_task(action_client.send_goal())
+    # logger.info(f'B) result {result} and status flag {status}')
 
     # cancel spinning task
-    spin_task.cancel()
+    spin_task1.cancel()
     try:
-        await spin_task
+        await spin_task1
     except asyncio.exceptions.CancelledError:
         pass
+    spin_task2.cancel()
+    try:
+        await spin_task2
+    except asyncio.exceptions.CancelledError:
+        pass
+
     rclpy.shutdown()
 
 
 def main(args=None):
+
     loop = asyncio.get_event_loop()
+
     loop.run_until_complete(run(args, loop=loop))
 
 

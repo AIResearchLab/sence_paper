@@ -32,8 +32,9 @@ setup(
 
                 'nu_menu = sence_poser.nu_menu:main',
 
-                'chat_client = sence_poser.chat_client:main'
+                'chat_client = sence_poser.chat_client:main',
 
+                'command_sub = sence_poser.command_sub:main',
         ],
     },
 )

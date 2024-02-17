@@ -116,14 +116,12 @@ class SequenceActionServer(Node):
         return result
     
     # the callback to use when a looping multi point action is called
-    def loop_execute_callback(self, goal_handle):
+    async def loop_execute_callback(self, goal_handle):
         self.get_logger().info('Running Loop: ' + goal_handle.request.sequence)
 
         # Spin in a separate thread
         thread = threading.Thread(target=rclpy.spin, args=(self, ), daemon=True)
         thread.start()
-
-        one_second = self.create_rate(2.1)
         
         while True:
             try:
@@ -143,10 +141,23 @@ class SequenceActionServer(Node):
 
                 self.get_logger().info('Sending goal request...')
 
-                self._send_goal_future = self.jta_client.send_goal_async(goal_msg)                
-                one_second.sleep()
-                        
-                    
+                goal_handle = await self.jta_client.send_goal_async(goal_msg)
+                
+                if not goal_handle.accepted:
+                    self.get_logger().info('Goal rejected :(')
+                    return
+
+                self.get_logger().info('Goal accepted :)')
+                res = await goal_handle.get_result_async()
+                result = res.result
+                status = res.status
+                if status == GoalStatus.STATUS_SUCCEEDED:
+                    self.get_logger().info('Goal succeeded! Result: {0}'.format(result.error_code))
+                else:
+                    self.get_logger().info('Goal failed with status: {0}'.format(status))
+
+                self.get_logger().info(f'A) result {result} and status flag {status}')
+                                
             except KeyboardInterrupt:
                 break
 
@@ -181,6 +192,8 @@ def main(args=None):
     sequence_action_server = SequenceActionServer()
 
     rclpy.spin(sequence_action_server)
+
+    
 
 
 if __name__ == '__main__':
