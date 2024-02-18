@@ -13,6 +13,8 @@ from control_msgs.action import FollowJointTrajectory
 from builtin_interfaces.msg import Duration
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
+from sence_msgs.srv import Trigger
+
 from .sence_poses import jointNames, sequences, poses, poseSec, poseNano
 
 
@@ -21,6 +23,7 @@ class CommandInterface(Node):
         super().__init__('command_interface')
 
         self.schedule = []
+        self.isLooping = False
 
         self._command_sub = self.create_subscription(String, "sence_commands",  self.command_callback, 10);
 
@@ -28,10 +31,20 @@ class CommandInterface(Node):
             self,
             FollowJointTrajectory,
             '/joint_trajectory_controller/follow_joint_trajectory')
+        
+        self._loop_switch_service = self.create_service(Trigger, 'loop_toggle', self.loop_toggle_callback)
+
 
     def command_callback(self, msg):
         self.get_logger().info(f'appending command {msg}')
         self.schedule.append(msg.data)
+
+    def loop_toggle_callback(self, request, response):
+        if self.isLooping:
+            self.isLooping = False
+        else:
+            self.isLooping = True
+        return response
 
     def build_goal_msg(self, goal_sequence):
         # # Create the goal message
@@ -108,6 +121,13 @@ async def run(args, loop):
 
                     result, status = await loop.create_task(node.send_goal(next_action))
                     logger.info(f'A) result {result} and status flag {status}')
+
+                    while node.isLooping:
+                        logger.info(f'looping on {next_action}')
+
+                        result, status = await loop.create_task(node.send_goal(next_action))
+                        logger.info(f'A) result {result} and status flag {status}')
+
 
                 else:
                     logger.info(f'sequence not found {next_action}')
