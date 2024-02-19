@@ -85,6 +85,7 @@ poses = {
 }
 
 sequences = {
+    "flat": ["flat"],
     "crab_stand_up": ["crab_flat",
                       "crab_stand_short", 
                       "crab_stand_tall"],
@@ -92,8 +93,4 @@ sequences = {
                            "flat"],
     "crab_dance": ["crab_stand_short", 
                    "crab_stand_tall"]
-}
-
-loops = {
-    "crab_dance"
 }

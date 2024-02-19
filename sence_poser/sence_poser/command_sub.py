@@ -13,7 +13,7 @@ from control_msgs.action import FollowJointTrajectory
 from builtin_interfaces.msg import Duration
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
-from sence_msgs.srv import Trigger
+from std_srvs.srv import SetBool
 
 from .sence_poses import jointNames, sequences, poses, poseSec, poseNano
 
@@ -32,7 +32,7 @@ class CommandInterface(Node):
             FollowJointTrajectory,
             '/joint_trajectory_controller/follow_joint_trajectory')
         
-        self._loop_switch_service = self.create_service(Trigger, 'loop_toggle', self.loop_toggle_callback)
+        self._loop_switch_service = self.create_service(SetBool, 'set_looping', self.loop_toggle_callback)
 
 
     def command_callback(self, msg):
@@ -40,10 +40,16 @@ class CommandInterface(Node):
         self.schedule.append(msg.data)
 
     def loop_toggle_callback(self, request, response):
-        if self.isLooping:
-            self.isLooping = False
+        self.get_logger().info('setting loop state to ' + str(request.data))
+        
+        response = SetBool.Response()
+
+        if request.data != self.isLooping:
+            self.isLooping = request.data
+            response.success = True
         else:
-            self.isLooping = True
+            response.success = False
+
         return response
 
     def build_goal_msg(self, goal_sequence):

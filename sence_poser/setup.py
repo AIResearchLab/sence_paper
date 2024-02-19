@@ -35,6 +35,9 @@ setup(
                 'chat_client = sence_poser.chat_client:main',
 
                 'command_sub = sence_poser.command_sub:main',
+
+                'command_menu = sence_poser.command_menu:main',
+
         ],
     },
 )
