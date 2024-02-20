@@ -138,9 +138,8 @@ async def run(args, loop):
                 else:
                     logger.info(f'sequence not found {next_action}')
 
-            else:
-                logger.info(f'nothing to do...')
-                # self.get_logger().info(str(self.schedule))
+            # else:
+            #     logger.info(f'nothing to do...')
                 
             rate.sleep()
 

@@ -65,6 +65,13 @@ dogWalkPoses = [
 
 ]
 
+cw_angle1 = pi/8
+cw_angle2 =  0.0
+cw_angle3 = -pi/8
+
+UP = pi/8
+DOWN = pi/4
+
 poses = {
     "flat": [0.0, 0.0, 0.0,
             0.0, 0.0, 0.0,
@@ -82,6 +89,43 @@ poses = {
                  pi/2, -pi/8, pi/4,
                  pi/2, -pi/8, pi/4,
                  -pi/2, pi/8, pi/4],
+
+
+    "cw1": [-pi/2, cw_angle1, DOWN,
+                 pi/2, cw_angle1, DOWN,
+                 pi/2, cw_angle2, DOWN,
+                 -pi/2, cw_angle1, UP],
+    "cw2": [-pi/2, cw_angle1, DOWN,
+                 pi/2, cw_angle1, DOWN,
+                 pi/2, cw_angle2, DOWN,
+                 -pi/2, cw_angle2, UP],
+
+    "cw3": [-pi/2, cw_angle2, DOWN,
+                 pi/2, cw_angle1, UP,
+                 pi/2, cw_angle3, DOWN,
+                 -pi/2, cw_angle3, DOWN],
+    "cw4": [-pi/2, cw_angle2, DOWN,
+                 pi/2, cw_angle2, UP,
+                 pi/2, cw_angle3, DOWN,
+                 -pi/2, cw_angle3, DOWN],
+
+    "cw5": [-pi/2, cw_angle3, DOWN,
+                 pi/2, cw_angle3, DOWN,
+                 pi/2, cw_angle3, UP,
+                 -pi/2, cw_angle2, DOWN],
+    "cw6": [-pi/2, cw_angle3, DOWN,
+                 pi/2, cw_angle3, DOWN,
+                 pi/2, cw_angle2, UP,
+                 -pi/2, cw_angle2, DOWN],
+
+    "cw7": [-pi/2, cw_angle3, UP,
+                 pi/2, cw_angle2, DOWN,
+                 pi/2, cw_angle1, DOWN,
+                 -pi/2, cw_angle1, DOWN],
+    "cw8": [-pi/2, cw_angle2, UP,
+                 pi/2, cw_angle2, DOWN,
+                 pi/2, cw_angle1, DOWN,
+                 -pi/2, cw_angle1, DOWN],
 }
 
 sequences = {
@@ -92,5 +136,13 @@ sequences = {
     "crab_stand_to_flat": ["crab_flat",
                            "flat"],
     "crab_dance": ["crab_stand_short", 
-                   "crab_stand_tall"]
+                   "crab_stand_tall"],
+    "crab_walk": ["cw1",
+                  "cw2",
+                  "cw3",
+                  "cw4",
+                  "cw5",
+                  "cw6",
+                  "cw7",
+                  "cw8"]
 }
