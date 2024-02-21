@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import String
-from std_srvs.srv import SetBool
+from std_srvs.srv import SetBool, Trigger
 
 from .sence_poses import sequences
 
@@ -13,17 +13,21 @@ class SenceCommandMenu(Node):
 
         self.publisher_ = self.create_publisher(String, 'sence_commands', 10)
 
-        self.loop_toggle_client = self.create_client(SetBool, 'set_looping')
-        self.req = SetBool.Request()
+        self.set_looping_client = self.create_client(SetBool, 'set_looping')
+        self.boolReq = SetBool.Request()
+
+        self.toggle_stepping_client = self.create_client(Trigger, 'toggle_stepping')
+        self.triggerReq = Trigger.Request()
 
         while True:
             print("""Sence Action Menu
 1. Run Pose/Sequence
 2. Run Loop
 3. Stop Looping
+4. Toggle Stepping
 q. Quit""")
             try:
-                choice = input(">> ")
+                choice = input(">> ").lower()
                 match choice:
                     case '1':
                         self.setLooping(False)
@@ -33,6 +37,8 @@ q. Quit""")
                         self.poseMenu()
                     case '3':
                         self.setLooping(False)
+                    case '4':
+                        self.toggleStepping()
                     case 'q':
                         self.setLooping(False)
                         break
@@ -42,8 +48,11 @@ q. Quit""")
                 print(e)
 
     def setLooping(self, state):
-        self.req.data = state
-        self.loop_toggle_client.call_async(self.req)
+        self.boolReq.data = state
+        self.set_looping_client.call_async(self.boolReq)
+
+    def toggleStepping(self):
+        self.toggle_stepping_client.call_async(self.triggerReq)
 
     def poseMenu(self):
         enumerated_poses = list(enumerate(list(sequences.keys())))
@@ -53,7 +62,7 @@ q. Quit""")
             print("Enter a pose (q to return)")
 
             try:
-                response = input(">> ")
+                response = input(">> ").lower()
                 if response == "q":
                     break
 

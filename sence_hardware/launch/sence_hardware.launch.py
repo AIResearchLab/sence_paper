@@ -24,7 +24,7 @@ def generate_launch_description():
     robot_description_path = os.path.join(get_package_share_directory(
         hardware_package_name), "urdf", robot_name + "_hardware.urdf.xacro")
     robot_description_config = xacro.process_file(robot_description_path,
-                                                  mappings={'use_dummy': 'true'}
+                                                  mappings={'use_dummy': 'false'}
                                                   ).toxml()
     robot_description = {'robot_description': robot_description_config}
 

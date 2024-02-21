@@ -68,9 +68,11 @@ dogWalkPoses = [
 cw_angle1 = pi/8
 cw_angle2 =  0.0
 cw_angle3 = -pi/8
+cw_angle4 = -pi/16
+cw_angle5 = pi/16
 
-UP = pi/8
-DOWN = pi/4
+UP = 0.0
+DOWN = pi/3
 
 poses = {
     "flat": [0.0, 0.0, 0.0,
@@ -91,40 +93,40 @@ poses = {
                  -pi/2, pi/8, pi/4],
 
 
-    "cw1": [-pi/2, cw_angle1, DOWN,
+    "cw1": [-pi/2, cw_angle5, DOWN,
                  pi/2, cw_angle1, DOWN,
-                 pi/2, cw_angle2, DOWN,
-                 -pi/2, cw_angle1, UP],
-    "cw2": [-pi/2, cw_angle1, DOWN,
-                 pi/2, cw_angle1, DOWN,
-                 pi/2, cw_angle2, DOWN,
+                 pi/2, cw_angle4, DOWN,
                  -pi/2, cw_angle2, UP],
-
-    "cw3": [-pi/2, cw_angle2, DOWN,
-                 pi/2, cw_angle1, UP,
-                 pi/2, cw_angle3, DOWN,
+    "cw2": [-pi/2, cw_angle5, DOWN,
+                 pi/2, cw_angle1, DOWN,
+                 pi/2, cw_angle4, DOWN,
                  -pi/2, cw_angle3, DOWN],
-    "cw4": [-pi/2, cw_angle2, DOWN,
+
+    "cw3": [-pi/2, cw_angle4, DOWN,
                  pi/2, cw_angle2, UP,
                  pi/2, cw_angle3, DOWN,
-                 -pi/2, cw_angle3, DOWN],
+                 -pi/2, cw_angle4, DOWN],
+    "cw4": [-pi/2, cw_angle4, DOWN,
+                 pi/2, cw_angle3, DOWN,
+                 pi/2, cw_angle3, DOWN,
+                 -pi/2, cw_angle4, DOWN],
 
     "cw5": [-pi/2, cw_angle3, DOWN,
-                 pi/2, cw_angle3, DOWN,
-                 pi/2, cw_angle3, UP,
-                 -pi/2, cw_angle2, DOWN],
-    "cw6": [-pi/2, cw_angle3, DOWN,
-                 pi/2, cw_angle3, DOWN,
+                 pi/2, cw_angle4, DOWN,
                  pi/2, cw_angle2, UP,
-                 -pi/2, cw_angle2, DOWN],
+                 -pi/2, cw_angle5, DOWN],
+    "cw6": [-pi/2, cw_angle3, DOWN,
+                 pi/2, cw_angle4, DOWN,
+                 pi/2, cw_angle1, DOWN,
+                 -pi/2, cw_angle5, DOWN],
 
-    "cw7": [-pi/2, cw_angle3, UP,
-                 pi/2, cw_angle2, DOWN,
-                 pi/2, cw_angle1, DOWN,
+    "cw7": [-pi/2, cw_angle2, UP,
+                 pi/2, cw_angle5, DOWN,
+                 pi/2, cw_angle5, DOWN,
                  -pi/2, cw_angle1, DOWN],
-    "cw8": [-pi/2, cw_angle2, UP,
-                 pi/2, cw_angle2, DOWN,
-                 pi/2, cw_angle1, DOWN,
+    "cw8": [-pi/2, cw_angle1, DOWN,
+                 pi/2, cw_angle5, DOWN,
+                 pi/2, cw_angle5, DOWN,
                  -pi/2, cw_angle1, DOWN],
 }
 

@@ -1,8 +1,13 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-
+<!-- normal strength motors
   <xacro:property name="torque_limit" value="2.5"/>
-  <xacro:property name="velocity_limit" value="5.8"/>
+  <xacro:property name="velocity_limit" value="5.8"/> -->
+
+<!-- super strength -->
+  <xacro:property name="torque_limit" value="10"/>
+  <xacro:property name="velocity_limit" value="10"/> 
+
 
   <xacro:macro name="leg" params="name parent *origin">
 

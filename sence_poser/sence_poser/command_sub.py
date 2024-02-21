@@ -13,7 +13,7 @@ from control_msgs.action import FollowJointTrajectory
 from builtin_interfaces.msg import Duration
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
-from std_srvs.srv import SetBool
+from std_srvs.srv import SetBool, Trigger
 
 from .sence_poses import jointNames, sequences, poses, poseSec, poseNano
 
@@ -23,7 +23,6 @@ class CommandInterface(Node):
         super().__init__('command_interface')
 
         self.schedule = []
-        self.isLooping = False
 
         self._command_sub = self.create_subscription(String, "sence_commands",  self.command_callback, 10);
 
@@ -32,14 +31,17 @@ class CommandInterface(Node):
             FollowJointTrajectory,
             '/joint_trajectory_controller/follow_joint_trajectory')
         
-        self._loop_switch_service = self.create_service(SetBool, 'set_looping', self.loop_toggle_callback)
+        self.isLooping = False
+        self._set_looping_service = self.create_service(SetBool, 'set_looping', self.set_looping_callback)
 
+        self.isStepping = False
+        self._toggle_stepping_service = self.create_service(Trigger, 'toggle_stepping', self.toggle_stepping_callback)
 
     def command_callback(self, msg):
         self.get_logger().info(f'appending command {msg}')
         self.schedule.append(msg.data)
 
-    def loop_toggle_callback(self, request, response):
+    def set_looping_callback(self, request, response):
         self.get_logger().info('setting loop state to ' + str(request.data))
         
         response = SetBool.Response()
@@ -50,6 +52,18 @@ class CommandInterface(Node):
         else:
             response.success = False
 
+        return response
+    
+    def toggle_stepping_callback(self, request, response):
+        response = Trigger.Response()
+
+        if self.isStepping:
+            self.get_logger().info('disabling stepping')
+            self.isStepping = False
+        else:
+            self.get_logger().info('enabling stepping')
+            self.isStepping = True
+        
         return response
 
     def build_goal_msg(self, goal_sequence):
@@ -106,32 +120,39 @@ async def spinning(node):
 
 async def run(args, loop):
     rclpy.init()
-    node = CommandInterface()
+    cmd_sub = CommandInterface()
     logger = rclpy.logging.get_logger('commandy_subby')
+    logger.info('sence command sub running...')
 
     # Spin in a separate thread
-    thread = threading.Thread(target=rclpy.spin, args=(node, ), daemon=True)
+    thread = threading.Thread(target=rclpy.spin, args=(cmd_sub, ), daemon=True)
     thread.start()
 
-    rate = node.create_rate(2)
+    rate = cmd_sub.create_rate(2)
 
     try:
         while rclpy.ok():
             
-            if len(node.schedule) > 0:
-                next_action = node.schedule.pop(0)
+            if len(cmd_sub.schedule) > 0:
+                if cmd_sub.isStepping:
+                    input("press enter to run next action")
+
+                next_action = cmd_sub.schedule.pop(0)
 
                 if next_action in sequences:
 
                     logger.info(f'running sequence {next_action}')
 
-                    result, status = await loop.create_task(node.send_goal(next_action))
+                    result, status = await loop.create_task(cmd_sub.send_goal(next_action))
                     logger.info(f'A) result {result} and status flag {status}')
 
-                    while node.isLooping:
+                    while cmd_sub.isLooping:
                         logger.info(f'looping on {next_action}')
 
-                        result, status = await loop.create_task(node.send_goal(next_action))
+                        if cmd_sub.isStepping:
+                            input("press enter to run next action")
+
+                        result, status = await loop.create_task(cmd_sub.send_goal(next_action))
                         logger.info(f'A) result {result} and status flag {status}')
 
 
