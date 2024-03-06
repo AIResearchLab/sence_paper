@@ -123,6 +123,13 @@ def generate_launch_description():
         name="sequence_action_server",
         output="screen"
     )
+
+    command_sub = Node(
+            package="sence_poser",
+            executable="command_sub",
+            name="command_sub",
+            output="screen"
+        )
     
     return LaunchDescription([
         ign_resource_path,
@@ -147,6 +154,7 @@ def generate_launch_description():
         spawn_robot,
         bridge,
         sequence_server,
+        command_sub,
         # rviz,
 
         # Launch Arguments

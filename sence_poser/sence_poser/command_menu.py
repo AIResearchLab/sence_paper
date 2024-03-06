@@ -35,6 +35,7 @@ q. Quit""")
                     case '2':
                         self.setLooping(True)
                         self.poseMenu()
+                        self.setLooping(False)
                     case '3':
                         self.setLooping(False)
                     case '4':

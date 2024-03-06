@@ -24,7 +24,7 @@ def generate_launch_description():
     robot_description_path = os.path.join(get_package_share_directory(
         hardware_package_name), "urdf", robot_name + "_hardware.urdf.xacro")
     robot_description_config = xacro.process_file(robot_description_path,
-                                                  mappings={'use_dummy': 'false'}
+                                                  mappings={'use_dummy': 'true'}
                                                   ).toxml()
     robot_description = {'robot_description': robot_description_config}
 
@@ -78,6 +78,13 @@ def generate_launch_description():
             package="sence_poser",
             executable="sequence_action_server",
             name="sequence_action_server",
+            output="screen"
+        ),
+
+        Node(
+            package="sence_poser",
+            executable="command_sub",
+            name="command_sub",
             output="screen"
         )
     ])
